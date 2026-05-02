@@ -6,7 +6,8 @@
     "nodejs@latest",
     "k3d@latest",
     "kubectl@latest",
-    "fluxcd@latest"
+    "fluxcd@latest",
+    "helm@latest"
   ],
   "shell": {
     "init_hook": [
