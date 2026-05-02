@@ -6,14 +6,14 @@ metadata:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: kube-prometheus-stack
+  name: monitoring
   namespace: monitoring
 spec:
   interval: 15m
   timeout: 5m
   chart:
     spec:
-      chart: prometheus-community/kube-prometheus-stack
+      chart: kube-prometheus-stack
       version: '83.7.0'
       sourceRef:
         kind: HelmRepository
