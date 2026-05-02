@@ -1,0 +1,19 @@
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution: 
+    version: "2.8.6"
+    registry: "ghcr.io/fluxcd"
+  cluster:
+    size: small
+  storage:
+    class: "standard"
+    size: "10Gi"
+  sync:
+    kind: GitRepository
+    url: "https://github.com/TimotheeRen/KubePods.git"
+    ref: "refs/heads/main"
+    path: "fluxcd"
