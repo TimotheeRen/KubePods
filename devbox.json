@@ -7,7 +7,7 @@
     "k3d@latest",
     "kubectl@latest",
     "fluxcd@latest",
-    "helm@latest"
+    "kubernetes-helm@latest"
   ],
   "shell": {
     "init_hook": [
