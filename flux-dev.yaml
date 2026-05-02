@@ -14,6 +14,6 @@ spec:
     size: "10Gi"
   sync:
     kind: GitRepository
-    url: "https://github.com/TimotheeRen/KubePods.git"
+    url: "https://github.com/TimotheeRen/KubePods"
     ref: "refs/heads/main"
-    path: "fluxcd"
+    path: "fluxcd/clusters/dev"
