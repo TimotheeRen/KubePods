@@ -24,8 +24,7 @@ jobs:
 
       - name: Update deployment value
         working-directory: chart
-        run: ls
-        # run: 'sed -i "s|${{ inputs.image }}Tag: .*|${{ inputs.image }}Tag: ${{ inputs.tag }}|g" values.yaml'
+        run: 'sed -i "s|image: .*|image: ${{ inputs.image }}:${{ inputs.tag }}|g" fluxcd/apps/base/${{inputs.image}}/deployment.yaml'
 
       - name: Commit and Push
         run: |
