@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ui
+  name: api
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ui
+      app: api
   template:
     metadata:
       labels:
-        app: ui
+        app: api
     spec:
       containers:
-        - name: ui
+        - name: api
           image: timotheeren/kubepods-api:sha-056b79dab51e18defc275173f8e4a736adc08757
           ports:
             - containerPort: 3001
