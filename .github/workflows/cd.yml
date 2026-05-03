@@ -23,15 +23,15 @@ jobs:
           token: ${{ secrets.token }}
 
       - name: Update deployment value
-        working-directory: chart
-        run: 'sed -i "s|image: .*|image: ${{ inputs.image }}:${{ inputs.tag }}|g" fluxcd/apps/base/${{inputs.image}}/deployment.yaml'
+        working-directory: fluxcd/apps/base/${{inputs.image}}
+        run: 'sed -i "s|image: .*|image: ${{ inputs.image }}:${{ inputs.tag }}|g" deployment.yaml'
 
       - name: Commit and Push
         run: |
           git config user.name "Github Actions"
           git config user.email "actions@github.com"
 
-          git add chart/values.yaml
+          git add *
           git commit -m "🚀 (CD) Update ${{ inputs.image }} to ${{ inputs.tag }}"
           git pull --rebase origin main
           git push -u origin main
