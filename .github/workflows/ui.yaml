@@ -1,0 +1,13 @@
+name: UI CI
+
+on:
+  push:
+    paths:
+      - 'ui/**'
+  workflow_dispatch:
+
+jobs:
+  call-workflow:
+    uses: timotheeren/KubePods/.github/workflows/ci.yml@main
+    with:
+      image: "ui"
