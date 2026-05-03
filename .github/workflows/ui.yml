@@ -11,3 +11,6 @@ jobs:
     uses: timotheeren/KubePods/.github/workflows/ci.yml@main
     with:
       image: "ui"
+    secrets:
+      dockerhub-username: ${{ vars.DOCKERHUB_USERNAME }}
+      dockerhub-token: ${{ inputs.DOCKERHUB_TOKEN }}
