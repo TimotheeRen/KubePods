@@ -1,0 +1,26 @@
+name: API Gateway CI/CD
+
+on:
+  push:
+    paths:
+      - 'api/**'
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: timotheeren/KubePods/.github/workflows/ci.yml@main
+    with:
+      image: "api"
+    secrets:
+      dockerhub-username: ${{ vars.DOCKERHUB_USERNAME }}
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  cd:
+    needs: ci
+    uses: timotheeren/KubePods/.github/workflows/cd.yml@main
+    with:
+      image: "timotheeren/kubepods-api"
+      tag: "sha-${{ github.sha }}"
+      path: "api"
+    secrets:
+      token: ${{ secrets.PAT }}

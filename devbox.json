@@ -1,13 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.17.2/.schema/devbox.schema.json",
   "packages": [
-    "rustup@latest",
     "pnpm@latest",
     "nodejs@latest",
     "k3d@latest",
     "kubectl@latest",
     "fluxcd@latest",
-    "kubernetes-helm@latest"
+    "kubernetes-helm@latest",
+    "cargo@latest",
+    "rust-analyzer@latest",
+    "rustc@latest",
+    "binutils@latest",
+    "pkg-config@latest",
+    "gcc@latest"
   ],
   "shell": {
     "init_hook": [
