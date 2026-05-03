@@ -2,8 +2,6 @@
 
 import z  from "zod";
 
-const host = process.env.API_HOST || "http://localhost:3001"
-
 const User = z.object({
   email: z.email(),
   username: z.string().min(3).max(24).regex(/^[a-zA-Z0-9]+$/, {
@@ -13,6 +11,7 @@ const User = z.object({
 })
 
 export async function register(prevState: any, form: FormData) {
+ const host = process.env.API_HOST || "http://localhost:3001"
  const result = User.safeParse(Object.fromEntries(form.entries()))
 
   if (!result.success) {

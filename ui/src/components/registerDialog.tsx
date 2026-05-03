@@ -42,7 +42,7 @@ export default function RegisterDialog() {
                 Create your account
               </DialogDescription>
             </DialogHeader>
-            <FieldGroup>
+            <FieldGroup className="my-5">
               <Field>
                 <Label>Email</Label>
                 <Input id="email" name="email" type="email" placeholder="m@example.com" />
