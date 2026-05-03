@@ -7,10 +7,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-workflow:
+  ci:
     uses: timotheeren/KubePods/.github/workflows/ci.yml@main
     with:
       image: "ui"
     secrets:
       dockerhub-username: ${{ vars.DOCKERHUB_USERNAME }}
       dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  cd:
+    needs: ci
+    uses: timotheeren/Furnace/.github/workflows/cd.yml@main
+    with:
+      image: "api"
+      tag: "sha-${{ github.sha }}"
+    secrets:
+      token: ${{ secrets.PAT }}

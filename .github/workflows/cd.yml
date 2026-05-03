@@ -1,0 +1,37 @@
+name: CD
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+      
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Github repository
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+        with:
+          token: ${{ secrets.token }}
+
+      - name: Update deployment value
+        working-directory: chart
+        run: 'sed -i "s|${{ inputs.image }}Tag: .*|${{ inputs.image }}Tag: ${{ inputs.tag }}|g" values.yaml'
+
+      - name: Commit and Push
+        run: |
+          git config user.name "Github Actions"
+          git config user.email "actions@github.com"
+
+          git add chart/values.yaml
+          git commit -m "🚀 (CD) Update ${{ inputs.image }} to ${{ inputs.tag }}"
+          git pull --rebase origin main
+          git push -u origin main
