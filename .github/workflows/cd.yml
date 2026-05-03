@@ -9,6 +9,9 @@ on:
       tag:
         required: true
         type: string
+      path:
+        required: true
+        type: string
     secrets:
       token:
         required: true
@@ -23,8 +26,8 @@ jobs:
           token: ${{ secrets.token }}
 
       - name: Update deployment value
-        working-directory: fluxcd/apps/base/${{inputs.image}}
-        run: 'sed -i "s|image: .*|image: timotheeren/${{ inputs.image }}:${{ inputs.tag }}|g" deployment.yaml'
+        working-directory: fluxcd/apps/base/${{inputs.path}}
+        run: 'sed -i "s|image: .*|image: ${{ inputs.image }}:${{ inputs.tag }}|g" deployment.yaml'
 
       - name: Commit and Push
         run: |
