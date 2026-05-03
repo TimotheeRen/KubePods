@@ -1,9 +1,8 @@
 "use server"
 
-import { error } from "console";
-import z, { success } from "zod";
+import z  from "zod";
 
-const host = "http://localhost:3001"
+const host = process.env.API_HOST || "http://localhost:3001"
 
 const User = z.object({
   email: z.email(),
