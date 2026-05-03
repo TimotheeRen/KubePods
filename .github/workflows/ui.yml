@@ -19,7 +19,7 @@ jobs:
     needs: ci
     uses: timotheeren/KubePods/.github/workflows/cd.yml@main
     with:
-      image: "timotheeren/kubepods-ui"
+      image: "kubepods-ui"
       tag: "sha-${{ github.sha }}"
     secrets:
       token: ${{ secrets.PAT }}
