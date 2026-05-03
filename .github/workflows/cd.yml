@@ -24,7 +24,8 @@ jobs:
 
       - name: Update deployment value
         working-directory: chart
-        run: 'sed -i "s|${{ inputs.image }}Tag: .*|${{ inputs.image }}Tag: ${{ inputs.tag }}|g" values.yaml'
+        run: ls
+        # run: 'sed -i "s|${{ inputs.image }}Tag: .*|${{ inputs.image }}Tag: ${{ inputs.tag }}|g" values.yaml'
 
       - name: Commit and Push
         run: |
