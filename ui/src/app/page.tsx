@@ -1,5 +1,9 @@
+import RegisterDialog from "@/components/registerDialog";
+
 export default function Home() {
   return (
-    <h1>KubePods</h1>
-  );
+    <div>
+      <RegisterDialog/>
+    </div>
+  )
 }
