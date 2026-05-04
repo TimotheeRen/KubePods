@@ -20,4 +20,4 @@ spec:
             - containerPort: 3000
           env:
             - name: API_HOST
-              value: "http://api"
+              value: "http://api:3001"
