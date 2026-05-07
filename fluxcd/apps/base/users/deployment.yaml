@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: users
-          image: timotheeren/kubepods-users:latest
+          image: timotheeren/kubepods-users:sha-9e573e3b68500d6af17f6db672add55c3e2dcef9
           ports:
             - containerPort: 3001
