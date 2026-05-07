@@ -1,0 +1,26 @@
+name: Users Gateway CI/CD
+
+on:
+  push:
+    paths:
+      - 'users/**'
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: timotheeren/KubePods/.github/workflows/ci.yml@main
+    with:
+      image: "users"
+    secrets:
+      dockerhub-username: ${{ vars.DOCKERHUB_USERNAME }}
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  cd:
+    needs: ci
+    uses: timotheeren/KubePods/.github/workflows/cd.yml@main
+    with:
+      image: "timotheeren/kubepods-users"
+      tag: "sha-${{ github.sha }}"
+      path: "users"
+    secrets:
+      token: ${{ secrets.PAT }}
