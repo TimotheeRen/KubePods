@@ -1,4 +1,4 @@
-name: Users Gateway CI/CD
+name: Users CI/CD
 
 on:
   push:
