@@ -630,6 +630,10 @@
         }
       }
     },
+    "protobuf_34": {
+      "resolved": "github:NixOS/nixpkgs/01fbdeef22b76df85ea168fbfe1bfd9e63681b30?narHash=sha256-GMSVw35Q%2B294GlrTUKlx087E31z7KurReQ1YHSKp5iw%3D#protobuf_34",
+      "source": "nixpkg"
+    },
     "rust-analyzer@latest": {
       "last_modified": "2026-04-30T11:26:30Z",
       "resolved": "github:NixOS/nixpkgs/7aaa00e7cc9be6c316cb5f6617bd740dd435c59d#rust-analyzer",
