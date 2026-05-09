@@ -8,20 +8,13 @@ FROM node:${NODE_VERSION} AS dependencies
 
 WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+ENV CI=true
 
-RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=cache,target=/usr/local/share/.cache/yarn \
-    --mount=type=cache,target=/root/.local/share/pnpm/store \
-  if [ -f package-lock.json ]; then \
-    npm ci --no-audit --no-fund; \
-  elif [ -f yarn.lock ]; then \
-    corepack enable yarn && yarn install --frozen-lockfile --production=false; \
-  elif [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm install --frozen-lockfile; \
-  else \
-    echo "No lockfile found." && exit 1; \
-  fi
+ENV PNPM_ONLY_ALLOW_TRUSTED_DEPENDENCIES=true
+
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
+
+RUN corepack enable pnpm && pnpm install
 
 # ============================================
 # Stage 2: Build Next.js application in standalone mode
@@ -37,15 +30,7 @@ COPY . .
 
 ENV NODE_ENV=production
 
-RUN if [ -f package-lock.json ]; then \
-    npm run build; \
-  elif [ -f yarn.lock ]; then \
-    corepack enable yarn && yarn build; \
-  elif [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm build; \
-  else \
-    echo "No lockfile found." && exit 1; \
-  fi
+RUN corepack enable pnpm && pnpm build
 
 # ============================================
 # Stage 3: Run Next.js application
