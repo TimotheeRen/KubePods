@@ -9,7 +9,11 @@ struct AppState {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let user_client = RegisterServiceClient::connect("http://[::1]:50051").await?;
+    let users_host = match std::env::var("USERS_HOST") {
+        Ok(val) => val,
+        Err(_) => "http://[::1]:50051".to_string(),
+    };
+    let user_client = RegisterServiceClient::connect(users_host).await?;
 
     let state = AppState {
         user_client: user_client,
