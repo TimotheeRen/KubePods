@@ -13,7 +13,8 @@
     "binutils@latest",
     "pkg-config@latest",
     "gcc@latest",
-    "protobuf_34"
+    "protobuf_34",
+    "rustfmt@latest"
   ],
   "shell": {
     "init_hook": [

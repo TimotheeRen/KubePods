@@ -6,3 +6,8 @@ edition = "2024"
 [dependencies]
 tokio = {version = "1.52.1", features = ["rt-multi-thread", "macros"]}
 axum = "0.8.9"
+tonic-build = "0.14.6"
+tonic = "0.14.6"
+
+[build-dependencies]
+tonic-prost-build = "0.14.6"

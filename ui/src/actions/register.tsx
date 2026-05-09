@@ -22,7 +22,7 @@ export async function register(prevState: any, form: FormData) {
   } else {
     const { email, username, password } = result.data
     try {
-      const response = await fetch(host+"/register", {
+      const response = await fetch(host+"/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
