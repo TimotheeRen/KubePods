@@ -1,7 +1,10 @@
-use crate::users::{schemas, services};
+use crate::users::schemas;
 use axum::Json;
 
 pub async fn register_handler(Json(payload): Json<schemas::RegisterUser>) -> String {
-    services::register_user(payload).await;
+    println!(
+        "Received a register request from user: {}",
+        payload.username
+    );
     return "Registered.".to_string();
 }

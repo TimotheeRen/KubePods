@@ -1,4 +1,3 @@
-pub mod handlers;
+mod handlers;
 pub mod routes;
-pub mod schemas;
-pub mod services;
+mod schemas;
