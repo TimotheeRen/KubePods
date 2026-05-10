@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.17.2/.schema/devbox.schema.json",
   "packages": [
     "pnpm@latest",
     "nodejs@latest",
@@ -7,23 +6,21 @@
     "kubectl@latest",
     "fluxcd@latest",
     "kubernetes-helm@latest",
-    "cargo@latest",
-    "rust-analyzer@latest",
-    "rustc@latest",
+    "rustup@latest",
     "binutils@latest",
     "pkg-config@latest",
     "gcc@latest",
     "protobuf_34",
-    "rustfmt@latest"
+    "libiconv@latest"
   ],
   "shell": {
     "init_hook": [
-      "echo 'Welcome to devbox!' > /dev/null"
-    ],
-    "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
-      ]
-    }
+      "projectDir=$(dirname $(readlink -f \"$0\"))",
+      "rustupHomeDir=\"$projectDir\"/.rustup",
+      "mkdir -p $rustupHomeDir",
+      "export RUSTUP_HOME=$rustupHomeDir",
+      "export LIBRARY_PATH=$LIBRARY_PATH:\"$projectDir/nix/profile/default/lib\"",
+      "rustup default stable"
+    ]
   }
 }

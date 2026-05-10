@@ -1,12 +1,14 @@
-use tonic::{transport::Server, Response};
+use sqlx::{Pool, Postgres, postgres::PgPoolOptions};
+use tonic::{Response, transport::Server};
 use user::register_service_server::{RegisterService, RegisterServiceServer};
 
 pub mod user {
     tonic::include_proto!("user");
 }
 
-#[derive(Default)]
-pub struct RegisterImpl {}
+pub struct RegisterImpl {
+    pub pool: Pool<Postgres>,
+}
 
 #[tonic::async_trait]
 impl RegisterService for RegisterImpl {
@@ -24,9 +26,18 @@ impl RegisterService for RegisterImpl {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let pg_host = match std::env::var("DB_HOST") {
+        Ok(val) => val,
+        Err(_) => "postgres://postgres:password@localhost/users".to_string(), // Local dev
+    };
+    let pool = PgPoolOptions::new()
+        .acquire_timeout(std::time::Duration::from_secs(30))
+        .connect(&pg_host)
+        .await?;
     let addr = "[::1]:50051".parse()?;
+    let register_service = RegisterImpl { pool };
     Server::builder()
-        .add_service(RegisterServiceServer::new(RegisterImpl::default()))
+        .add_service(RegisterServiceServer::new(register_service))
         .serve(addr)
         .await?;
 
