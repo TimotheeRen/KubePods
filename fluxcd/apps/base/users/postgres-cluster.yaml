@@ -1,0 +1,9 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: users-postgres-cluster
+spec:
+  cluster:
+    name: users-postgres-cluster
+    instances: 1
+    storage: 1Gi
