@@ -11,4 +11,4 @@ spec:
   schema:
     configMapKeyRef:
       name: users-schema-config
-      key: schema.hcl
+      key: users-schema.hcl
