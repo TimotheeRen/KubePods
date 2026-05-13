@@ -8,6 +8,6 @@ resources:
 configMapGenerator:
   - name: users-schema-config
     files:
-      - schemas/schema.hcl
+      - schemas/users-schema.hcl
     options:
       disableNameSuffixHash: true
