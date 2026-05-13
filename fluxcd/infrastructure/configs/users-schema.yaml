@@ -1,0 +1,13 @@
+apiVersion: db.atlasgo.io/v1alpha1
+kind: AtlasSchema
+metadata:
+  name: users-schema
+spec:
+  urlFrom:
+    secretKeyRef:
+      name: users-postgres-cluster-app
+      key: uri
+  schema:
+    configMapKeyRef:
+      name: users-schema-config
+      key: schema.hcl
