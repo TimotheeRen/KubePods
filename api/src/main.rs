@@ -15,9 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     let user_client = RegisterServiceClient::connect(users_host).await?;
 
-    let state = AppState {
-        user_client: user_client,
-    };
+    let state = AppState { user_client };
 
     let app = Router::new()
         .nest("/users", users::routes::auth())

@@ -1,8 +1,8 @@
 use std::env::var;
 
 use dotenvy::dotenv;
-use sqlx::{Pool, Postgres, postgres::PgPoolOptions};
-use tonic::{Response, transport::Server};
+use sqlx::{Pool, Postgres, postgres::PgPoolOptions, query};
+use tonic::{Response, Status, transport::Server};
 use user::register_service_server::{RegisterService, RegisterServiceServer};
 
 pub mod user {
@@ -20,6 +20,14 @@ impl RegisterService for RegisterImpl {
         request: tonic::Request<user::RegisterRequest>,
     ) -> std::result::Result<tonic::Response<user::RegisterResponse>, tonic::Status> {
         println!("{:?}", request);
+        let req = request.into_inner();
+        query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)")
+            .bind(&req.username)
+            .bind(&req.email)
+            .bind(&req.password)
+            .execute(&self.pool)
+            .await
+            .map_err(|e| tonic::Status::internal(format!("Database error: {e}")))?;
         Ok(Response::new(user::RegisterResponse {
             success: true,
             message: "".to_string(),
