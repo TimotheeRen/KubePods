@@ -29,6 +29,9 @@ impl RegisterService for RegisterImpl {
                     Status::already_exists("Username already taken")
                 }
                 CreateUserError::DatabaseError => Status::internal("Internal server error"),
+                CreateUserError::HashPasswordError => {
+                    Status::internal("An error occured when hasing the password")
+                }
             })?;
 
         Ok(Response::new(user::RegisterResponse {

@@ -1,3 +1,4 @@
+use argon2::{Argon2, PasswordHash, PasswordHasher};
 use sqlx::{Pool, Postgres, query};
 
 use crate::auth::{error::CreateUserError, model::User};
@@ -18,10 +19,15 @@ impl PostgresAuthRepository {
 
 impl AuthRepository for PostgresAuthRepository {
     async fn create_user(&self, user: &User) -> Result<(), CreateUserError> {
+        let password = Argon2::default()
+            .hash_password(user.password.as_bytes())
+            .map_err(|_| CreateUserError::HashPasswordError)?
+            .to_string();
+
         match query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)")
             .bind(&user.username)
             .bind(&user.email)
-            .bind(&user.password)
+            .bind(&password)
             .execute(&self.pool)
             .await
         {

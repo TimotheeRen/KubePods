@@ -2,4 +2,5 @@
 pub enum CreateUserError {
     UserAlreadyExists,
     DatabaseError,
+    HashPasswordError,
 }
