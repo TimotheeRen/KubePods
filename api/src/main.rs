@@ -11,7 +11,7 @@ struct AppState {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let users_host = match std::env::var("USERS_HOST") {
         Ok(val) => val,
-        Err(_) => "http://[::1]:50051".to_string(),
+        Err(_) => "http://0.0.0.0:50051".to_string(),
     };
     let user_client = RegisterServiceClient::connect(users_host).await?;
 
