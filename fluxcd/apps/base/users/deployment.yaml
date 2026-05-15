@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: timotheeren/kubepods-users:sha-e54650eb854625f2fc67968b71cbf90c9c1a8a6d
+          image: timotheeren/kubepods-users:sha-2a27cc79d6931e1bb1399a29da2d800dbcd7de8f
           ports:
             - containerPort: 50051
           env:
