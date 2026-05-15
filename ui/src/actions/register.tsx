@@ -1,6 +1,6 @@
 "use server"
 
-import z  from "zod";
+import z from "zod";
 
 const User = z.object({
   email: z.email(),
@@ -11,8 +11,8 @@ const User = z.object({
 })
 
 export async function register(prevState: any, form: FormData) {
- const host = process.env.API_HOST || "http://localhost:3001"
- const result = User.safeParse(Object.fromEntries(form.entries()))
+  const host = process.env.API_HOST || "http://localhost:3001"
+  const result = User.safeParse(Object.fromEntries(form.entries()))
 
   if (!result.success) {
     return {
@@ -22,18 +22,30 @@ export async function register(prevState: any, form: FormData) {
   } else {
     const { email, username, password } = result.data
     try {
-      const response = await fetch(host+"/users/register", {
+      const response = await fetch(host + "/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({email, username, password}),
+        body: JSON.stringify({ email, username, password }),
       })
 
       if (!response.ok) {
-        return {
-          error: "Fetching",
-          message: "Couldn't join host."
+        if (response.status == 409) {
+          return {
+            error: "Fetching",
+            message: "Username already taken"
+          }
+        } else if (response.status == 500) {
+          return {
+            error: "Fetching",
+            message: "Internal server error"
+          }
+        } else {
+          return {
+            error: "Fetching",
+            message: "An unexpected error occured"
+          }
         }
       }
 

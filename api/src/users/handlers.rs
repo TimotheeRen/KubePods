@@ -20,7 +20,10 @@ pub async fn register_handler(
         .await
         .map_err(|e| {
             println!("Grpc error: {}", e);
-            StatusCode::INTERNAL_SERVER_ERROR
+            match e.code() {
+                tonic::Code::AlreadyExists => StatusCode::CONFLICT,
+                _ => StatusCode::INTERNAL_SERVER_ERROR,
+            }
         })?;
     Ok("Registered.".to_string())
 }

@@ -1,5 +1,5 @@
 use sqlx::{Pool, Postgres, query};
-use tonic::Response;
+use tonic::{Response, Status};
 use user::register_service_server::RegisterService;
 
 use crate::auth::{error::CreateUserError, repo::PostgresAuthRepository, service::AuthService};
@@ -21,19 +21,19 @@ impl RegisterService for RegisterImpl {
         println!("{:?}", request);
         let req = request.into_inner();
 
-        let message = match self
-            .service
+        self.service
             .register(req.username, req.email, req.password)
             .await
-        {
-            Ok(_) => "".to_string(),
-            Err(CreateUserError::UserAlreadyExists) => "This username is already taken".to_string(),
-            Err(CreateUserError::DatabaseError) => "An error occured".to_string(),
-        };
+            .map_err(|e| match e {
+                CreateUserError::UserAlreadyExists => {
+                    Status::already_exists("Username already taken")
+                }
+                CreateUserError::DatabaseError => Status::internal("Internal server error"),
+            })?;
 
         Ok(Response::new(user::RegisterResponse {
             success: true,
-            message,
+            message: "".to_string(),
         }))
     }
 }
