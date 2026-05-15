@@ -11,6 +11,7 @@ sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio"] }
 tonic-prost = "0.14.6"
 dotenvy = "0.15.7"
 async-trait = "0.1.89"
+thiserror = "2.0.18"
 
 [build-dependencies]
 tonic-prost-build = "0.14.6"

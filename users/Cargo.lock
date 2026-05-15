@@ -1986,6 +1986,7 @@ dependencies = [
  "dotenvy",
  "prost",
  "sqlx",
+ "thiserror",
  "tokio",
  "tonic",
  "tonic-prost",

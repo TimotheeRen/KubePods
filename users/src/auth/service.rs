@@ -1,4 +1,4 @@
-use crate::auth::{model::User, repo::AuthRepository};
+use crate::auth::{error::CreateUserError, model::User, repo::AuthRepository};
 
 pub struct AuthService<R: AuthRepository> {
     repo: R,
@@ -14,7 +14,7 @@ impl<R: AuthRepository> AuthService<R> {
         username: String,
         email: String,
         password: String,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    ) -> Result<(), CreateUserError> {
         let user = User {
             username,
             email,
