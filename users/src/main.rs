@@ -1,39 +1,15 @@
+mod auth;
 use std::env::var;
 
 use dotenvy::dotenv;
-use sqlx::{Pool, Postgres, postgres::PgPoolOptions, query};
-use tonic::{Response, Status, transport::Server};
-use user::register_service_server::{RegisterService, RegisterServiceServer};
+use sqlx::postgres::PgPoolOptions;
+use tonic::transport::Server;
 
-pub mod user {
-    tonic::include_proto!("user");
-}
-
-pub struct RegisterImpl {
-    pub pool: Pool<Postgres>,
-}
-
-#[tonic::async_trait]
-impl RegisterService for RegisterImpl {
-    async fn register(
-        &self,
-        request: tonic::Request<user::RegisterRequest>,
-    ) -> std::result::Result<tonic::Response<user::RegisterResponse>, tonic::Status> {
-        println!("{:?}", request);
-        let req = request.into_inner();
-        query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)")
-            .bind(&req.username)
-            .bind(&req.email)
-            .bind(&req.password)
-            .execute(&self.pool)
-            .await
-            .map_err(|e| tonic::Status::internal(format!("Database error: {e}")))?;
-        Ok(Response::new(user::RegisterResponse {
-            success: true,
-            message: "".to_string(),
-        }))
-    }
-}
+use crate::auth::{
+    handler::{RegisterImpl, user::register_service_server::RegisterServiceServer},
+    repo::PostgresAuthRepository,
+    service::AuthService,
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -54,8 +30,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .connect(&pg_host)
         .await?;
 
+    let repo = PostgresAuthRepository::new(pool);
+    let service = AuthService::new(repo);
+
     let addr = "0.0.0.0:50051".parse()?;
-    let register_service = RegisterImpl { pool };
+    let register_service = RegisterImpl { service };
 
     Server::builder()
         .add_service(RegisterServiceServer::new(register_service))
