@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: timotheeren/kubepods-api:sha-7e0db9980411676e9758dc23b1ec1512ffd5bddf
+          image: timotheeren/kubepods-api:sha-924d7a0f1e4161eecb020e97c064f09b2124392f
           ports:
             - containerPort: 3001
           env:
