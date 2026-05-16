@@ -1,6 +1,5 @@
 "use client"
 
-import { register } from "@/actions/register"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -17,9 +16,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useActionState, useEffect } from "react"
 import { toast } from "sonner"
+import { login } from "@/actions/login"
 
-export default function RegisterDialog() {
-  const [state, action, pending] = useActionState(register, null)
+export default function LoginDialog() {
+  const [state, action, pending] = useActionState(login, null)
 
   useEffect(() => {
     if (state?.error) {
@@ -32,21 +32,17 @@ export default function RegisterDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Register</Button>
+        <Button>Login</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <form action={action}>
           <DialogHeader>
-            <DialogTitle>Register</DialogTitle>
+            <DialogTitle>Login</DialogTitle>
             <DialogDescription>
-              Create your account
+              Log into your account
             </DialogDescription>
           </DialogHeader>
           <FieldGroup className="my-5">
-            <Field>
-              <Label>Email</Label>
-              <Input id="email" name="email" type="email" placeholder="m@example.com" required />
-            </Field>
             <Field>
               <Label>Username</Label>
               <Input id="username" name="username" type="text" placeholder="..." required />
@@ -60,10 +56,11 @@ export default function RegisterDialog() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" disabled={pending}>Register</Button>
+            <Button type="submit" disabled={pending}>Login</Button>
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   )
 }
+
