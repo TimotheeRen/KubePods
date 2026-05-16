@@ -1,4 +1,4 @@
-use argon2::{Argon2, PasswordHash, PasswordHasher};
+use argon2::{Argon2, PasswordHasher};
 use sqlx::{Pool, Postgres, query};
 
 use crate::auth::{error::CreateUserError, model::User};

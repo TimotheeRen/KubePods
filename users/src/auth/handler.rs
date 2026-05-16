@@ -1,4 +1,3 @@
-use sqlx::{Pool, Postgres, query};
 use tonic::{Response, Status};
 use user::register_service_server::RegisterService;
 

@@ -1,6 +1,9 @@
 use crate::AppState;
-use crate::users::schemas::{self, RegisterUser};
-use crate::users::user::RegisterRequest;
+use crate::users::user::LoginRequest;
+use crate::users::{
+    schemas::{self},
+    user::RegisterRequest,
+};
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -11,7 +14,7 @@ pub async fn register_handler(
 ) -> Result<String, StatusCode> {
     println!("Received a register request from user: {}", user.username);
     state
-        .user_client
+        .user_register_client
         .register(RegisterRequest {
             email: user.email,
             username: user.username,
@@ -26,4 +29,23 @@ pub async fn register_handler(
             }
         })?;
     Ok("Registered.".to_string())
+}
+
+pub async fn login_handler(
+    State(mut state): State<AppState>,
+    Json(user): Json<schemas::LoginUser>,
+) -> Result<String, StatusCode> {
+    println!("Received a login request from user: {}", user.username);
+    state
+        .user_login_client
+        .login(LoginRequest {
+            username: user.username,
+            password: user.password,
+        })
+        .await
+        .map_err(|e| match e.code() {
+            tonic::Code::Unauthenticated => StatusCode::UNAUTHORIZED,
+            _ => StatusCode::INTERNAL_SERVER_ERROR,
+        })?;
+    Ok("Logged in".to_string())
 }

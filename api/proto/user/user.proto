@@ -15,3 +15,16 @@ message RegisterResponse {
   bool success = 1;
   string message = 2;
 }
+
+service LoginService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}

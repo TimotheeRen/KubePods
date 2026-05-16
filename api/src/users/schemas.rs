@@ -6,3 +6,9 @@ pub struct RegisterUser {
     pub username: String,
     pub password: String,
 }
+
+#[derive(Deserialize)]
+pub struct LoginUser {
+    pub username: String,
+    pub password: String,
+}
