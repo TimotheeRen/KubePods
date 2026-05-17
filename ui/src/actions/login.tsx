@@ -28,10 +28,10 @@ export async function login(prevState: any, form: FormData) {
       })
 
       if (!response.ok) {
-        if (response.status == 500) {
+        if (response.status == 401) {
           return {
-            error: "Fetching",
-            message: "Internal server error"
+            error: "Unauthenticated",
+            message: "Wrong password"
           }
         } else {
           return {
@@ -43,7 +43,7 @@ export async function login(prevState: any, form: FormData) {
 
       return ({
         error: null,
-        message: "Successfuly registered!"
+        message: "Successfuly logged in!"
       })
     } catch (e) {
       return {

@@ -49,7 +49,7 @@ impl AuthRepository for PostgresAuthRepository {
     }
 
     async fn check_password(&self, user: LoginUser) -> Result<(), CheckPasswordError> {
-        let res = query("SELECT password FROM users WHERE username = '$1'")
+        let res = query("SELECT password FROM users WHERE username = $1")
             .bind(&user.username)
             .fetch_optional(&self.pool)
             .await;
@@ -59,7 +59,7 @@ impl AuthRepository for PostgresAuthRepository {
             Err(_) => return Err(CheckPasswordError::DatabaseError),
         };
 
-        println!("Succesfully logged in!");
+        println!("Pasword: {}", password);
 
         Ok(())
     }
