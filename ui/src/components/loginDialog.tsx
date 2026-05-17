@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label"
 import { useActionState, useEffect } from "react"
 import { toast } from "sonner"
 import { login } from "@/actions/login"
+import Cookie from "js-cookie";
 
 export default function LoginDialog() {
   const [state, action, pending] = useActionState(login, null)
@@ -26,6 +27,11 @@ export default function LoginDialog() {
       toast.error(state.message)
     } else if (state?.message) {
       toast.success(state.message)
+      Cookie.set("token", state.token, {
+        expires: 1,
+        secure: true,
+        sameSite: "strict",
+      })
     }
   }, [state])
 

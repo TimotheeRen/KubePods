@@ -41,9 +41,11 @@ export async function login(prevState: any, form: FormData) {
         }
       }
 
+      let token = await response.text(); // TODO: put it in a cookie on the client
       return ({
         error: null,
-        message: "Successfuly logged in!"
+        message: "Successfully logged in.",
+        token: token,
       })
     } catch (e) {
       return {
