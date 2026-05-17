@@ -1,4 +1,4 @@
-use argon2::{Argon2, PasswordHasher};
+use argon2::{Argon2, PasswordHash, PasswordHasher, PasswordVerifier};
 use sqlx::{Pool, Postgres, Row, query};
 
 use crate::auth::{
@@ -59,7 +59,16 @@ impl AuthRepository for PostgresAuthRepository {
             Err(_) => return Err(CheckPasswordError::DatabaseError),
         };
 
-        println!("Pasword: {}", password);
+        let hash = PasswordHash::new(&password).map_err(|e| {
+            println!("PasswordHash error: {:?}", e);
+            CheckPasswordError::DatabaseError
+        })?;
+
+        Argon2::default()
+            .verify_password(user.password.as_bytes(), &hash)
+            .map_err(|_| CheckPasswordError::WrongPassword)?;
+
+        println!("Sucessfully logged in!");
 
         Ok(())
     }

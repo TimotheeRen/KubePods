@@ -1,5 +1,3 @@
-use argon2::PasswordHash;
-
 use crate::auth::{
     error::{CheckPasswordError, CreateUserError},
     model::{LoginUser, User},
