@@ -14,7 +14,7 @@ pub async fn register_handler(
 ) -> Result<String, StatusCode> {
     println!("Received a register request from user: {}", user.username);
     state
-        .user_register_client
+        .user_auth_client
         .register(RegisterRequest {
             email: user.email,
             username: user.username,
@@ -37,7 +37,7 @@ pub async fn login_handler(
 ) -> Result<String, StatusCode> {
     println!("Received a login request from user: {}", user.username);
     state
-        .user_login_client
+        .user_auth_client
         .login(LoginRequest {
             username: user.username,
             password: user.password,

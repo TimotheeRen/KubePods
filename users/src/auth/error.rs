@@ -4,3 +4,9 @@ pub enum CreateUserError {
     DatabaseError,
     HashPasswordError,
 }
+
+#[derive(Debug)]
+pub enum CheckPasswordError {
+    WrongPassword,
+    DatabaseError,
+}

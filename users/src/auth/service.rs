@@ -1,10 +1,16 @@
-use crate::auth::{error::CreateUserError, model::User, repo::AuthRepository};
+use argon2::PasswordHash;
 
-pub struct AuthService<R: AuthRepository> {
+use crate::auth::{
+    error::{CheckPasswordError, CreateUserError},
+    model::{LoginUser, User},
+    repo::AuthRepository,
+};
+
+pub struct AuthServiceLayer<R: AuthRepository> {
     repo: R,
 }
 
-impl<R: AuthRepository> AuthService<R> {
+impl<R: AuthRepository> AuthServiceLayer<R> {
     pub fn new(repo: R) -> Self {
         Self { repo }
     }
@@ -22,6 +28,16 @@ impl<R: AuthRepository> AuthService<R> {
         };
         self.repo.create_user(&user).await?;
 
+        Ok(())
+    }
+
+    pub async fn login(
+        &self,
+        username: String,
+        password: String,
+    ) -> Result<(), CheckPasswordError> {
+        let user = LoginUser { username, password };
+        self.repo.check_password(user).await?;
         Ok(())
     }
 }

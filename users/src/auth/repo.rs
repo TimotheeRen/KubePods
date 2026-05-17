@@ -1,10 +1,14 @@
 use argon2::{Argon2, PasswordHasher};
-use sqlx::{Pool, Postgres, query};
+use sqlx::{Pool, Postgres, Row, query};
 
-use crate::auth::{error::CreateUserError, model::User};
+use crate::auth::{
+    error::{CheckPasswordError, CreateUserError},
+    model::{LoginUser, User},
+};
 
 pub trait AuthRepository {
     async fn create_user(&self, user: &User) -> Result<(), CreateUserError>;
+    async fn check_password(&self, user: LoginUser) -> Result<(), CheckPasswordError>;
 }
 
 pub struct PostgresAuthRepository {
@@ -42,5 +46,21 @@ impl AuthRepository for PostgresAuthRepository {
             }
             Err(_) => Err(CreateUserError::DatabaseError),
         }
+    }
+
+    async fn check_password(&self, user: LoginUser) -> Result<(), CheckPasswordError> {
+        let res = query("SELECT password FROM users WHERE username = '$1'")
+            .bind(&user.username)
+            .fetch_optional(&self.pool)
+            .await;
+        let password: String = match res {
+            Ok(Some(row)) => row.get("password"),
+            Ok(None) => return Err(CheckPasswordError::WrongPassword),
+            Err(_) => return Err(CheckPasswordError::DatabaseError),
+        };
+
+        println!("Succesfully logged in!");
+
+        Ok(())
     }
 }
