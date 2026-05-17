@@ -25,7 +25,7 @@ export default function LoginDialog() {
   useEffect(() => {
     if (state?.error) {
       toast.error(state.message)
-    } else if (state?.message) {
+    } else if (state?.message && state?.token) {
       toast.success(state.message)
       Cookie.set("token", state.token, {
         expires: 1,
