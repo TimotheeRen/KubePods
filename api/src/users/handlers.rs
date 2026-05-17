@@ -36,7 +36,7 @@ pub async fn login_handler(
     Json(user): Json<schemas::LoginUser>,
 ) -> Result<String, StatusCode> {
     println!("Received a login request from user: {}", user.username);
-    state
+    let res = state
         .user_auth_client
         .login(LoginRequest {
             username: user.username,
@@ -47,5 +47,5 @@ pub async fn login_handler(
             tonic::Code::Unauthenticated => StatusCode::UNAUTHORIZED,
             _ => StatusCode::INTERNAL_SERVER_ERROR,
         })?;
-    Ok("Logged in".to_string())
+    Ok(res.into_inner().token)
 }

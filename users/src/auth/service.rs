@@ -33,9 +33,8 @@ impl<R: AuthRepository> AuthServiceLayer<R> {
         &self,
         username: String,
         password: String,
-    ) -> Result<(), CheckPasswordError> {
+    ) -> Result<String, CheckPasswordError> {
         let user = LoginUser { username, password };
-        self.repo.check_password(user).await?;
-        Ok(())
+        self.repo.check_password(user).await
     }
 }

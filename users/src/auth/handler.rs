@@ -48,15 +48,14 @@ impl AuthService for AuthImpl {
         request: tonic::Request<user::LoginRequest>,
     ) -> std::result::Result<tonic::Response<user::LoginResponse>, tonic::Status> {
         let req = request.into_inner();
-        self.service
+        let token = self
+            .service
             .login(req.username, req.password)
             .await
             .map_err(|e| match e {
                 CheckPasswordError::WrongPassword => Status::unauthenticated("Wrong credentials"),
                 CheckPasswordError::DatabaseError => Status::internal("Internal server error"),
             })?;
-        Ok(Response::new(user::LoginResponse {
-            token: "".to_string(),
-        }))
+        Ok(Response::new(user::LoginResponse { token }))
     }
 }
