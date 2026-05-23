@@ -85,7 +85,7 @@ impl AuthRepository for PostgresAuthRepository {
         let token = encode(
             &Header::default(),
             &claims,
-            &EncodingKey::from_secret("secret".as_ref()), // TODO add secret var
+            &EncodingKey::from_secret("secret".as_ref()), // TODO: add secret var
         )
         .map_err(|_| CheckPasswordError::DatabaseError)?;
 

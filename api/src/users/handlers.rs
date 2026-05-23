@@ -1,9 +1,9 @@
-use crate::AppState;
 use crate::users::user::LoginRequest;
 use crate::users::{
     schemas::{self},
     user::RegisterRequest,
 };
+use crate::{AppState, Claims};
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
