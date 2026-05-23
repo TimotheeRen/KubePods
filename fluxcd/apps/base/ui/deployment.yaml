@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: ui
-          image: timotheeren/kubepods-ui:sha-5bc0308b57f09b14f1f3dbb1c5847bfa6ace533c
+          image: timotheeren/kubepods-ui:sha-ae45007a3f5de839fbf59182837adc5f867e9602
           ports:
             - containerPort: 3000
           env:
