@@ -16,10 +16,19 @@ import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useActionState, useEffect } from "react"
+import { useFetcher } from "react-router"
 import { toast } from "sonner"
 
+interface ActionData {
+  error: string | null
+  message: string
+  token?: string
+}
+
 export default function RegisterDialog() {
-  const [state, action, pending] = useActionState(register, null)
+  const fetcher = useFetcher<ActionData>()
+  const state = fetcher.data
+  const pending = fetcher.state === "submitting"
 
   useEffect(() => {
     if (state?.error) {
@@ -35,7 +44,7 @@ export default function RegisterDialog() {
         <Button>Register</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
-        <form action={action}>
+        <fetcher.Form method="post" action="/action/register">
           <DialogHeader>
             <DialogTitle>Register</DialogTitle>
             <DialogDescription>
@@ -62,7 +71,7 @@ export default function RegisterDialog() {
             </DialogClose>
             <Button type="submit" disabled={pending}>Register</Button>
           </DialogFooter>
-        </form>
+        </fetcher.Form>
       </DialogContent>
     </Dialog>
   )

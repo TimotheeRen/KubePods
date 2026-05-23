@@ -18,9 +18,19 @@ import { useActionState, useEffect } from "react"
 import { toast } from "sonner"
 import { login } from "@/actions/login"
 import Cookie from "js-cookie";
+import { useFetcher } from "react-router"
+import { Form } from "react-router";
+
+interface ActionData {
+  error: string | null
+  message: string
+  token?: string
+}
 
 export default function LoginDialog() {
-  const [state, action, pending] = useActionState(login, null)
+  const fetcher = useFetcher<ActionData>()
+  const state = fetcher.data
+  const pending = fetcher.state === "submitting"
 
   useEffect(() => {
     if (state?.error) {
@@ -41,7 +51,7 @@ export default function LoginDialog() {
         <Button>Login</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
-        <form action={action}>
+        <fetcher.Form method="post" action="/action/login">
           <DialogHeader>
             <DialogTitle>Login</DialogTitle>
             <DialogDescription>
@@ -64,9 +74,8 @@ export default function LoginDialog() {
             </DialogClose>
             <Button type="submit" disabled={pending}>Login</Button>
           </DialogFooter>
-        </form>
+        </fetcher.Form>
       </DialogContent>
     </Dialog >
   )
 }
-

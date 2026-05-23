@@ -1,5 +1,4 @@
-"use server"
-
+import type { ActionFunctionArgs } from "react-router-dom";
 import z from "zod";
 
 const User = z.object({
@@ -7,9 +6,10 @@ const User = z.object({
   password: z.string(),
 })
 
-export async function login(prevState: any, form: FormData) {
-  const host = process.env.API_HOST || "http://localhost:3001"
-  const result = User.safeParse(Object.fromEntries(form.entries()))
+export async function login({ request }: ActionFunctionArgs) {
+  const host = import.meta.env.VITE_API_HOST || "http://localhost:3001"
+  const formData = await request.formData()
+  const result = User.safeParse(Object.fromEntries(formData.entries()))
 
   if (!result.success) {
     return {
