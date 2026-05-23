@@ -1,6 +1,5 @@
 "use client"
 
-import { register } from "@/actions/register"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -15,7 +14,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useActionState, useEffect } from "react"
+import { useEffect } from "react"
 import { useFetcher } from "react-router"
 import { toast } from "sonner"
 

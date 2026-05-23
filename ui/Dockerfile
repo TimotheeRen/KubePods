@@ -5,8 +5,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm config set minimum-release-age 0 \
   && pnpm install --frozen-lockfile
 COPY . .
-
 RUN pnpm run build
+
 FROM busybox:1.37 AS runner
 WORKDIR /app
 COPY --from=builder /app/dist .
