@@ -7,7 +7,8 @@ const User = z.object({
 })
 
 export async function login({ request }: ActionFunctionArgs) {
-  const host = import.meta.env.VITE_API_HOST || "http://localhost:3001"
+  const host = "http://localhost:3001"
+  console.log(host)
   const formData = await request.formData()
   const result = User.safeParse(Object.fromEntries(formData.entries()))
 
@@ -41,7 +42,7 @@ export async function login({ request }: ActionFunctionArgs) {
         }
       }
 
-      let token = await response.text(); // TODO: put it in a cookie on the client
+      let token = await response.text();
       return ({
         error: null,
         message: "Successfully logged in.",
