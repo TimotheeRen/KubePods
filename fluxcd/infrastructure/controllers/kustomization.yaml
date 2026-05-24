@@ -4,4 +4,4 @@ resources:
   - kube-prometheus-stack.yaml
   - cnpg.yaml
   - atlas-operator.yaml
-  - ingress-nginx.yaml
+  - ingress-traefik.yaml
