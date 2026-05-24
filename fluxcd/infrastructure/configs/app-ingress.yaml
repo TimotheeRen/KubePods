@@ -5,8 +5,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: app.local
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
@@ -15,6 +14,7 @@ spec:
                 name: ui
                 port:
                   number: 8080
+
           - path: /users
             pathType: Prefix
             backend:
