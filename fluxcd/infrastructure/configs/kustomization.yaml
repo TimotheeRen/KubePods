@@ -4,6 +4,7 @@ namespace: default
 
 resources:
   - users-schema.yaml
+  - app-ingress.yaml
 
 configMapGenerator:
   - name: users-schema-config
