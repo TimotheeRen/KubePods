@@ -22,3 +22,11 @@ spec:
         kind: HelmRepository
         name: traefik
         namespace: default
+  values:
+    ports:
+      web:
+        hostPort: 8080
+      websecure:
+        hostPort: 8443
+    service:
+      type: ClusterIP
