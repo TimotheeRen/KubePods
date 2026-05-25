@@ -23,10 +23,10 @@ spec:
         name: traefik
         namespace: default
   values:
+    service:
+      type: NodePort
     ports:
       web:
-        hostPort: 8080
+        nodePort: 30080
       websecure:
-        hostPort: 8443
-    service:
-      type: ClusterIP
+      nodePort: 30443
