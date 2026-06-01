@@ -3,11 +3,18 @@ import Root from "@/routes/index"
 import { Toaster } from "sonner"
 import { login } from "./actions/login"
 import { register } from "./actions/register"
+import Auth from "./middlewares/auth"
+import Dashboard from "./routes/dashboard.tsx"
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+  },
+  {
+    path: '/dashboard',
+    loader: Auth,
+    element: <Dashboard />
   },
   {
     path: '/action',
@@ -21,7 +28,7 @@ const router = createBrowserRouter([
         action: register
       },
     ]
-  }
+  },
 ])
 
 function App() {

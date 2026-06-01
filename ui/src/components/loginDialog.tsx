@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label"
 import { useEffect } from "react"
 import { toast } from "sonner"
 import Cookie from "js-cookie";
-import { useFetcher } from "react-router"
+import { useFetcher, useNavigate } from "react-router"
 
 interface ActionData {
   error: string | null
@@ -26,6 +26,7 @@ interface ActionData {
 }
 
 export default function LoginDialog() {
+  const navigate = useNavigate()
   const fetcher = useFetcher<ActionData>()
   const state = fetcher.data
   const pending = fetcher.state === "submitting"
@@ -40,6 +41,7 @@ export default function LoginDialog() {
         secure: true,
         sameSite: "strict",
       })
+      navigate("/dashboard")
     }
   }, [state])
 
