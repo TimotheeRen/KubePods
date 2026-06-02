@@ -12,7 +12,7 @@ const User = z.object({
 })
 
 export async function register({ request }: ActionFunctionArgs) {
-  const host = "http://localhost:3001"
+  const host = import.meta.env.VITE_API_HOST;
   const formData = await request.formData()
   const result = User.safeParse(Object.fromEntries(formData.entries()))
 
