@@ -8,7 +8,9 @@ RUN pnpm config set minimum-release-age 0 \
 COPY . .
 RUN pnpm run build
 
-FROM busybox:1.37 AS runner
-WORKDIR /app
-COPY --from=builder /app/dist .
-CMD ["busybox", "httpd", "-f", "-v", "-p", "3000"]
+FROM nginx:stable-alpine3.23 AS runner
+WORKDIR /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]
