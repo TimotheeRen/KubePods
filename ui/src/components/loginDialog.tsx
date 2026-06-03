@@ -48,7 +48,7 @@ export default function LoginDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="text-md hover:bg-transparent hover:underline cursor-pointer">Login</Button>
+        <Button variant="link" className="text-md cursor-pointer">Login</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <fetcher.Form method="post" action="/action/login">
