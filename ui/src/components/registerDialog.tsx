@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label"
 import { useEffect } from "react"
 import { useFetcher } from "react-router"
 import { toast } from "sonner"
+import { ShimmerButton } from "./ui/shimmer-button"
 
 interface ActionData {
   error: string | null
@@ -40,7 +41,7 @@ export default function RegisterDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Register</Button>
+        <ShimmerButton background="rgba(99, 102, 241, 1)" className="h-10 w-20">Register</ShimmerButton>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <fetcher.Form method="post" action="/action/register">

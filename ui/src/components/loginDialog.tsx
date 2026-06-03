@@ -18,6 +18,7 @@ import { useEffect } from "react"
 import { toast } from "sonner"
 import Cookie from "js-cookie";
 import { useFetcher, useNavigate } from "react-router"
+import { ShimmerButton } from "./ui/shimmer-button"
 
 interface ActionData {
   error: string | null
@@ -48,7 +49,7 @@ export default function LoginDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Login</Button>
+        <Button variant="ghost" className="text-md hover:bg-transparent hover:underline cursor-pointer">Login</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <fetcher.Form method="post" action="/action/login">

@@ -5,6 +5,7 @@ import { login } from "./actions/login"
 import { register } from "./actions/register"
 import Auth from "./middlewares/auth"
 import Dashboard from "./routes/dashboard.tsx"
+import { ThemeProvider } from "./components/theme-provider.tsx"
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <ThemeProvider defaultTheme="dark" storageKey="theme">
+        <RouterProvider router={router} />
+      </ThemeProvider>
       <Toaster richColors />
     </>
   )
