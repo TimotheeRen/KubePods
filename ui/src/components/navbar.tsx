@@ -11,7 +11,7 @@ export default function Navbar() {
         <img src={logo} alt="KubePods" className="w-8" />
         <h1 className="text-xl font-semibold">KubePods</h1>
       </div>
-      <div className="flex sm:gap-4 md:gap-12">
+      <div className="md:flex gap-10 hidden mt-1">
         <div className="flex items-center gap-1">
           <h1 className="cursor-pointer text-lg">Why KubePods</h1>
           <ChevronDown size={18} />
