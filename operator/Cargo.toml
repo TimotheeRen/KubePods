@@ -1,0 +1,13 @@
+[package]
+name = "operator"
+version = "0.1.0"
+edition = "2024"
+default-run = "operator"
+
+[dependencies]
+kube = { version = "3.1.0", features = ["runtime", "derive"]}
+k8s-openapi = { version = "0.27.1", features = ["v1_35"]}
+serde = "1.0.228"
+serde_json = "1.0.150"
+schemars = "1.2.1"
+serde_yaml_neo = "0.11.0"
