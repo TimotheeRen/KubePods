@@ -2,7 +2,7 @@ import logo from "@/assets/logo.png"
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler"
 import { FaGithub } from "react-icons/fa";
 import { FaDiscord } from "react-icons/fa";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 export default function Navbar() {
   return (
