@@ -5,3 +5,4 @@ resources:
   - cnpg.yaml
   - atlas-operator.yaml
   - ingress-traefik.yaml
+  - desktops-namespace.yaml
