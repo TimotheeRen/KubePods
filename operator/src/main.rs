@@ -4,15 +4,14 @@ use k8s_openapi::{
         apps::v1::{Deployment, DeploymentSpec},
         core::v1::{Container, ContainerPort, PodSpec, PodTemplateSpec, ResourceRequirements},
     },
-    apimachinery::pkg::api::resource::Quantity,
+    apimachinery::pkg::{api::resource::Quantity, apis::meta::v1::LabelSelector},
 };
-use serde::de;
 use std::{collections::BTreeMap, sync::Arc, time::Duration, vec};
 
 use kube::{
     Api, Client, Error,
     api::{ObjectMeta, Patch, PatchParams},
-    runtime::{Controller, controller::Action, reflector::Lookup, watcher::Config},
+    runtime::{Controller, controller::Action, watcher::Config},
 };
 use operator::Desktop;
 
@@ -41,9 +40,14 @@ struct ContextData {
 
 async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<Action, Error> {
     let client = context.client.clone();
+
     let mut limits = BTreeMap::new();
     limits.insert("memory".to_string(), Quantity(desktop.spec.max_ram.clone()));
     limits.insert("cpu".to_string(), Quantity(desktop.spec.max_cpu.clone()));
+
+    let mut labels = BTreeMap::new();
+    labels.insert("app".to_string(), desktop.spec.id.clone());
+
     let deployment = Deployment {
         metadata: ObjectMeta {
             name: Some(desktop.spec.id.clone()),
@@ -51,7 +55,15 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
             ..Default::default()
         },
         spec: Some(DeploymentSpec {
+            selector: LabelSelector {
+                match_labels: Some(labels.clone()),
+                ..Default::default()
+            },
             template: PodTemplateSpec {
+                metadata: Some(ObjectMeta {
+                    labels: Some(labels.clone()),
+                    ..Default::default()
+                }),
                 spec: Some(PodSpec {
                     containers: vec![Container {
                         name: desktop.spec.name.clone(),
@@ -61,7 +73,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
                             ..Default::default()
                         }),
                         ports: Some(vec![ContainerPort {
-                            name: Some("HTTP".to_string()),
+                            name: Some("http".to_string()),
                             container_port: 3000,
                             host_port: Some(3000),
                             protocol: Some("TCP".to_string()),
@@ -71,7 +83,6 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
                     }],
                     ..Default::default()
                 }),
-                ..Default::default()
             },
             ..Default::default()
         }),
@@ -80,18 +91,18 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
     let deployments: Api<Deployment> = Api::namespaced(client, "desktops");
     match deployments
         .patch(
-            "desktop",
-            &PatchParams::default(),
+            &desktop.spec.id.clone(),
+            &PatchParams::apply("desktop-manager").force(),
             &Patch::Apply(deployment),
         )
         .await
     {
-        Ok(o) => println!("Sucessfully patched a deployment: {:?}", o),
+        Ok(_) => println!("Sucessfully patched a deployment"),
         Err(e) => println!("An error occured when patching a deployment: {}", e),
     };
     Ok(Action::requeue(Duration::from_secs(300)))
 }
 
-fn error_policy(desktop: Arc<Desktop>, error: &Error, context: Arc<ContextData>) -> Action {
+fn error_policy(_desktop: Arc<Desktop>, _error: &Error, _context: Arc<ContextData>) -> Action {
     Action::requeue(Duration::from_secs(60))
 }

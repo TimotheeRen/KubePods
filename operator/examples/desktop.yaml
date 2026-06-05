@@ -2,6 +2,7 @@ apiVersion: kubepods.com/v1
 kind: Desktop
 metadata:
   name: alpine
+  namespace: desktops
 spec:
   name: alpine
   id: "123"
