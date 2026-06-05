@@ -13,6 +13,7 @@ spec:
       labels:
         app: operator
     spec:
+      serviceAccount: operator
       containers:
         - name: operator
           image: timotheeren/kubepods-operator:sha-887f31dc9cffff424501d391eaf5f8e517115a51
