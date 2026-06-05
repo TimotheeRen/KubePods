@@ -1,0 +1,26 @@
+name: Operator CI/CD
+
+on:
+  push:
+    paths:
+      - "operator/**"
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: timotheeren/KubePods/.github/workflows/ci.yml@main
+    with:
+      image: "operator"
+    secrets:
+      dockerhub-username: ${{ vars.DOCKERHUB_USERNAME }}
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  cd:
+    needs: ci
+    uses: timotheeren/KubePods/.github/workflows/cd.yml@main
+    with:
+      image: "timotheeren/kubepods-operator"
+      tag: "sha-${{ github.sha }}"
+      path: "operator"
+    secrets:
+      token: ${{ secrets.PAT }}
