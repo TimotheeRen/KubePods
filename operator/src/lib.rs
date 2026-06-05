@@ -8,4 +8,6 @@ pub struct DesktopSpec {
     pub name: String,
     pub id: String,
     pub image: String,
+    pub max_ram: String,
+    pub max_cpu: String,
 }

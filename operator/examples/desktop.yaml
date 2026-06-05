@@ -6,3 +6,5 @@ spec:
   name: alpine
   id: "123"
   image: alpine
+  max_ram: "1Gi"
+  max_cpu: "100m"

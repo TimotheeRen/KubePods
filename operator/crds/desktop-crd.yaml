@@ -24,11 +24,17 @@ spec:
                 type: string
               image:
                 type: string
+              max_cpu:
+                type: string
+              max_ram:
+                type: string
               name:
                 type: string
             required:
             - id
             - image
+            - max_cpu
+            - max_ram
             - name
             type: object
         required:
