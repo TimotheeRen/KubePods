@@ -86,7 +86,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         )
         .await
     {
-        Ok(_) => println!("Sucessfully patched a deployment !"),
+        Ok(o) => println!("Sucessfully patched a deployment: {:?}", o),
         Err(e) => println!("An error occured when patching a deployment: {}", e),
     };
     Ok(Action::requeue(Duration::from_secs(300)))
