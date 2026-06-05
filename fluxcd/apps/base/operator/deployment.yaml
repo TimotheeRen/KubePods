@@ -15,4 +15,4 @@ spec:
     spec:
       containers:
         - name: operator
-          image: timotheeren/kubepods-operator:sha-345d5c9aeed5c0ed2b46c11bcead25f34d27d010
+          image: timotheeren/kubepods-operator:sha-c8a5b1c16ddfecb1cfcfa2eaae1631df7fce5a13
