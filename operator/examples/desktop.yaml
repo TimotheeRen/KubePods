@@ -1,0 +1,8 @@
+apiVersion: kubepods.com/v1
+kind: Desktop
+metadata:
+  name: alpine
+spec:
+  name: alpine
+  id: "123"
+  image: alpine
