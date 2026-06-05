@@ -14,7 +14,7 @@ use k8s_openapi::{
 use std::{collections::BTreeMap, sync::Arc, time::Duration, vec};
 
 use kube::{
-    Api, Client, Error,
+    Api, Client, Error, Resource,
     api::{ObjectMeta, Patch, PatchParams},
     runtime::{Controller, controller::Action, watcher::Config},
 };
@@ -25,13 +25,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::try_default().await?;
     let desktops: Api<Desktop> = Api::namespaced(client.clone(), "desktops");
     let config = Config::default();
-    let context = Arc::new(ContextData { client });
+
+    let deployments: Api<Deployment> = Api::namespaced(client.clone(), "desktops");
+    let services: Api<Service> = Api::namespaced(client.clone(), "desktops");
+    let context = Arc::new(ContextData {
+        deployments: deployments.clone(),
+        services: services.clone(),
+    });
+
     Controller::new(desktops.clone(), config.clone())
-        .owns(desktops, config)
+        .owns(deployments, config.clone())
+        .owns(services, config)
         .run(reconcile, error_policy, context)
         .for_each(|res| async move {
             match res {
                 Ok(o) => println!("reconciled: {:?}", o),
+                Err(kube::runtime::controller::Error::ObjectNotFound(_)) => {
+                    println!("Object already deleted from store, skipping.")
+                }
                 Err(e) => println!("reconciliation failed: {}", e),
             }
         })
@@ -40,11 +51,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 struct ContextData {
-    client: Client,
+    deployments: Api<Deployment>,
+    services: Api<Service>,
 }
 
 async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<Action, Error> {
-    let client = context.client.clone();
+    if desktop.metadata.deletion_timestamp.is_some() {
+        println!("Object {} is being deleted", desktop.spec.id);
+        return Ok(Action::await_change());
+    }
 
     let mut limits = BTreeMap::new();
     limits.insert("memory".to_string(), Quantity(desktop.spec.max_ram.clone()));
@@ -57,6 +72,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         metadata: ObjectMeta {
             name: Some(desktop.spec.id.clone()),
             namespace: Some("desktops".to_string()),
+            owner_references: Some(vec![desktop.controller_owner_ref(&()).unwrap()]),
             ..Default::default()
         },
         spec: Some(DeploymentSpec {
@@ -93,8 +109,8 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         }),
         ..Default::default()
     };
-    let deployments: Api<Deployment> = Api::namespaced(client.clone(), "desktops");
-    match deployments
+    match context
+        .deployments
         .patch(
             &desktop.spec.id.clone(),
             &PatchParams::apply("deployment-manager").force(),
@@ -110,6 +126,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         metadata: ObjectMeta {
             name: Some(desktop.spec.id.clone()),
             namespace: Some("desktops".to_string()),
+            owner_references: Some(vec![desktop.controller_owner_ref(&()).unwrap()]),
             ..Default::default()
         },
         spec: Some(ServiceSpec {
@@ -125,8 +142,8 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         }),
         ..Default::default()
     };
-    let services: Api<Service> = Api::namespaced(client, "desktops");
-    match services
+    match context
+        .services
         .patch(
             &desktop.spec.id.clone(),
             &PatchParams::apply("service-manager"),
