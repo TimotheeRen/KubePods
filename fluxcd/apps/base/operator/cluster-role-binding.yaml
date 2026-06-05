@@ -3,6 +3,8 @@ kind: ClusterRole
 metadata:
   name: operator
 rules:
-  - apiGroups: ["", "apps"]
+  - apiGroups: ["", "apps", "kubepods.com"]
     resources: ["desktops", "deployments", "services"]
-    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
