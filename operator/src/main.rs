@@ -2,9 +2,14 @@ use futures::StreamExt;
 use k8s_openapi::{
     api::{
         apps::v1::{Deployment, DeploymentSpec},
-        core::v1::{Container, ContainerPort, PodSpec, PodTemplateSpec, ResourceRequirements},
+        core::v1::{
+            Container, ContainerPort, PodSpec, PodTemplateSpec, ResourceRequirements, Service,
+            ServicePort, ServiceSpec,
+        },
     },
-    apimachinery::pkg::{api::resource::Quantity, apis::meta::v1::LabelSelector},
+    apimachinery::pkg::{
+        api::resource::Quantity, apis::meta::v1::LabelSelector, util::intstr::IntOrString,
+    },
 };
 use std::{collections::BTreeMap, sync::Arc, time::Duration, vec};
 
@@ -88,16 +93,48 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         }),
         ..Default::default()
     };
-    let deployments: Api<Deployment> = Api::namespaced(client, "desktops");
+    let deployments: Api<Deployment> = Api::namespaced(client.clone(), "desktops");
     match deployments
         .patch(
             &desktop.spec.id.clone(),
-            &PatchParams::apply("desktop-manager").force(),
+            &PatchParams::apply("deployment-manager").force(),
             &Patch::Apply(deployment),
         )
         .await
     {
-        Ok(_) => println!("Sucessfully patched a deployment"),
+        Ok(_) => println!("Sucessfully patched deployment"),
+        Err(e) => println!("An error occured when patching a deployment: {}", e),
+    };
+
+    let service = Service {
+        metadata: ObjectMeta {
+            name: Some(desktop.spec.id.clone()),
+            namespace: Some("desktops".to_string()),
+            ..Default::default()
+        },
+        spec: Some(ServiceSpec {
+            selector: Some(labels),
+            ports: Some(vec![ServicePort {
+                protocol: Some("TCP".to_string()),
+                port: 3000,
+                target_port: Some(IntOrString::Int(3000)),
+                ..Default::default()
+            }]),
+            type_: Some("ClusterIP".to_string()),
+            ..Default::default()
+        }),
+        ..Default::default()
+    };
+    let services: Api<Service> = Api::namespaced(client, "desktops");
+    match services
+        .patch(
+            &desktop.spec.id.clone(),
+            &PatchParams::apply("service-manager"),
+            &Patch::Apply(service),
+        )
+        .await
+    {
+        Ok(_) => println!("Sucessfully patched service"),
         Err(e) => println!("An error occured when patching a deployment: {}", e),
     };
     Ok(Action::requeue(Duration::from_secs(300)))
