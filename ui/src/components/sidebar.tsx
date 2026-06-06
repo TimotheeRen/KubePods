@@ -1,7 +1,6 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -12,7 +11,6 @@ import {
 import logo from "@/assets/logo.png"
 import { ChartLine, LogOut, MonitorCloud, Plus, Settings, User, UserCog } from "lucide-react"
 import { FaDiscord, FaGithub } from "react-icons/fa"
-import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu"
 
 export default function AppSidebar() {
   return (
