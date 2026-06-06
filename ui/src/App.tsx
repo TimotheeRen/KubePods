@@ -8,6 +8,7 @@ import Auth from "./middlewares/auth"
 import Dashboard from "./routes/dashboard.tsx"
 import { ThemeProvider } from "./components/theme-provider.tsx"
 import DashboardLayout from "./components/dashboardLayout.tsx"
+import { createDesktop } from "./actions/createDesktop.tsx";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/action',
+    path: '/actions',
     children: [
       {
         path: 'login',
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: 'register',
         action: register
+      },
+      {
+        path: 'createDesktop',
+        action: createDesktop
       },
     ]
   },

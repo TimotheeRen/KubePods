@@ -52,7 +52,7 @@ export default function RegisterDialog() {
         <ShimmerButton background="rgba(99, 102, 241, 1)" className="h-10 w-20">Register</ShimmerButton>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
-        <fetcher.Form method="post" action="/action/register">
+        <fetcher.Form method="post" action="/actions/register">
           <DialogHeader>
             <DialogTitle>Register</DialogTitle>
             <DialogDescription>

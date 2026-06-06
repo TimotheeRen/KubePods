@@ -51,7 +51,7 @@ export default function LoginDialog() {
         <Button variant="link" className="text-md cursor-pointer">Login</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
-        <fetcher.Form method="post" action="/action/login">
+        <fetcher.Form method="post" action="/actions/login">
           <DialogHeader>
             <DialogTitle>Login</DialogTitle>
             <DialogDescription>

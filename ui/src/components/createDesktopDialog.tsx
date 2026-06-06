@@ -6,6 +6,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { useFetcher } from "react-router";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 interface ActionData {
   error: string | null,
@@ -26,7 +27,7 @@ export default function CreateDesktopDialog() {
         </SidebarMenuButton>
       </DialogTrigger>
       <DialogContent>
-        <fetcher.Form method="post" action="/action/createDesktop">
+        <fetcher.Form method="post" action="/actions/createDesktop">
           <DialogHeader>
             <DialogTitle>Create a desktop</DialogTitle>
             <DialogDescription>Add a desktop to your workspace</DialogDescription>
@@ -34,7 +35,39 @@ export default function CreateDesktopDialog() {
           <FieldGroup className="mt-3 mb-5">
             <Field>
               <Label>Desktop name</Label>
-              <Input placeholder="Your desktop name" />
+              <Input name="name" placeholder="Your desktop name" />
+            </Field>
+            <Field>
+              <Label>Distribution</Label>
+              <Select name="distribution" defaultValue="ubuntu">
+                <SelectTrigger>
+                  <SelectValue placeholder="Ubuntu" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="ubuntu">Ubuntu</SelectItem>
+                    <SelectItem value="debian">Debian</SelectItem>
+                    <SelectItem value="fedora">Fedora</SelectItem>
+                    <SelectItem value="arch">Arch</SelectItem>
+                    <SelectItem value="alpine">Alpine</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field>
+              <Label >Desktop environment</Label>
+              <Select name="desktopEnvironment" defaultValue="kde-plasma">
+                <SelectTrigger>
+                  <SelectValue placeholder="KDE Plasma" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="kde-plasma">KDE Plasma</SelectItem>
+                    <SelectItem value="xfc">XFCE</SelectItem>
+                    <SelectItem value="i3">i3</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </Field>
           </FieldGroup>
           <DialogFooter>
