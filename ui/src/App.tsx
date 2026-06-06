@@ -6,6 +6,8 @@ import { register } from "./actions/register"
 import Auth from "./middlewares/auth"
 import Dashboard from "./routes/dashboard.tsx"
 import { ThemeProvider } from "./components/theme-provider.tsx"
+import AppSidebar from "./components/sidebar.tsx"
+import DashboardLayout from "./components/dashboardLayout.tsx"
 
 const router = createBrowserRouter([
   {
@@ -15,7 +17,13 @@ const router = createBrowserRouter([
   {
     path: '/dashboard',
     loader: Auth,
-    element: <Dashboard />
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: '',
+        element: <Dashboard />,
+      },
+    ],
   },
   {
     path: '/action',
