@@ -19,7 +19,8 @@ impl AuthService for AuthImpl {
     ) -> std::result::Result<tonic::Response<user::RegisterResponse>, tonic::Status> {
         let req = request.into_inner();
 
-        self.service
+        let token = self
+            .service
             .register(req.username, req.email, req.password)
             .await
             .map_err(|e| match e {
@@ -27,9 +28,7 @@ impl AuthService for AuthImpl {
                 _ => Status::internal("Internal server error"),
             })?;
 
-        Ok(Response::new(user::RegisterResponse {
-            token: "".to_string(),
-        }))
+        Ok(Response::new(user::RegisterResponse { token }))
     }
 
     async fn login(

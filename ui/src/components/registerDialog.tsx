@@ -15,9 +15,10 @@ import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect } from "react"
-import { useFetcher } from "react-router"
+import { useFetcher, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { ShimmerButton } from "./ui/shimmer-button"
+import Cookie from "js-cookie";
 
 interface ActionData {
   error: string | null
@@ -26,6 +27,7 @@ interface ActionData {
 }
 
 export default function RegisterDialog() {
+  const navigate = useNavigate()
   const fetcher = useFetcher<ActionData>()
   const state = fetcher.data
   const pending = fetcher.state === "submitting"
@@ -33,8 +35,14 @@ export default function RegisterDialog() {
   useEffect(() => {
     if (state?.error) {
       toast.error(state.message)
-    } else if (state?.message) {
+    } else if (state?.token) {
       toast.success(state.message)
+      Cookie.set("token", state.token, {
+        expires: 1,
+        secure: true,
+        sameSite: "strict",
+      })
+      navigate("/dashboard")
     }
   }, [state])
 

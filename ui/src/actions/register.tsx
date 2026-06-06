@@ -51,9 +51,11 @@ export async function register({ request }: ActionFunctionArgs) {
         }
       }
 
+      let token = await response.text();
       return ({
         error: null,
-        message: "Successfuly registered!"
+        message: "Successfuly registered!",
+        token: token
       })
     } catch (e) {
       return {

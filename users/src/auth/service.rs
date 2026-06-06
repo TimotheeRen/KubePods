@@ -18,15 +18,21 @@ impl<R: AuthRepository> AuthServiceLayer<R> {
         username: String,
         email: String,
         password: String,
-    ) -> Result<(), AuthError> {
-        let user = User {
+    ) -> Result<String, AuthError> {
+        let register_user = User {
             username,
             email,
             password,
         };
-        self.repo.create_user(&user).await?;
-
-        Ok(())
+        self.repo.create_user(&register_user).await?;
+        let login_user = LoginUser {
+            username: register_user.username,
+            password: register_user.password,
+        };
+        let hash = self.repo.check_password(login_user.clone()).await?;
+        self.repo
+            .generate_token(login_user.username, login_user.password, &hash)
+            .await
     }
 
     pub async fn login(&self, username: String, password: String) -> Result<String, AuthError> {
