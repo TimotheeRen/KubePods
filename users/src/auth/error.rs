@@ -1,12 +1,6 @@
 #[derive(Debug)]
-pub enum CreateUserError {
+pub enum AuthError {
     UserAlreadyExists,
-    DatabaseError,
-    HashPasswordError,
-}
-
-#[derive(Debug)]
-pub enum CheckPasswordError {
+    InternalServerError,
     WrongPassword,
-    DatabaseError,
 }

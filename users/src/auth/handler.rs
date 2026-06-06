@@ -1,11 +1,7 @@
 use tonic::{Response, Status};
 use user::auth_service_server::AuthService;
 
-use crate::auth::{
-    error::{CheckPasswordError, CreateUserError},
-    repo::PostgresAuthRepository,
-    service::AuthServiceLayer,
-};
+use crate::auth::{error::AuthError, repo::PostgresAuthRepository, service::AuthServiceLayer};
 
 pub mod user {
     tonic::include_proto!("user");
@@ -27,18 +23,12 @@ impl AuthService for AuthImpl {
             .register(req.username, req.email, req.password)
             .await
             .map_err(|e| match e {
-                CreateUserError::UserAlreadyExists => {
-                    Status::already_exists("Username already taken")
-                }
-                CreateUserError::DatabaseError => Status::internal("Internal server error"),
-                CreateUserError::HashPasswordError => {
-                    Status::internal("An error occured when hasing the password")
-                }
+                AuthError::UserAlreadyExists => Status::already_exists("Username already taken"),
+                _ => Status::internal("Internal server error"),
             })?;
 
         Ok(Response::new(user::RegisterResponse {
-            success: true,
-            message: "".to_string(),
+            token: "".to_string(),
         }))
     }
 
@@ -52,8 +42,8 @@ impl AuthService for AuthImpl {
             .login(req.username, req.password)
             .await
             .map_err(|e| match e {
-                CheckPasswordError::WrongPassword => Status::unauthenticated("Wrong credentials"),
-                CheckPasswordError::DatabaseError => Status::internal("Internal server error"),
+                AuthError::WrongPassword => Status::unauthenticated("Wrong credentials"),
+                _ => Status::internal("Internal server error"),
             })?;
         Ok(Response::new(user::LoginResponse { token }))
     }

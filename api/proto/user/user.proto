@@ -13,8 +13,7 @@ message RegisterRequest {
   string password = 3;
 }
 message RegisterResponse {
-  bool success = 1;
-  string message = 2;
+  string token = 1;
 }
 
 message LoginRequest {

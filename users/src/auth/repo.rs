@@ -6,20 +6,19 @@ use jsonwebtoken::{EncodingKey, Header, encode};
 use sqlx::{Pool, Postgres, Row, query};
 
 use crate::auth::{
-    error::{CheckPasswordError, CreateUserError},
+    error::AuthError,
     model::{LoginUser, User, UserClaims},
 };
 
 pub trait AuthRepository {
-    async fn create_user(&self, user: &User) -> Result<(), CreateUserError>;
-    async fn check_password(&self, user: LoginUser) -> Result<String, CheckPasswordError>;
+    async fn create_user(&self, user: &User) -> Result<(), AuthError>;
+    async fn check_password(&self, user: LoginUser) -> Result<String, AuthError>;
     async fn generate_token(
         &self,
         username: String,
         password: String,
         hashed_password: &str,
-    ) -> Result<String, CheckPasswordError>; // TODO: Add
-    // another error type
+    ) -> Result<String, AuthError>;
 }
 
 pub struct PostgresAuthRepository {
@@ -33,10 +32,10 @@ impl PostgresAuthRepository {
 }
 
 impl AuthRepository for PostgresAuthRepository {
-    async fn create_user(&self, user: &User) -> Result<(), CreateUserError> {
+    async fn create_user(&self, user: &User) -> Result<(), AuthError> {
         let password = Argon2::default()
             .hash_password(user.password.as_bytes())
-            .map_err(|_| CreateUserError::HashPasswordError)?
+            .map_err(|_| AuthError::InternalServerError)?
             .to_string();
 
         match query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)")
@@ -48,26 +47,25 @@ impl AuthRepository for PostgresAuthRepository {
         {
             Ok(_) => Ok(()),
             Err(sqlx::Error::Database(err)) => {
-                println!("{:?}", err.constraint());
                 if err.constraint() == Some("users_pkey") {
-                    Err(CreateUserError::UserAlreadyExists)
+                    Err(AuthError::UserAlreadyExists)
                 } else {
-                    Err(CreateUserError::DatabaseError)
+                    Err(AuthError::InternalServerError)
                 }
             }
-            Err(_) => Err(CreateUserError::DatabaseError),
+            Err(_) => Err(AuthError::InternalServerError),
         }
     }
 
-    async fn check_password(&self, user: LoginUser) -> Result<String, CheckPasswordError> {
+    async fn check_password(&self, user: LoginUser) -> Result<String, AuthError> {
         let res = query("SELECT password FROM users WHERE username = $1")
             .bind(&user.username)
             .fetch_optional(&self.pool)
             .await;
         match res {
             Ok(Some(row)) => Ok(row.get("password")),
-            Ok(None) => Err(CheckPasswordError::WrongPassword),
-            Err(_) => Err(CheckPasswordError::DatabaseError),
+            Ok(None) => Err(AuthError::WrongPassword),
+            Err(_) => Err(AuthError::InternalServerError),
         }
     }
 
@@ -76,15 +74,15 @@ impl AuthRepository for PostgresAuthRepository {
         username: String,
         password: String,
         hashed_password: &str,
-    ) -> Result<String, CheckPasswordError> {
+    ) -> Result<String, AuthError> {
         let hash = PasswordHash::new(hashed_password).map_err(|e| {
             println!("PasswordHash error: {:?}", e);
-            CheckPasswordError::DatabaseError
+            AuthError::InternalServerError
         })?;
 
         Argon2::default()
             .verify_password(password.as_bytes(), &hash)
-            .map_err(|_| CheckPasswordError::WrongPassword)?;
+            .map_err(|_| AuthError::InternalServerError)?;
 
         println!("Correct credentials !");
 
@@ -101,7 +99,7 @@ impl AuthRepository for PostgresAuthRepository {
             &claims,
             &EncodingKey::from_secret("secret".as_ref()), // TODO: add secret var
         )
-        .map_err(|_| CheckPasswordError::DatabaseError)?;
+        .map_err(|_| AuthError::InternalServerError)?;
 
         Ok(token)
     }

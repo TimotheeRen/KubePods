@@ -1,5 +1,5 @@
 use crate::auth::{
-    error::{CheckPasswordError, CreateUserError},
+    error::AuthError,
     model::{LoginUser, User},
     repo::AuthRepository,
 };
@@ -18,7 +18,7 @@ impl<R: AuthRepository> AuthServiceLayer<R> {
         username: String,
         email: String,
         password: String,
-    ) -> Result<(), CreateUserError> {
+    ) -> Result<(), AuthError> {
         let user = User {
             username,
             email,
@@ -29,11 +29,7 @@ impl<R: AuthRepository> AuthServiceLayer<R> {
         Ok(())
     }
 
-    pub async fn login(
-        &self,
-        username: String,
-        password: String,
-    ) -> Result<String, CheckPasswordError> {
+    pub async fn login(&self, username: String, password: String) -> Result<String, AuthError> {
         let user = LoginUser { username, password };
         let hash = self.repo.check_password(user.clone()).await?;
         self.repo
