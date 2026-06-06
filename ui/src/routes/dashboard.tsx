@@ -1,3 +1,10 @@
+import Header from "@/components/header"
+
 export default function Dashboard() {
-  return <h1>Dashboard</h1>
+  return (
+    <div>
+      <Header title={"Dashboard"} />
+      <h1>Dashboard content lwekfjwlefj</h1>
+    </div>
+  )
 }
