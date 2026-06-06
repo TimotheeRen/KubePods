@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import logo from "@/assets/logo.png"
-import { ChartLine, LogOut, MonitorCloud, Plus, Settings, User, UserCog } from "lucide-react"
+import { ChartLine, LogOut, MonitorCloud, Plus, Settings, UserCog } from "lucide-react"
 import { FaDiscord, FaGithub } from "react-icons/fa"
 
 export default function AppSidebar() {
