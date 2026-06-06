@@ -35,6 +35,9 @@ impl<R: AuthRepository> AuthServiceLayer<R> {
         password: String,
     ) -> Result<String, CheckPasswordError> {
         let user = LoginUser { username, password };
-        self.repo.check_password(user).await
+        let hash = self.repo.check_password(user.clone()).await?;
+        self.repo
+            .generate_token(user.username, user.password, &hash)
+            .await
     }
 }

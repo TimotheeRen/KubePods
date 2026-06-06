@@ -21,7 +21,6 @@ impl AuthService for AuthImpl {
         &self,
         request: tonic::Request<user::RegisterRequest>,
     ) -> std::result::Result<tonic::Response<user::RegisterResponse>, tonic::Status> {
-        println!("{:?}", request);
         let req = request.into_inner();
 
         self.service

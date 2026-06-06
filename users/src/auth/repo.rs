@@ -1,8 +1,8 @@
-use std::time::{Duration, SystemTime};
+use std::time::Duration;
 
 use argon2::{Argon2, PasswordHash, PasswordHasher, PasswordVerifier};
 use chrono::Utc;
-use jsonwebtoken::{EncodingKey, Header, crypto::CryptoProvider, encode};
+use jsonwebtoken::{EncodingKey, Header, encode};
 use sqlx::{Pool, Postgres, Row, query};
 
 use crate::auth::{
@@ -13,6 +13,13 @@ use crate::auth::{
 pub trait AuthRepository {
     async fn create_user(&self, user: &User) -> Result<(), CreateUserError>;
     async fn check_password(&self, user: LoginUser) -> Result<String, CheckPasswordError>;
+    async fn generate_token(
+        &self,
+        username: String,
+        password: String,
+        hashed_password: &str,
+    ) -> Result<String, CheckPasswordError>; // TODO: Add
+    // another error type
 }
 
 pub struct PostgresAuthRepository {
@@ -57,19 +64,26 @@ impl AuthRepository for PostgresAuthRepository {
             .bind(&user.username)
             .fetch_optional(&self.pool)
             .await;
-        let password: String = match res {
-            Ok(Some(row)) => row.get("password"),
-            Ok(None) => return Err(CheckPasswordError::WrongPassword),
-            Err(_) => return Err(CheckPasswordError::DatabaseError),
-        };
+        match res {
+            Ok(Some(row)) => Ok(row.get("password")),
+            Ok(None) => Err(CheckPasswordError::WrongPassword),
+            Err(_) => Err(CheckPasswordError::DatabaseError),
+        }
+    }
 
-        let hash = PasswordHash::new(&password).map_err(|e| {
+    async fn generate_token(
+        &self,
+        username: String,
+        password: String,
+        hashed_password: &str,
+    ) -> Result<String, CheckPasswordError> {
+        let hash = PasswordHash::new(hashed_password).map_err(|e| {
             println!("PasswordHash error: {:?}", e);
             CheckPasswordError::DatabaseError
         })?;
 
         Argon2::default()
-            .verify_password(user.password.as_bytes(), &hash)
+            .verify_password(password.as_bytes(), &hash)
             .map_err(|_| CheckPasswordError::WrongPassword)?;
 
         println!("Correct credentials !");
@@ -77,7 +91,7 @@ impl AuthRepository for PostgresAuthRepository {
         let expiration = Utc::now() + Duration::from_mins(90);
 
         let claims = UserClaims {
-            sub: user.username,
+            sub: username,
             role: "user".to_string(),
             exp: expiration.timestamp(),
         };

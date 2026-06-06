@@ -6,6 +6,7 @@ pub struct User {
     pub password: String,
 }
 
+#[derive(Clone)]
 pub struct LoginUser {
     pub username: String,
     pub password: String,
