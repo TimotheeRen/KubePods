@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { ChartLine, LogOut, MonitorCloud, Plus, Settings, UserCog } from "lucide-react"
+import { ChartLine, LogOut, MonitorCloud, Settings, UserCog } from "lucide-react"
 import { FaDiscord, FaGithub } from "react-icons/fa"
 import CreateDesktopDialog from "./createDesktopDialog"
 import logo from "@/assets/logo.png"

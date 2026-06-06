@@ -13,8 +13,6 @@ interface ActionData {
 
 export default function CreateDesktopDialog() {
   const fetcher = useFetcher<ActionData>()
-  const state = fetcher.data
-  const pending = fetcher.state === "submitting"
   return (
     <Dialog>
       <DialogTrigger asChild>
