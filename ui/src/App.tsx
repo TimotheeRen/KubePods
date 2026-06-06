@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { redirect } from "react-router";
 import Root from "@/routes/index"
 import { Toaster } from "sonner"
 import { login } from "./actions/login"
@@ -12,10 +13,21 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+    loader: async () => {
+      if (await Auth()) {
+        throw redirect("/dashboard")
+      }
+      return null
+    }
   },
   {
     path: '/dashboard',
-    loader: Auth,
+    loader: async () => {
+      if (!await Auth()) {
+        throw redirect("/")
+      }
+      return null
+    },
     element: <DashboardLayout />,
     children: [
       {

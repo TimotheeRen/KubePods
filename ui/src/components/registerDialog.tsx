@@ -58,11 +58,11 @@ export default function RegisterDialog() {
             </Field>
             <Field>
               <Label>Username</Label>
-              <Input id="username" name="username" type="text" placeholder="..." required />
+              <Input id="username" name="username" type="text" placeholder="A great username" required />
             </Field>
             <Field>
               <Label>Password</Label>
-              <Input id="password" name="password" type="password" placeholder="..." required />
+              <Input id="password" name="password" type="password" placeholder="A strong password" required />
             </Field>
           </FieldGroup>
           <DialogFooter>

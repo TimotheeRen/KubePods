@@ -2,6 +2,7 @@ import LoginDialog from "@/components/loginDialog";
 import Navbar from "@/components/navbar";
 import RegisterDialog from "@/components/registerDialog";
 import { LightRays } from "@/components/ui/light-rays";
+import Auth from "@/middlewares/auth";
 
 export default function Root() {
   return (

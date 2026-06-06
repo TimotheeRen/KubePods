@@ -61,11 +61,11 @@ export default function LoginDialog() {
           <FieldGroup className="my-5">
             <Field>
               <Label>Username</Label>
-              <Input id="username" name="username" type="text" placeholder="..." required />
+              <Input id="username" name="username" type="text" placeholder="Your username" required />
             </Field>
             <Field>
               <Label>Password</Label>
-              <Input id="password" name="password" type="password" placeholder="..." required />
+              <Input id="password" name="password" type="password" placeholder="Your password" required />
             </Field>
           </FieldGroup>
           <DialogFooter>

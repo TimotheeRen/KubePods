@@ -3,19 +3,21 @@ import Cookie from "js-cookie";
 
 export default async function Auth() {
   const token = Cookie.get("token")
-  if (!token) {
-    throw redirect("/")
-  }
+  if (!token) return false
 
   const host = import.meta.env.VITE_API_HOST;
-  const response = await fetch(host + "/ping", {
-    headers: {
-      Authorization: `Bearer ${token}`,
+  try {
+    const response = await fetch(host + "/ping", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    if (response.status != 200) {
+      throw redirect("/")
     }
-  })
-  if (response.status != 200) {
-    throw redirect("/")
+  } catch (error) {
+    return false
   }
 
-  return null
+  return true
 }

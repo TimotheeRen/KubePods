@@ -8,9 +8,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import logo from "@/assets/logo.png"
 import { ChartLine, LogOut, MonitorCloud, Plus, Settings, UserCog } from "lucide-react"
 import { FaDiscord, FaGithub } from "react-icons/fa"
+import CreateDesktopDialog from "./createDesktopDialog"
+import logo from "@/assets/logo.png"
 
 export default function AppSidebar() {
   return (
@@ -31,16 +32,8 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground cursor-pointer"
-                >
-                  <div className="flex gap-1 items-center">
-                    <Plus />
-                    <span>Create a desktop</span>
-                  </div>
-                </SidebarMenuButton>
+                <CreateDesktopDialog />
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenu className="mt-2">
@@ -75,7 +68,6 @@ export default function AppSidebar() {
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
             <SidebarMenu>
-
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <FaDiscord />
@@ -94,7 +86,6 @@ export default function AppSidebar() {
                   <span>Logout</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
