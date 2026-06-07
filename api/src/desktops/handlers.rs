@@ -7,7 +7,7 @@ use crate::{
 
 pub async fn create_desktop(
     State(mut state): State<AppState>,
-    user: Claims,
+    _: Claims,
     Json(desktop): Json<schemas::createDesktop>,
 ) -> Result<String, StatusCode> {
     let res = state
