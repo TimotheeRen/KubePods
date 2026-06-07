@@ -1,3 +1,4 @@
 syntax = "proto3";
 
+import "desktops/provisioning.proto";
 import "user/user.proto";

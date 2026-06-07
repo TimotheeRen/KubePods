@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package provisioning;
+
+service ProvisioningService {
+  rpc CreateDesktop(CreateDesktopRequest) returns (CreateDesktopResponse);
+}
+
+message CreateDesktopRequest {
+  string name = 1;
+  string distribution = 2;
+  string desktop_environment = 3;
+}
+
+message CreateDesktopResponse {}

@@ -9,3 +9,6 @@ dev:
 
 delete:
 	k3d cluster delete KubePods
+
+forward:
+	kubectl port-forward svc/users-postgres-cluster-rw 5432

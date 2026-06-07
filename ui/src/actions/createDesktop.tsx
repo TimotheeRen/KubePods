@@ -4,7 +4,7 @@ import z from "zod";
 const Desktop = z.object({
   name: z.string(),
   distribution: z.string(),
-  desktopEnvironment: z.string(),
+  desktop_environment: z.string(),
 })
 
 export async function createDesktop({ request }: ActionFunctionArgs) {
@@ -19,15 +19,15 @@ export async function createDesktop({ request }: ActionFunctionArgs) {
       message: result.error.issues[0].message
     }
   } else {
-    const { name, distribution, desktopEnvironment } = result.data
-    console.log(name, distribution, desktopEnvironment)
+    const { name, distribution, desktop_environment } = result.data
+    console.log(name, distribution, desktop_environment)
     try {
       const response = await fetch(host + "/desktops/create_desktop", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, distribution, desktopEnvironment }),
+        body: JSON.stringify({ name, distribution, desktop_environment }),
       })
 
       if (!response.ok) {

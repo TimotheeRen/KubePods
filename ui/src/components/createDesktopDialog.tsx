@@ -56,7 +56,7 @@ export default function CreateDesktopDialog() {
             </Field>
             <Field>
               <Label >Desktop environment</Label>
-              <Select name="desktopEnvironment" defaultValue="kde-plasma">
+              <Select name="desktop_environment" defaultValue="kde-plasma">
                 <SelectTrigger>
                   <SelectValue placeholder="KDE Plasma" />
                 </SelectTrigger>
