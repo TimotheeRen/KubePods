@@ -22,7 +22,7 @@ export async function createDesktop({ request }: ActionFunctionArgs) {
     const { name, distribution, desktopEnvironment } = result.data
     console.log(name, distribution, desktopEnvironment)
     try {
-      const response = await fetch(host + "/users/create_desktop", {
+      const response = await fetch(host + "/desktops/create_desktop", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

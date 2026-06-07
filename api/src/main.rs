@@ -1,4 +1,6 @@
+mod desktops;
 mod users;
+
 use crate::users::user::auth_service_client::AuthServiceClient;
 use axum::{
     Router,
@@ -87,6 +89,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = Router::new()
         .route("/ping", get(ping))
         .nest("/users", users::routes::auth())
+        .nest("/desktops", desktops::routes::provisioning())
         .layer(cors)
         .with_state(state);
 
