@@ -1,0 +1,26 @@
+name: Desktops CI/CD
+
+on:
+  push:
+    paths:
+      - "desktops/**"
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: timotheeren/KubePods/.github/workflows/ci.yml@main
+    with:
+      image: "desktops"
+    secrets:
+      dockerhub-username: ${{ vars.DOCKERHUB_USERNAME }}
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  cd:
+    needs: ci
+    uses: timotheeren/KubePods/.github/workflows/cd.yml@main
+    with:
+      image: "timotheeren/kubepods-desktops"
+      tag: "sha-${{ github.sha }}"
+      path: "desktops"
+    secrets:
+      token: ${{ secrets.PAT }}

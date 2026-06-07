@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: desktops
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: desktops
+  template:
+    metadata:
+      labels:
+        app: desktops
+    spec:
+      containers:
+        - name: desktops
+          image: timotheeren/kubepods-desktops:sha-3aa8cd8b0b1537e3579499d079a9f5980ea70b78
+          ports:
+            - containerPort: 50051
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: desktops-postgres-cluster-app
+                  key: uri
