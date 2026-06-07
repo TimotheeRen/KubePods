@@ -1,5 +1,6 @@
 import type { ActionFunctionArgs } from "react-router-dom";
 import z from "zod";
+import Cookie from "js-cookie";
 
 const Desktop = z.object({
   name: z.string(),
@@ -12,6 +13,7 @@ export async function createDesktop({ request }: ActionFunctionArgs) {
   console.log(host)
   const formData = await request.formData()
   const result = Desktop.safeParse(Object.fromEntries(formData.entries()))
+  const token = Cookie.get("token")
 
   if (!result.success) {
     return {
@@ -26,6 +28,7 @@ export async function createDesktop({ request }: ActionFunctionArgs) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name, distribution, desktop_environment }),
       })

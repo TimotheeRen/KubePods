@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .connect(&pg_host)
         .await?;
 
-    let addr = "0.0.0.0:50051".parse()?;
+    let addr = "0.0.0.0:50052".parse()?;
     let repo = PostgresProvioningRepository::new(pool);
     let service = ProvisioningServiceLayer::new(repo);
     let provisioning_service = ProvisioningImpl { service };

@@ -21,3 +21,5 @@ spec:
           env:
             - name: USERS_HOST
               value: "http://users:50051"
+            - name: DESKTOPS_HOST
+              value: "http://desktops:50051"

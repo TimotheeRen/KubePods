@@ -11,4 +11,9 @@ delete:
 	k3d cluster delete KubePods
 
 forward:
-	kubectl port-forward svc/users-postgres-cluster-rw 5432
+	kubectl port-forward svc/users-postgres-cluster-rw 5432:5432 &
+	kubectl port-forward svc/desktops-postgres-cluster-rw 5433:5432 &
+
+show-passwords:
+	@echo "users-postgres-cluster-app: $$(kubectl get secret users-postgres-cluster-app -o jsonpath='{.data.password}' | base64 -d)"
+	@echo "desktops-postgres-cluster-app: $$(kubectl get secret desktops-postgres-cluster-app -o jsonpath='{.data.password}' | base64 -d)"

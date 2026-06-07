@@ -17,7 +17,7 @@ spec:
         - name: desktops
           image: timotheeren/kubepods-desktops:sha-27c1a73b4a815a0b77314f0a881c51676af1aaa5
           ports:
-            - containerPort: 50051
+            - containerPort: 50052
           env:
             - name: DB_HOST
               valueFrom:

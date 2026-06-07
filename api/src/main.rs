@@ -1,7 +1,10 @@
 mod desktops;
 mod users;
 
-use crate::users::user::auth_service_client::AuthServiceClient;
+use crate::{
+    desktops::user::provisioning_service_client::ProvisioningServiceClient,
+    users::user::auth_service_client::AuthServiceClient,
+};
 use axum::{
     Router,
     extract::FromRequestParts,
@@ -21,6 +24,7 @@ use tower_http::cors::{Any, CorsLayer};
 #[derive(Clone)]
 struct AppState {
     pub user_auth_client: AuthServiceClient<Channel>,
+    pub provisioning_auth_client: ProvisioningServiceClient<Channel>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -72,10 +76,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Err(_) => "http://0.0.0.0:50051".to_string(),
     };
 
-    let channel = Channel::from_shared(users_host)?.connect().await?;
-    let user_auth_client = AuthServiceClient::new(channel);
+    let desktops_host = match std::env::var("DESKTOPS_HOST") {
+        Ok(val) => val,
+        Err(_) => "http://0.0.0.0:50052".to_string(),
+    };
 
-    let state = AppState { user_auth_client };
+    let users_channel = Channel::from_shared(users_host)?.connect().await?;
+    let desktops_channel = Channel::from_shared(desktops_host)?.connect().await?;
+    let user_auth_client = AuthServiceClient::new(users_channel);
+    let provisioning_auth_client = ProvisioningServiceClient::new(desktops_channel);
+
+    let state = AppState {
+        user_auth_client,
+        provisioning_auth_client,
+    };
 
     let cors = CorsLayer::new()
         .allow_origin([
