@@ -1,5 +1,6 @@
 use tonic::{Response, Status};
 
+use crate::provisioning::error::ProvisioningError;
 use crate::provisioning::repo::{KubernetesRepository, PostgresRepository};
 use crate::provisioning::{
     handler::user::{
@@ -27,7 +28,13 @@ impl ProvisioningService for ProvisioningImpl {
         let req = request.into_inner();
         self.service
             .create_desktop(req.name, req.distribution, req.desktop_environment)
-            .await;
+            .await
+            .map_err(|e| match e {
+                ProvisioningError::DesktopAlreadyExist => {
+                    Status::already_exists("Desktop already exist")
+                }
+                _ => Status::internal("Internal server error"),
+            })?;
         Ok(Response::new(CreateDesktopResponse {}))
     }
 }
