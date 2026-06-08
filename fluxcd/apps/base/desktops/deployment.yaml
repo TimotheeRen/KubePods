@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: desktops
-          image: timotheeren/kubepods-desktops:sha-fd699b90ced4f54f6d8bbe337c392c1bd7953076
+          image: timotheeren/kubepods-desktops:sha-5b4b0baff6d11d2134360183e3a2039f6169c28c
           ports:
             - containerPort: 50052
           env:
