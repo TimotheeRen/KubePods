@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
   name: operator
+  namespace: desktops
 rules:
   - apiGroups: ["", "apps", "kubepods.com"]
     resources: ["desktops", "deployments", "services"]

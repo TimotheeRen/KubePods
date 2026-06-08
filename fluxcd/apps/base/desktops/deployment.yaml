@@ -13,6 +13,7 @@ spec:
       labels:
         app: desktops
     spec:
+      serviceAccount: desktops
       containers:
         - name: desktops
           image: timotheeren/kubepods-desktops:sha-5b4b0baff6d11d2134360183e3a2039f6169c28c
