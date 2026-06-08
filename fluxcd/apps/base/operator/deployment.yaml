@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: operator
-  namespace: default
+  namespace: desktops
 spec:
   replicas: 1
   selector:
@@ -13,7 +13,7 @@ spec:
       labels:
         app: operator
     spec:
-      serviceAccount: operator
+      serviceAccountName: operator
       containers:
         - name: operator
           image: timotheeren/kubepods-operator:sha-fd699b90ced4f54f6d8bbe337c392c1bd7953076
