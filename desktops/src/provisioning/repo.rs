@@ -40,7 +40,7 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
         let desktop = desktops::Desktop {
             metadata: ObjectMeta {
                 name: Some(desktop.name.clone()),
-                namespace: Some("default".to_string()),
+                namespace: Some("desktops".to_string()),
                 ..Default::default()
             },
             spec: DesktopSpec {
@@ -53,7 +53,7 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
             },
         };
 
-        let desktops: Api<desktops::Desktop> = Api::default_namespaced(self.client.clone());
+        let desktops: Api<desktops::Desktop> = Api::namespaced(self.client.clone(), "desktops");
         match desktops.create(&PostParams::default(), &desktop).await {
             Ok(_) => Ok(()),
             Err(_) => Err(ProvisioningError::InternalServerError),

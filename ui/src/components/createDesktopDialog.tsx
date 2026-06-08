@@ -56,13 +56,13 @@ export default function CreateDesktopDialog() {
             </Field>
             <Field>
               <Label >Desktop environment</Label>
-              <Select name="desktop_environment" defaultValue="kde-plasma">
+              <Select name="desktop_environment" defaultValue="kde">
                 <SelectTrigger>
                   <SelectValue placeholder="KDE Plasma" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="kde-plasma">KDE Plasma</SelectItem>
+                    <SelectItem value="kde">KDE Plasma</SelectItem>
                     <SelectItem value="xfc">XFCE</SelectItem>
                     <SelectItem value="i3">i3</SelectItem>
                   </SelectGroup>
