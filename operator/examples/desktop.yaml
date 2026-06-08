@@ -6,6 +6,7 @@ metadata:
 spec:
   name: alpine
   id: "abcdef"
-  image: alpine
+  distribution: "alpine"
+  desktop_environment: "i3"
   max_ram: "1Gi"
   max_cpu: "100m"

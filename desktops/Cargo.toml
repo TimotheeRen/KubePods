@@ -13,6 +13,10 @@ dotenvy = "0.15.7"
 async-trait = "0.1.89"
 thiserror = "2.0.18"
 serde = "1.0.228"
+serde_json = "1.0.150"
+kube = { version = "3.1.0", features = ["derive"] }
+k8s-openapi = { version = "0.27.1", features = ["v1_35"] }
+schemars = "1.2.1"
 
 [build-dependencies]
 tonic-prost-build = "0.14.6"

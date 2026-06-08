@@ -1,12 +1,11 @@
 use tonic::{Response, Status};
 
+use crate::provisioning::repo::{KubernetesRepository, PostgresRepository};
 use crate::provisioning::{
-    self,
     handler::user::{
         CreateDesktopRequest, CreateDesktopResponse,
         provisioning_service_server::ProvisioningService,
     },
-    repo::PostgresProvioningRepository,
     service::ProvisioningServiceLayer,
 };
 
@@ -15,7 +14,7 @@ pub mod user {
 }
 
 pub struct ProvisioningImpl {
-    pub service: ProvisioningServiceLayer<PostgresProvioningRepository>,
+    pub service: ProvisioningServiceLayer<KubernetesRepository, PostgresRepository>,
 }
 
 #[tonic::async_trait]

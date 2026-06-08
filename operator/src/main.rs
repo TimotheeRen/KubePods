@@ -68,6 +68,13 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
     let mut labels = BTreeMap::new();
     labels.insert("app".to_string(), desktop.spec.id.clone());
 
+    let distribution = desktop.spec.distribtion.clone();
+    let mut desktop_environment = desktop.spec.desktop_environment.clone();
+
+    if distribution == "alpine" && desktop_environment == "xfce" {
+        desktop_environment = "latest".to_string();
+    }
+
     let deployment = Deployment {
         metadata: ObjectMeta {
             name: Some(desktop.spec.id.clone()),
@@ -88,7 +95,9 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
                 spec: Some(PodSpec {
                     containers: vec![Container {
                         name: desktop.spec.name.clone(),
-                        image: Some(desktop.spec.image.clone()),
+                        image: Some(format!(
+                            "linuxserver/webtop:{distribution}-{desktop_environment}"
+                        )),
                         resources: Some(ResourceRequirements {
                             limits: Some(limits),
                             ..Default::default()

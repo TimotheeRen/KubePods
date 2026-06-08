@@ -1,10 +1,11 @@
 mod provisioning;
 use crate::provisioning::{
     handler::{ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer},
-    repo::PostgresProvioningRepository,
+    repo::{KubernetesRepository, PostgresProvioningRepository, PostgresRepository},
     service::ProvisioningServiceLayer,
 };
 use dotenvy::{dotenv, var};
+use kube::Client;
 use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
 
@@ -27,9 +28,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .connect(&pg_host)
         .await?;
 
+    let client = Client::try_default().await?;
+
     let addr = "0.0.0.0:50052".parse()?;
-    let repo = PostgresProvioningRepository::new(pool);
-    let service = ProvisioningServiceLayer::new(repo);
+    let kubernetes_repo = KubernetesRepository::new(client);
+    let postgres_repo = PostgresRepository::new(pool);
+    let service = ProvisioningServiceLayer::new(kubernetes_repo, postgres_repo);
     let provisioning_service = ProvisioningImpl { service };
 
     Server::builder()

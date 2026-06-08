@@ -1,12 +1,25 @@
-use crate::provisioning::{error::ProvisioningError, model::Desktop, repo::ProvisioningRepository};
+use crate::provisioning::{
+    error::ProvisioningError,
+    model::Desktop,
+    repo::{KubernetesProvisiningRepository, PostgresProvioningRepository},
+};
 
-pub struct ProvisioningServiceLayer<R: ProvisioningRepository> {
-    repo: R,
+pub struct ProvisioningServiceLayer<
+    K: KubernetesProvisiningRepository,
+    P: PostgresProvioningRepository,
+> {
+    kubernetes_repo: K,
+    postgres_repo: P,
 }
 
-impl<R: ProvisioningRepository> ProvisioningServiceLayer<R> {
-    pub fn new(repo: R) -> Self {
-        Self { repo }
+impl<K: KubernetesProvisiningRepository, P: PostgresProvioningRepository>
+    ProvisioningServiceLayer<K, P>
+{
+    pub fn new(kubernetes_repo: K, postgres_repo: P) -> Self {
+        Self {
+            kubernetes_repo,
+            postgres_repo,
+        }
     }
 
     pub async fn create_desktop(
@@ -20,6 +33,8 @@ impl<R: ProvisioningRepository> ProvisioningServiceLayer<R> {
             distribution,
             desktop_environement,
         };
-        self.repo.create_desktop(&desktop).await
+        self.kubernetes_repo.create_desktop(&desktop).await;
+        self.postgres_repo.add_desktop(&desktop).await;
+        Ok(())
     }
 }
