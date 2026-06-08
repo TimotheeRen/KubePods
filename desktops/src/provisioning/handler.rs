@@ -27,7 +27,12 @@ impl ProvisioningService for ProvisioningImpl {
         println!("Received a desktop creation request!");
         let req = request.into_inner();
         self.service
-            .create_desktop(req.name, req.distribution, req.desktop_environment)
+            .create_desktop(
+                req.name,
+                req.distribution,
+                req.desktop_environment,
+                req.username,
+            )
             .await
             .map_err(|e| match e {
                 ProvisioningError::DesktopAlreadyExist => {

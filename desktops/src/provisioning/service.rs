@@ -27,13 +27,16 @@ impl<K: KubernetesProvisiningRepository, P: PostgresProvioningRepository>
         name: String,
         distribution: String,
         desktop_environement: String,
+        username: String,
     ) -> Result<(), ProvisioningError> {
         let desktop = Desktop {
             name,
             distribution,
             desktop_environement,
         };
-        self.kubernetes_repo.create_desktop(&desktop).await;
+        self.kubernetes_repo
+            .create_desktop(&desktop, username)
+            .await;
         self.postgres_repo.add_desktop(&desktop).await;
         Ok(())
     }

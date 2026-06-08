@@ -10,6 +10,7 @@ message CreateDesktopRequest {
   string name = 1;
   string distribution = 2;
   string desktop_environment = 3;
+  string username = 4;
 }
 
 message CreateDesktopResponse {}

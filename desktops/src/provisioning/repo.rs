@@ -3,12 +3,17 @@ use kube::{
     Api, Client,
     api::{ObjectMeta, PostParams},
 };
+use sha2::{Digest, Sha256};
 use sqlx::{Pool, Postgres};
 
 use crate::provisioning::{error::ProvisioningError, model::Desktop};
 
 pub trait KubernetesProvisiningRepository {
-    async fn create_desktop(&self, desktop: &Desktop) -> Result<(), ProvisioningError>;
+    async fn create_desktop(
+        &self,
+        desktop: &Desktop,
+        username: String,
+    ) -> Result<(), ProvisioningError>;
 }
 
 pub trait PostgresProvioningRepository {
@@ -36,7 +41,16 @@ impl KubernetesRepository {
 }
 
 impl KubernetesProvisiningRepository for KubernetesRepository {
-    async fn create_desktop(&self, desktop: &Desktop) -> Result<(), ProvisioningError> {
+    async fn create_desktop(
+        &self,
+        desktop: &Desktop,
+        username: String,
+    ) -> Result<(), ProvisioningError> {
+        let base = format!("{}:{}", username, desktop.name.clone());
+        let hash = Sha256::digest(base.as_bytes());
+        let hex = hex::encode(hash);
+        let id = format!("d-{}", &hex[..61]);
+
         let desktop = desktops::Desktop {
             metadata: ObjectMeta {
                 name: Some(desktop.name.clone()),
@@ -45,7 +59,7 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
             },
             spec: DesktopSpec {
                 name: desktop.name.clone(),
-                id: "id".to_string(),
+                id,
                 distribtion: desktop.distribution.clone(),
                 desktop_environment: desktop.desktop_environement.clone(),
                 max_ram: "1Gi".to_string(),

@@ -7,7 +7,7 @@ use crate::{
 
 pub async fn create_desktop(
     State(mut state): State<AppState>,
-    _: Claims,
+    user: Claims,
     Json(desktop): Json<schemas::createDesktop>,
 ) -> Result<String, StatusCode> {
     let res = state
@@ -16,6 +16,7 @@ pub async fn create_desktop(
             name: desktop.name,
             distribution: desktop.distribution,
             desktop_environment: desktop.desktop_environment,
+            username: user.sub,
         })
         .await;
     println!("{:?}", res);
