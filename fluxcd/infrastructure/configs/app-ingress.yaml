@@ -26,6 +26,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: desktops
+                name: api
                 port:
                   number: 3001
