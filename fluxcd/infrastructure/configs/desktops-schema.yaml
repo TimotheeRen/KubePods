@@ -1,0 +1,14 @@
+apiVersion: db.atlasgo.io/v1alpha1
+kind: AtlasSchema
+metadata:
+  name: desktops-schema
+  namespace: default
+spec:
+  urlFrom:
+    secretKeyRef:
+      name: desktops-postgres-cluster-app
+      key: uri
+  schema:
+    configMapKeyRef:
+      name: desktops-schema-config
+      key: desktops-schema.hcl
