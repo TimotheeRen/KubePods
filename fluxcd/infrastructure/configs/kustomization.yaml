@@ -11,6 +11,8 @@ configMapGenerator:
   - name: users-schema-config
     files:
       - schemas/users-schema.hcl
+  - name: desktops-schema-config
+    files:
       - schemas/desktops-schema.hcl
     options:
       disableNameSuffixHash: true
