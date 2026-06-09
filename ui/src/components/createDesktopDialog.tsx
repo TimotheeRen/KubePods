@@ -7,15 +7,32 @@ import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { useFetcher } from "react-router";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface ActionData {
   error: string | null,
+  message: string | null,
 }
 
 export default function CreateDesktopDialog() {
   const fetcher = useFetcher<ActionData>()
+  const state = fetcher.data
+  const pending = fetcher.state === "submitting"
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.message)
+    } else if (state?.message) {
+      toast.success(state.message)
+      setOpen(false)
+    }
+  }, [state])
+
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <SidebarMenuButton
           className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground cursor-pointer"
@@ -74,7 +91,7 @@ export default function CreateDesktopDialog() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Create</Button>
+            <Button type="submit" disabled={pending}>Create</Button>
           </DialogFooter>
         </fetcher.Form>
       </DialogContent>

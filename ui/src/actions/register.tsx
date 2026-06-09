@@ -61,7 +61,7 @@ export async function register({ request }: ActionFunctionArgs) {
     } catch (e) {
       return {
         error: "Server",
-        message: "Network error or host unreachable."
+        message: "Network error or host unreachable"
       }
     }
   }

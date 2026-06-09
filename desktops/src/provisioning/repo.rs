@@ -70,6 +70,9 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
         let desktops: Api<desktops::Desktop> = Api::namespaced(self.client.clone(), "desktops");
         match desktops.create(&PostParams::default(), &desktop).await {
             Ok(_) => Ok(()),
+            Err(kube::Error::Api(e)) if e.code == 409 => {
+                Err(ProvisioningError::DesktopAlreadyExist)
+            }
             Err(_) => Err(ProvisioningError::InternalServerError),
         }
     }

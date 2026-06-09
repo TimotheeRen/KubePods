@@ -34,10 +34,10 @@ export async function createDesktop({ request }: ActionFunctionArgs) {
       })
 
       if (!response.ok) {
-        if (response.status == 401) {
+        if (response.status == 409) {
           return {
-            error: "Unauthenticated",
-            message: "Wrong password"
+            error: "Conflict",
+            message: "Desktop already created"
           }
         } else {
           return {
@@ -49,7 +49,7 @@ export async function createDesktop({ request }: ActionFunctionArgs) {
 
       return ({
         error: null,
-        message: "Successfully created the desktop.",
+        message: "Desktop successfully created !",
       })
     } catch (e) {
       return {
