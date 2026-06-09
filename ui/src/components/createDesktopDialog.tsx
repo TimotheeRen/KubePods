@@ -63,7 +63,7 @@ export default function CreateDesktopDialog() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem value="kde">KDE Plasma</SelectItem>
-                    <SelectItem value="xfc">XFCE</SelectItem>
+                    <SelectItem value="xfce">XFCE</SelectItem>
                     <SelectItem value="i3">i3</SelectItem>
                   </SelectGroup>
                 </SelectContent>

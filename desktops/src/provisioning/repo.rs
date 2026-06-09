@@ -46,14 +46,14 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
         desktop: &Desktop,
         username: String,
     ) -> Result<(), ProvisioningError> {
-        let base = format!("{}:{}", username, desktop.name.clone());
-        let hash = Sha256::digest(base.as_bytes());
+        let id = format!("{}-{}", username.to_lowercase(), desktop.name.clone());
+        /*let hash = Sha256::digest(base.as_bytes());
         let hex = hex::encode(hash);
-        let id = format!("d-{}", &hex[..61]);
+        let id = format!("d-{}", &hex[..61]);*/
 
         let desktop = desktops::Desktop {
             metadata: ObjectMeta {
-                name: Some(desktop.name.clone()),
+                name: Some(id.clone()),
                 namespace: Some("desktops".to_string()),
                 ..Default::default()
             },
