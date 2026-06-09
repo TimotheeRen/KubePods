@@ -35,8 +35,9 @@ impl<K: KubernetesProvisiningRepository, P: PostgresProvioningRepository>
             desktop_environement,
         };
         self.kubernetes_repo
-            .create_desktop(&desktop, username)
-            .await
-        //self.postgres_repo.add_desktop(&desktop).await;
+            .create_desktop(&desktop, username.clone())
+            .await?;
+        self.postgres_repo.add_desktop(&desktop, username).await?;
+        Ok(())
     }
 }

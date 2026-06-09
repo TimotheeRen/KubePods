@@ -4,7 +4,7 @@ use kube::{
     api::{ObjectMeta, PostParams},
 };
 use sha2::{Digest, Sha256};
-use sqlx::{Pool, Postgres};
+use sqlx::{Pool, Postgres, query};
 
 use crate::provisioning::{error::ProvisioningError, model::Desktop};
 
@@ -17,7 +17,11 @@ pub trait KubernetesProvisiningRepository {
 }
 
 pub trait PostgresProvioningRepository {
-    async fn add_desktop(&self, desktop: &Desktop) -> Result<(), ProvisioningError>;
+    async fn add_desktop(
+        &self,
+        desktop: &Desktop,
+        username: String,
+    ) -> Result<(), ProvisioningError>;
 }
 
 pub struct PostgresRepository {
@@ -79,7 +83,30 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
 }
 
 impl PostgresProvioningRepository for PostgresRepository {
-    async fn add_desktop(&self, desktop: &Desktop) -> Result<(), ProvisioningError> {
-        Ok(())
+    async fn add_desktop(
+        &self,
+        desktop: &Desktop,
+        username: String,
+    ) -> Result<(), ProvisioningError> {
+        let id = format!("{}-{}", username, desktop.name);
+        match query( "INSERT INTO desktops (id, name, username, distribution, desktop_environment) VALUES ($1, $2, $3, $4, $5)")
+        .bind(id)
+        .bind(desktop.name.clone())
+        .bind(username)
+        .bind(desktop.distribution.clone())
+        .bind(desktop.desktop_environement.clone())
+        .execute(&self.pool)
+        .await
+        {
+            Ok(_) => Ok(()),
+            Err(sqlx::Error::Database(err)) => {
+                if err.constraint() == Some("desktops_pkey") {
+                    Err(ProvisioningError::DesktopAlreadyExist)
+                } else {
+                    Err(ProvisioningError::InternalServerError)
+                }
+            }
+            Err(_) => Err(ProvisioningError::InternalServerError),
+        }
     }
 }
