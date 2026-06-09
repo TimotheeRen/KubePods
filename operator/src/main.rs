@@ -6,6 +6,10 @@ use k8s_openapi::{
             Container, ContainerPort, PodSpec, PodTemplateSpec, ResourceRequirements, Service,
             ServicePort, ServiceSpec,
         },
+        networking::v1::{
+            HTTPIngressPath, HTTPIngressRuleValue, Ingress, IngressBackend, IngressRule,
+            IngressServiceBackend, IngressSpec, ServiceBackendPort,
+        },
     },
     apimachinery::pkg::{
         api::resource::Quantity, apis::meta::v1::LabelSelector, util::intstr::IntOrString,
@@ -28,9 +32,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let deployments: Api<Deployment> = Api::namespaced(client.clone(), "desktops");
     let services: Api<Service> = Api::namespaced(client.clone(), "desktops");
+    let ingresses: Api<Ingress> = Api::namespaced(client.clone(), "desktops");
     let context = Arc::new(ContextData {
         deployments: deployments.clone(),
         services: services.clone(),
+        ingresses: ingresses.clone(),
     });
 
     Controller::new(desktops.clone(), config.clone())
@@ -53,6 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 struct ContextData {
     deployments: Api<Deployment>,
     services: Api<Service>,
+    ingresses: Api<Ingress>,
 }
 
 async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<Action, Error> {
@@ -161,7 +168,51 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         .await
     {
         Ok(_) => println!("Sucessfully patched service"),
-        Err(e) => println!("An error occured when patching a deployment: {}", e),
+        Err(e) => println!("An error occured when patching a service: {}", e),
+    };
+    let ingress = Ingress {
+        metadata: ObjectMeta {
+            name: Some(desktop.spec.id.clone()),
+            namespace: Some("desktops".to_string()),
+            owner_references: Some(vec![desktop.controller_owner_ref(&()).unwrap()]),
+            ..Default::default()
+        },
+        spec: Some(IngressSpec {
+            ingress_class_name: Some("traefik".to_string()),
+            rules: Some(vec![IngressRule {
+                http: Some(HTTPIngressRuleValue {
+                    paths: vec![HTTPIngressPath {
+                        path: Some(format!("/{}", desktop.spec.id.clone())),
+                        path_type: "Prefix".to_string(),
+                        backend: IngressBackend {
+                            service: Some(IngressServiceBackend {
+                                name: desktop.spec.id.clone(),
+                                port: Some(ServiceBackendPort {
+                                    number: Some(3000),
+                                    ..Default::default()
+                                }),
+                            }),
+                            ..Default::default()
+                        },
+                    }],
+                }),
+                ..Default::default()
+            }]),
+            ..Default::default()
+        }),
+        ..Default::default()
+    };
+    match context
+        .ingresses
+        .patch(
+            &desktop.spec.id.clone(),
+            &PatchParams::apply("ingress-manager"),
+            &Patch::Apply(ingress),
+        )
+        .await
+    {
+        Ok(_) => println!("Sucessfully patched ingress"),
+        Err(e) => println!("An error occured when patching an ingress: {}", e),
     };
     Ok(Action::requeue(Duration::from_secs(300)))
 }
