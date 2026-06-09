@@ -18,7 +18,8 @@ export async function login({ request }: ActionFunctionArgs) {
       message: result.error.issues[0].message
     }
   } else {
-    const { username, password } = result.data
+    let { username, password } = result.data
+    username = username.toLowerCase()
     try {
       const response = await fetch(host + "/users/login", {
         method: "POST",

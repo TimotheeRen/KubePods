@@ -39,7 +39,7 @@ impl AuthRepository for PostgresAuthRepository {
             .to_string();
 
         match query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)")
-            .bind(&user.username)
+            .bind(user.username.to_lowercase())
             .bind(&user.email)
             .bind(&password)
             .execute(&self.pool)
@@ -77,12 +77,12 @@ impl AuthRepository for PostgresAuthRepository {
     ) -> Result<String, AuthError> {
         let hash = PasswordHash::new(hashed_password).map_err(|e| {
             println!("PasswordHash error: {:?}", e);
-            AuthError::InternalServerError
+            AuthError::WrongPassword
         })?;
 
         Argon2::default()
             .verify_password(password.as_bytes(), &hash)
-            .map_err(|_| AuthError::InternalServerError)?;
+            .map_err(|_| AuthError::WrongPassword)?;
 
         println!("Correct credentials !");
 

@@ -61,7 +61,7 @@ export default function LoginDialog() {
           <FieldGroup className="my-5">
             <Field>
               <Label>Username</Label>
-              <Input id="username" name="username" type="text" placeholder="Your username" required />
+              <Input id="username" name="username" type="text" placeholder="Your username" className="lowercase" required />
             </Field>
             <Field>
               <Label>Password</Label>

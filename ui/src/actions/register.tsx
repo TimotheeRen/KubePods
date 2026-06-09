@@ -22,7 +22,8 @@ export async function register({ request }: ActionFunctionArgs) {
       message: result.error.issues[0].message
     }
   } else {
-    const { email, username, password } = result.data
+    let { email, username, password } = result.data
+    username = username.toLowerCase()
     try {
       const response = await fetch(host + "/users/register", {
         method: "POST",
