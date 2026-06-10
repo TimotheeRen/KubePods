@@ -1,4 +1,4 @@
-import { MonitorPlay, Plus, ScreenShareOff } from "lucide-react";
+import { MonitorPlay, ScreenShareOff } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "./ui/empty";
 import CreateDesktopDialog from "./createDesktopDialog";
