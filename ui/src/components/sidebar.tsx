@@ -33,7 +33,7 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <CreateDesktopDialog />
+                <CreateDesktopDialog type="sidebar" />
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenu className="mt-2">

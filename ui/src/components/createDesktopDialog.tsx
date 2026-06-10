@@ -15,7 +15,11 @@ interface ActionData {
   message: string | null,
 }
 
-export default function CreateDesktopDialog() {
+interface CreateDesktopDialogProps {
+  type?: string,
+}
+
+export default function CreateDesktopDialog({ type }: CreateDesktopDialogProps) {
   const fetcher = useFetcher<ActionData>()
   const state = fetcher.data
   const pending = fetcher.state === "submitting"
@@ -34,14 +38,20 @@ export default function CreateDesktopDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <SidebarMenuButton
-          className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground cursor-pointer"
-        >
-          <div className="flex gap-1 items-center">
-            <Plus />
-            <span>Create a desktop</span>
-          </div>
-        </SidebarMenuButton>
+        {type === "sidebar" ? (
+          <SidebarMenuButton
+            className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground cursor-pointer"
+          >
+            <div className="flex gap-1 items-center">
+              <Plus />
+              <span>Create a desktop</span>
+            </div>
+          </SidebarMenuButton>
+        ) : type === "button-plus" ? (
+          <Button><Plus />Add a desktop</Button>
+        ) : (
+          <Button>Add a desktop</Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <fetcher.Form method="post" action="/actions/createDesktop">
