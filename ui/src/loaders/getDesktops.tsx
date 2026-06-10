@@ -10,9 +10,7 @@ export async function GetDesktops() {
       Authorization: `Bearer ${token}`,
     },
   })
-  const res = await response.json()
-  console.log(res)
   return ({
-    response: res
+    response: await response.json()
   })
 } 

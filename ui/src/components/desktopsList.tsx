@@ -2,8 +2,27 @@ import { MonitorPlay, ScreenShareOff } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "./ui/empty";
 import CreateDesktopDialog from "./createDesktopDialog";
+import { Link, useLoaderData } from "react-router";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
+import Cookie from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import DesktopSettingsMenu from "./desktopSettingsMenu";
+
+type Desktop = {
+  name: string;
+  distribution: string;
+  desktop_environment: string;
+};
 
 export default function DesktopList() {
+  const desktops = useLoaderData().response
+  const isPresent = desktops.length === 0
+  const token = Cookie.get("token")
+  if (!token) { return null }
+  const username = jwtDecode(token).sub
+  const host = import.meta.env.VITE_API_HOST;
+  const link = host + "/" + username + "-"
+
   return (
     <Card className="w-full h-full">
       <CardHeader>
@@ -15,20 +34,50 @@ export default function DesktopList() {
       </CardHeader>
       <CardContent>
 
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <ScreenShareOff />
-            </EmptyMedia>
-            <EmptyTitle>No desktops created</EmptyTitle>
-            <EmptyDescription>
-              Add a virtual desktop, accessible from anywhere
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <CreateDesktopDialog type="button-plus" />
-          </EmptyContent>
-        </Empty>
+        {isPresent ? (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <ScreenShareOff />
+              </EmptyMedia>
+              <EmptyTitle>No desktops created</EmptyTitle>
+              <EmptyDescription>
+                Add a virtual desktop, accessible from anywhere
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <CreateDesktopDialog type="button-plus" />
+            </EmptyContent>
+          </Empty>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Distribution</TableHead>
+                <TableHead>Desktop environment</TableHead>
+                <TableHead>Access</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {desktops.map((d: Desktop) => (
+                <TableRow key={d.name}>
+                  <TableCell>{d.name}</TableCell>
+                  <TableCell>{d.distribution}</TableCell>
+                  <TableCell>{d.desktop_environment}</TableCell>
+                  <TableHead>
+                    <Link target="_blank" to={link + d.name} className="hover:underline">
+                      {link + d.name}
+                    </Link>
+                  </TableHead>
+                  <TableCell>
+                    <DesktopSettingsMenu link={link + d.name} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
 
       </CardContent>
     </Card>
