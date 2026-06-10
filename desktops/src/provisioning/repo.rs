@@ -3,8 +3,7 @@ use kube::{
     Api, Client,
     api::{ObjectMeta, PostParams},
 };
-use sha2::{Digest, Sha256};
-use sqlx::{Pool, Postgres, query};
+use sqlx::{Pool, Postgres, query, query_as};
 
 use crate::provisioning::{error::ProvisioningError, model::Desktop};
 
@@ -22,6 +21,7 @@ pub trait PostgresProvioningRepository {
         desktop: &Desktop,
         username: String,
     ) -> Result<(), ProvisioningError>;
+    async fn get_desktops(&self, username: String) -> Result<Vec<Desktop>, ProvisioningError>;
 }
 
 pub struct PostgresRepository {
@@ -51,9 +51,6 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
         username: String,
     ) -> Result<(), ProvisioningError> {
         let id = format!("{}-{}", username.to_lowercase(), desktop.name.clone());
-        /*let hash = Sha256::digest(base.as_bytes());
-        let hex = hex::encode(hash);
-        let id = format!("d-{}", &hex[..61]);*/
 
         let desktop = desktops::Desktop {
             metadata: ObjectMeta {
@@ -65,7 +62,7 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
                 name: desktop.name.clone(),
                 id,
                 distribtion: desktop.distribution.clone(),
-                desktop_environment: desktop.desktop_environement.clone(),
+                desktop_environment: desktop.desktop_environment.clone(),
                 max_ram: "1Gi".to_string(),
                 max_cpu: "100m".to_string(),
             },
@@ -94,7 +91,7 @@ impl PostgresProvioningRepository for PostgresRepository {
         .bind(desktop.name.clone())
         .bind(username)
         .bind(desktop.distribution.clone())
-        .bind(desktop.desktop_environement.clone())
+        .bind(desktop.desktop_environment.clone())
         .execute(&self.pool)
         .await
         {
@@ -108,5 +105,19 @@ impl PostgresProvioningRepository for PostgresRepository {
             }
             Err(_) => Err(ProvisioningError::InternalServerError),
         }
+    }
+
+    async fn get_desktops(&self, username: String) -> Result<Vec<Desktop>, ProvisioningError> {
+        let desktops = query_as::<_, Desktop>(
+            "SELECT name, distribution, desktop_environment FROM desktops WHERE username = $1",
+        )
+        .bind(&username)
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|e| match e {
+            sqlx::Error::RowNotFound => ProvisioningError::NoDesktopFound,
+            _ => ProvisioningError::InternalServerError,
+        })?;
+        Ok(desktops)
     }
 }

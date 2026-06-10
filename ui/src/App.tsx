@@ -10,6 +10,7 @@ import { ThemeProvider } from "./components/theme-provider.tsx"
 import DashboardLayout from "./components/dashboardLayout.tsx"
 import { createDesktop } from "./actions/createDesktop.tsx";
 import NotFound from "./components/ui/not-found.tsx";
+import { GetDesktops } from "./loaders/getDesktops.tsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Dashboard />,
+        loader: GetDesktops,
       },
     ],
   },

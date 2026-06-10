@@ -1,7 +1,7 @@
 mod provisioning;
 use crate::provisioning::{
     handler::{ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer},
-    repo::{KubernetesRepository, PostgresProvioningRepository, PostgresRepository},
+    repo::{KubernetesRepository, PostgresRepository},
     service::ProvisioningServiceLayer,
 };
 use dotenvy::{dotenv, var};

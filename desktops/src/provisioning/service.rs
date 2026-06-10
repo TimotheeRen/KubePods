@@ -26,18 +26,22 @@ impl<K: KubernetesProvisiningRepository, P: PostgresProvioningRepository>
         &self,
         name: String,
         distribution: String,
-        desktop_environement: String,
+        desktop_environment: String,
         username: String,
     ) -> Result<(), ProvisioningError> {
         let desktop = Desktop {
             name,
             distribution,
-            desktop_environement,
+            desktop_environment,
         };
         self.kubernetes_repo
             .create_desktop(&desktop, username.clone())
             .await?;
         self.postgres_repo.add_desktop(&desktop, username).await?;
         Ok(())
+    }
+
+    pub async fn get_desktops(&self, username: String) -> Result<Vec<Desktop>, ProvisioningError> {
+        self.postgres_repo.get_desktops(username).await
     }
 }

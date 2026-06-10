@@ -1,6 +1,7 @@
 use tonic::{Response, Status};
 
 use crate::provisioning::error::ProvisioningError;
+use crate::provisioning::handler::user::{GetDesktopResponse, GetDesktopsRequest};
 use crate::provisioning::repo::{KubernetesRepository, PostgresRepository};
 use crate::provisioning::{
     handler::user::{
@@ -41,5 +42,29 @@ impl ProvisioningService for ProvisioningImpl {
                 _ => Status::internal("Internal server error"),
             })?;
         Ok(Response::new(CreateDesktopResponse {}))
+    }
+
+    async fn get_desktops(
+        &self,
+        request: tonic::Request<GetDesktopsRequest>,
+    ) -> Result<tonic::Response<GetDesktopResponse>, Status> {
+        let req = request.into_inner();
+        let res = self
+            .service
+            .get_desktops(req.username)
+            .await
+            .map_err(|e| match e {
+                ProvisioningError::NoDesktopFound => Status::not_found("No desktop found."),
+                _ => Status::internal("Internal server error"),
+            })?;
+        let desktops = res
+            .into_iter()
+            .map(|d| user::Desktop {
+                name: d.name,
+                distribution: d.distribution,
+                desktop_environment: d.desktop_environment,
+            })
+            .collect();
+        Ok(Response::new(GetDesktopResponse { desktops }))
     }
 }

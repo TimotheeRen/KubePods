@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Desktop {
     pub name: String,
     pub distribution: String,
-    pub desktop_environement: String,
+    pub desktop_environment: String,
 }
