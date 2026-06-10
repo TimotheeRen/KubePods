@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export default function Header({ title }: HeaderProps) {
   return (
-    <header className="py-1 flex items-center border-b justify-between mb-3">
+    <header className="py-1 flex items-center border-b justify-between">
       <div className="flex items-center">
         <SidebarTrigger className="" />
         <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4 my-auto" />
