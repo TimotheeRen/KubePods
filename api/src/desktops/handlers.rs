@@ -3,7 +3,7 @@ use axum::{Json, extract::State, http::StatusCode};
 use crate::{
     AppState, Claims,
     desktops::{
-        schemas::{self, DeleteDesktop, DesktopItem},
+        schemas::{self, DesktopItem},
         user::{CreateDesktopRequest, DeleteDesktopRequest, GetDesktopsRequest},
     },
 };

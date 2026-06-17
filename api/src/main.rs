@@ -10,7 +10,6 @@ use axum::{
     extract::FromRequestParts,
     http::{HeaderValue, StatusCode, request::Parts},
     response::{IntoResponse, Response},
-    routing::get,
 };
 use axum_extra::{
     TypedHeader,
@@ -101,7 +100,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .allow_headers(Any);
 
     let app = Router::new()
-        .route("/ping", get(ping))
         .nest("/users", users::routes::auth())
         .nest("/desktops", desktops::routes::provisioning())
         .layer(cors)
@@ -110,9 +108,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3001").await?;
     axum::serve(listener, app).await?;
     Ok(())
-}
-
-// Used for auth
-pub async fn ping(_: Claims) -> String {
-    "Pong!".to_string()
 }

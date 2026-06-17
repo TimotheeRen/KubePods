@@ -7,7 +7,7 @@ export default async function Auth() {
 
   const host = import.meta.env.VITE_API_HOST;
   try {
-    const response = await fetch(host + "/ping", {
+    const response = await fetch(host + "/users/ping", {
       headers: {
         Authorization: `Bearer ${token}`,
       }

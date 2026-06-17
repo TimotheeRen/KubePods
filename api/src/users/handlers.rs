@@ -1,9 +1,9 @@
-use crate::AppState;
 use crate::users::user::LoginRequest;
 use crate::users::{
     schemas::{self},
     user::RegisterRequest,
 };
+use crate::{AppState, Claims};
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -43,4 +43,8 @@ pub async fn login_handler(
             _ => StatusCode::INTERNAL_SERVER_ERROR,
         })?;
     Ok(res.into_inner().token)
+}
+
+pub async fn ping(_: Claims) -> String {
+    "Pong!".to_string()
 }
