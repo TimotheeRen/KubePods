@@ -12,7 +12,6 @@ pub async fn register_handler(
     State(mut state): State<AppState>,
     Json(user): Json<schemas::RegisterUser>,
 ) -> Result<String, StatusCode> {
-    println!("Received a register request from user: {}", user.username);
     let res = state
         .user_auth_client
         .register(RegisterRequest {
@@ -21,12 +20,9 @@ pub async fn register_handler(
             password: user.password,
         })
         .await
-        .map_err(|e| {
-            println!("Grpc error: {}", e);
-            match e.code() {
-                tonic::Code::AlreadyExists => StatusCode::CONFLICT,
-                _ => StatusCode::INTERNAL_SERVER_ERROR,
-            }
+        .map_err(|e| match e.code() {
+            tonic::Code::AlreadyExists => StatusCode::CONFLICT,
+            _ => StatusCode::INTERNAL_SERVER_ERROR,
         })?;
     Ok(res.into_inner().token)
 }
@@ -35,7 +31,6 @@ pub async fn login_handler(
     State(mut state): State<AppState>,
     Json(user): Json<schemas::LoginUser>,
 ) -> Result<String, StatusCode> {
-    println!("Received a login request from user: {}", user.username);
     let res = state
         .user_auth_client
         .login(LoginRequest {

@@ -71,7 +71,7 @@ export default function DesktopList() {
                     </Link>
                   </TableHead>
                   <TableCell>
-                    <DesktopSettingsMenu link={link + d.name} />
+                    <DesktopSettingsMenu link={link + d.name} resourceName={d.name} />
                   </TableCell>
                 </TableRow>
               ))}

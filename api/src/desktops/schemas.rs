@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
-pub struct createDesktop {
+pub struct CreateDesktop {
     pub name: String,
     pub distribution: String,
     pub desktop_environment: String,
@@ -12,4 +12,9 @@ pub struct DesktopItem {
     pub name: String,
     pub distribution: String,
     pub desktop_environment: String,
+}
+
+#[derive(Deserialize)]
+pub struct DeleteDesktop {
+    pub name: String,
 }

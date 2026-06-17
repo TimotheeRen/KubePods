@@ -1,7 +1,7 @@
 use desktops::DesktopSpec;
 use kube::{
     Api, Client,
-    api::{ObjectMeta, PostParams},
+    api::{DeleteParams, ObjectMeta, PostParams},
 };
 use sqlx::{Pool, Postgres, query, query_as};
 
@@ -13,6 +13,9 @@ pub trait KubernetesProvisiningRepository {
         desktop: &Desktop,
         username: String,
     ) -> Result<(), ProvisioningError>;
+
+    async fn delete_desktop(&self, name: String, username: String)
+    -> Result<(), ProvisioningError>;
 }
 
 pub trait PostgresProvioningRepository {
@@ -22,6 +25,8 @@ pub trait PostgresProvioningRepository {
         username: String,
     ) -> Result<(), ProvisioningError>;
     async fn get_desktops(&self, username: String) -> Result<Vec<Desktop>, ProvisioningError>;
+    async fn remove_desktop(&self, name: String, username: String)
+    -> Result<(), ProvisioningError>;
 }
 
 pub struct PostgresRepository {
@@ -77,6 +82,19 @@ impl KubernetesProvisiningRepository for KubernetesRepository {
             Err(_) => Err(ProvisioningError::InternalServerError),
         }
     }
+
+    async fn delete_desktop(
+        &self,
+        name: String,
+        username: String,
+    ) -> Result<(), ProvisioningError> {
+        let id = format!("{}-{}", username.to_lowercase(), name);
+        let desktops: Api<desktops::Desktop> = Api::namespaced(self.client.clone(), "desktops");
+        match desktops.delete(&id, &DeleteParams::default()).await {
+            Ok(_) => Ok(()),
+            Err(_) => Err(ProvisioningError::InternalServerError),
+        }
+    }
 }
 
 impl PostgresProvioningRepository for PostgresRepository {
@@ -119,5 +137,22 @@ impl PostgresProvioningRepository for PostgresRepository {
             _ => ProvisioningError::InternalServerError,
         })?;
         Ok(desktops)
+    }
+
+    async fn remove_desktop(
+        &self,
+        name: String,
+        username: String,
+    ) -> Result<(), ProvisioningError> {
+        let id = format!("{}-{}", username, name);
+        println!("{}", id.clone());
+        match query("DELETE FROM desktops WHERE id = $1")
+            .bind(&id)
+            .execute(&self.pool)
+            .await
+        {
+            Ok(_) => Ok(()),
+            Err(_) => Err(ProvisioningError::InternalServerError),
+        }
     }
 }

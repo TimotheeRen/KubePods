@@ -3,15 +3,15 @@ use axum::{Json, extract::State, http::StatusCode};
 use crate::{
     AppState, Claims,
     desktops::{
-        schemas::{self, DesktopItem},
-        user::{CreateDesktopRequest, GetDesktopsRequest},
+        schemas::{self, DeleteDesktop, DesktopItem},
+        user::{CreateDesktopRequest, DeleteDesktopRequest, GetDesktopsRequest},
     },
 };
 
 pub async fn create_desktop(
     State(mut state): State<AppState>,
     user: Claims,
-    Json(desktop): Json<schemas::createDesktop>,
+    Json(desktop): Json<schemas::CreateDesktop>,
 ) -> Result<String, StatusCode> {
     state
         .provisioning_auth_client
@@ -54,4 +54,20 @@ pub async fn get_desktops(
         .collect();
 
     Ok(Json(desktops))
+}
+
+pub async fn delete_desktop(
+    State(mut state): State<AppState>,
+    user: Claims,
+    Json(desktop): Json<schemas::DeleteDesktop>,
+) -> Result<String, StatusCode> {
+    state
+        .provisioning_auth_client
+        .delete_desktop(DeleteDesktopRequest {
+            name: desktop.name,
+            username: user.sub,
+        })
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    Ok("".to_string())
 }

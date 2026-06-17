@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs } from "react-router-dom";
+import { type ActionFunctionArgs } from "react-router-dom";
 import z from "zod";
 import Cookie from "js-cookie";
 

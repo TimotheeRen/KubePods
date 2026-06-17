@@ -1,16 +1,24 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { ExternalLink, Settings, Trash2 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useRevalidator } from "react-router";
 import DestructiveAlert from "./destructiveAlert"
 import { useState } from "react";
+import DeleteDesktop from "@/actions/deleteDesktop"
 
 interface DesktopSettingsMenuProps {
-  link: string
+  link: string,
+  resourceName: string,
 }
 
-export default function DesktopSettingsMenu({ link }: DesktopSettingsMenuProps) {
-  const [open, setOpen] = useState(false);
+export default function DesktopSettingsMenu({ link, resourceName }: DesktopSettingsMenuProps) {
+  const revalidator = useRevalidator()
+  const [open, setOpen] = useState(false)
+
+  const handleDelete = async () => {
+    await DeleteDesktop(resourceName)
+    revalidator.revalidate()
+  }
   return (
     <div>
       <DropdownMenu>
@@ -34,7 +42,7 @@ export default function DesktopSettingsMenu({ link }: DesktopSettingsMenuProps) 
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DestructiveAlert title="Delete desktop ?" description="This will permanatly delete the current desktop." isOpen={open} onOpenChange={setOpen} />
+      <DestructiveAlert title="Delete desktop ?" description="This will permanatly delete the current desktop." isOpen={open} onOpenChange={setOpen} execute={handleDelete} resourceName={resourceName} />
     </div>
   )
 }

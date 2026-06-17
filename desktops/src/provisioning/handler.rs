@@ -1,7 +1,9 @@
 use tonic::{Response, Status};
 
 use crate::provisioning::error::ProvisioningError;
-use crate::provisioning::handler::user::{GetDesktopResponse, GetDesktopsRequest};
+use crate::provisioning::handler::user::{
+    DeleteDesktopRequest, DeleteDesktopResponse, GetDesktopResponse, GetDesktopsRequest,
+};
 use crate::provisioning::repo::{KubernetesRepository, PostgresRepository};
 use crate::provisioning::{
     handler::user::{
@@ -66,5 +68,17 @@ impl ProvisioningService for ProvisioningImpl {
             })
             .collect();
         Ok(Response::new(GetDesktopResponse { desktops }))
+    }
+
+    async fn delete_desktop(
+        &self,
+        request: tonic::Request<DeleteDesktopRequest>,
+    ) -> Result<tonic::Response<DeleteDesktopResponse>, Status> {
+        let req = request.into_inner();
+        self.service
+            .delete_desktop(req.name, req.username)
+            .await
+            .map_err(|_| Status::internal("Internal server error"))?;
+        Ok(Response::new(DeleteDesktopResponse {}))
     }
 }

@@ -5,6 +5,7 @@ package provisioning;
 service ProvisioningService {
   rpc CreateDesktop(CreateDesktopRequest) returns (CreateDesktopResponse);
   rpc GetDesktops(GetDesktopsRequest) returns (GetDesktopResponse);
+  rpc DeleteDesktop(DeleteDesktopRequest) returns (DeleteDesktopResponse);
 }
 
 message Desktop {
@@ -29,3 +30,9 @@ message GetDesktopsRequest {
 message GetDesktopResponse {
   repeated Desktop desktops = 1;
 }
+
+message DeleteDesktopRequest {
+  string name = 1;
+  string username = 2;
+}
+message DeleteDesktopResponse {}

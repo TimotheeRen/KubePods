@@ -5,10 +5,12 @@ interface destructiveAlert {
   title: string,
   description: string,
   isOpen: boolean,
-  onOpenChange: (open: boolean) => void
+  onOpenChange: (open: boolean) => void,
+  execute: (name: string) => void,
+  resourceName: string,
 }
 
-export default function destructiveAlert({ title, description, isOpen, onOpenChange }: destructiveAlert) {
+export default function destructiveAlert({ title, description, isOpen, onOpenChange, execute, resourceName }: destructiveAlert) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent size="sm">
@@ -21,7 +23,7 @@ export default function destructiveAlert({ title, description, isOpen, onOpenCha
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive">Delete</AlertDialogAction>
+          <AlertDialogAction variant="destructive" onClick={() => execute(resourceName)}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

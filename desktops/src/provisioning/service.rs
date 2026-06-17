@@ -44,4 +44,18 @@ impl<K: KubernetesProvisiningRepository, P: PostgresProvioningRepository>
     pub async fn get_desktops(&self, username: String) -> Result<Vec<Desktop>, ProvisioningError> {
         self.postgres_repo.get_desktops(username).await
     }
+
+    pub async fn delete_desktop(
+        &self,
+        name: String,
+        username: String,
+    ) -> Result<(), ProvisioningError> {
+        println!("A");
+        self.kubernetes_repo
+            .delete_desktop(name.clone(), username.clone())
+            .await?;
+        println!("B");
+        self.postgres_repo.remove_desktop(name, username).await?;
+        Ok(())
+    }
 }
