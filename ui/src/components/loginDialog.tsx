@@ -14,7 +14,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useEffect } from "react"
+import { useEffect, type ReactNode } from "react"
 import { toast } from "sonner"
 import Cookie from "js-cookie";
 import { useFetcher, useNavigate } from "react-router"
@@ -25,7 +25,11 @@ interface ActionData {
   token?: string
 }
 
-export default function LoginDialog() {
+interface LoginDialogProps {
+  children: ReactNode
+}
+
+export default function LoginDialog({ children }: LoginDialogProps) {
   const navigate = useNavigate()
   const fetcher = useFetcher<ActionData>()
   const state = fetcher.data
@@ -48,7 +52,7 @@ export default function LoginDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="link" className="text-md cursor-pointer">Login</Button>
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <fetcher.Form method="post" action="/actions/login">

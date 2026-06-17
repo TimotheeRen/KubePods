@@ -1,36 +1,46 @@
+import { Button } from "@/components/ui/button";
+import { NavMenu } from "@/components/nav-menu";
+import { NavigationSheet } from "@/components/navigation-sheet";
 import logo from "@/assets/logo.png"
-import { AnimatedThemeToggler } from "./ui/animated-theme-toggler"
-import { FaGithub } from "react-icons/fa";
-import { FaDiscord } from "react-icons/fa";
-import { ChevronDown } from "lucide-react";
+import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
+import RegisterDialog from "./registerDialog";
+import LoginDialog from "./loginDialog";
 
-export default function Navbar() {
+const Navbar = () => {
   return (
-    <div className="flex text-center justify-between items-center cursor-pointer mt-1">
-      <div className="flex cursor-pointer items-center gap-2 ml-3 mt-1">
-        <img src={logo} alt="KubePods" className="w-8" />
-        <h1 className="text-xl font-semibold">KubePods</h1>
-      </div>
-      <div className="md:flex gap-10 hidden mt-1">
-        <div className="flex items-center gap-1">
-          <h1 className="cursor-pointer text-lg">Why KubePods</h1>
-          <ChevronDown size={18} />
+    <nav className="h-16 border-b bg-background/20 backdrop-blur-md fixed w-full z-10">
+      <div className="mx-auto flex h-full max-w-(--breakpoint-xl) items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-12">
+          <a href="#" className="flex gap-1">
+            <img src={logo} alt="Logo" className="w-7" />
+            <span className="text-lg">KubePods</span>
+          </a>
+
+          {/* Desktop Menu */}
+          <NavMenu className="hidden md:block" />
         </div>
-        <div className="flex items-center gap-1">
-          <h1 className="cursor-pointer text-lg">Desktops</h1>
-          <ChevronDown size={18} />
+
+        <div className="flex items-center gap-3">
+          <LoginDialog>
+            <Button className="hidden sm:inline-flex" variant="outline">
+              Sign In
+            </Button>
+          </LoginDialog>
+          <RegisterDialog>
+            <Button>Sign Up</Button>
+          </RegisterDialog>
+          <Button size="icon" variant="outline">
+            <AnimatedThemeToggler />
+          </Button>
+
+          {/* Mobile Menu */}
+          <div className="md:hidden">
+            <NavigationSheet />
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <h1 className="cursor-pointer text-lg">Pricing</h1>
-          <ChevronDown size={18} />
-        </div>
-        <h1 className="cursor-pointer text-lg">Documentation</h1>
       </div>
-      <div className="flex gap-4 items-center mr-3">
-        <a href="#"><FaDiscord size={25} className="cursor-pointer" /></a>
-        <a href="https://github.com/TimotheeRen/KubePods"><FaGithub size={21} className="cursor-pointer" /></a>
-        <AnimatedThemeToggler className="cursor-pointer" />
-      </div>
-    </div>
-  )
-}
+    </nav>
+  );
+};
+
+export default Navbar;

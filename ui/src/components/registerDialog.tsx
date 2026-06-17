@@ -14,10 +14,9 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useEffect } from "react"
+import { useEffect, type ReactNode } from "react"
 import { useFetcher, useNavigate } from "react-router"
 import { toast } from "sonner"
-import { ShimmerButton } from "./ui/shimmer-button"
 import Cookie from "js-cookie";
 
 interface ActionData {
@@ -26,7 +25,11 @@ interface ActionData {
   token?: string
 }
 
-export default function RegisterDialog() {
+interface RegisterDialogProps {
+  children: ReactNode
+}
+
+export default function RegisterDialog({ children }: RegisterDialogProps) {
   const navigate = useNavigate()
   const fetcher = useFetcher<ActionData>()
   const state = fetcher.data
@@ -49,7 +52,7 @@ export default function RegisterDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <ShimmerButton background="rgba(99, 102, 241, 1)" className="h-10 w-20">Register</ShimmerButton>
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <fetcher.Form method="post" action="/actions/register">
