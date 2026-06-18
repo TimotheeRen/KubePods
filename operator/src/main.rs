@@ -176,6 +176,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         Ok(_) => println!("Sucessfully patched service"),
         Err(e) => println!("An error occured when patching a service: {}", e),
     };
+
     let ingress = Ingress {
         metadata: ObjectMeta {
             name: Some(desktop.spec.id.clone()),
