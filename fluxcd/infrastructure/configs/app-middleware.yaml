@@ -4,6 +4,5 @@ metadata:
   name: replace-desktops-prefix
   namespace: default
 spec:
-  replacePathRegex:
-    regex: ^/desktop/(/.*)?$
-    replacement: /
+  replacePath:
+    path: /
