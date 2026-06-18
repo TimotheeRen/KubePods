@@ -1,9 +1,7 @@
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: desktop-strip-all
-  namespace: desktops
+  name: replace-desktops-prefix
 spec:
-  replacePathRegex:
-    regex: "^/desktop/[^/]+(.*)"
-    replacement: "$1"
+  replacePath:
+    path: /
