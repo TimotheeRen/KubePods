@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: app-ingress
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: desktops-replace-desktops-prefix@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: default-replace-desktops-prefix@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
