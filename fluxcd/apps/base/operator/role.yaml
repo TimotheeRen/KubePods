@@ -4,7 +4,7 @@ metadata:
   name: operator
   namespace: desktops
 rules:
-  - apiGroups: ["", "apps", "kubepods.com"]
+  - apiGroups: ["", "apps", "kubepods.com", "networking.k8s.io"]
     resources: ["desktops", "deployments", "services", "ingresses"]
     verbs: ["*"]
   - apiGroups: [""]
