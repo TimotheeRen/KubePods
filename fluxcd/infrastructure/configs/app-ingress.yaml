@@ -2,8 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: app-ingress
-  annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: default-replace-desktops-prefix@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:

@@ -75,6 +75,12 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
     let mut labels = BTreeMap::new();
     labels.insert("app".to_string(), desktop.spec.id.clone());
 
+    let mut annotations = BTreeMap::new();
+    annotations.insert(
+        "traefik.ingress.kubernetes.io/router.middlewares".to_string(),
+        "desktops-replace-desktops-prefix@kubernetescrd".to_string(),
+    );
+
     let distribution = desktop.spec.distribtion.clone();
     let mut desktop_environment = desktop.spec.desktop_environment.clone();
 
@@ -175,6 +181,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
             name: Some(desktop.spec.id.clone()),
             namespace: Some("desktops".to_string()),
             owner_references: Some(vec![desktop.controller_owner_ref(&()).unwrap()]),
+            annotations: Some(annotations),
             ..Default::default()
         },
         spec: Some(IngressSpec {
