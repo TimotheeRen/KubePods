@@ -1,0 +1,9 @@
+apiVerion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: replace-desktops-prefix
+  namespace: desktops
+spec:
+  replacePathRegex:
+    regex: ^/desktop/(/.*)?$
+    replacement: /
