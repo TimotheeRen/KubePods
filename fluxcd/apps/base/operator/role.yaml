@@ -5,7 +5,7 @@ metadata:
   namespace: desktops
 rules:
   - apiGroups: ["", "apps", "kubepods.com"]
-    resources: ["desktops", "deployments", "services"]
+    resources: ["desktops", "deployments", "services", "ingresses"]
     verbs: ["*"]
   - apiGroups: [""]
     resources: ["events"]
