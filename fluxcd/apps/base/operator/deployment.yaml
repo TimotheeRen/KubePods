@@ -16,4 +16,4 @@ spec:
       serviceAccountName: operator
       containers:
         - name: operator
-          image: timotheeren/kubepods-operator:sha-8036e86d58648aba5c52dcba262986f6f8bbb2d5
+          image: timotheeren/kubepods-operator:sha-badf20ff213c01a8546e5fa6c0d7852b658a649c
