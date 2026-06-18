@@ -182,7 +182,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
             rules: Some(vec![IngressRule {
                 http: Some(HTTPIngressRuleValue {
                     paths: vec![HTTPIngressPath {
-                        path: Some(format!("/{}", desktop.spec.id.clone())),
+                        path: Some(format!("/desktop/{}", desktop.spec.id.clone())),
                         path_type: "Prefix".to_string(),
                         backend: IngressBackend {
                             service: Some(IngressServiceBackend {

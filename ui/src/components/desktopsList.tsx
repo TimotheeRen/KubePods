@@ -21,7 +21,7 @@ export default function DesktopList() {
   if (!token) { return null }
   const username = jwtDecode(token).sub
   const host = import.meta.env.VITE_API_HOST;
-  const link = host + "/" + username + "-"
+  const link = host + "/desktop/" + username + "-"
 
   return (
     <Card className="w-full h-full">
