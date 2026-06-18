@@ -78,7 +78,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
     let mut annotations = BTreeMap::new();
     annotations.insert(
         "traefik.ingress.kubernetes.io/router.middlewares".to_string(),
-        "default-replace-desktops-prefix@kubernetescrd".to_string(),
+        "default-desktop-chain@kubernetescrd".to_string(),
     );
 
     let distribution = desktop.spec.distribtion.clone();
