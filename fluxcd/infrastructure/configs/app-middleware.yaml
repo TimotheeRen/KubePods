@@ -3,26 +3,5 @@ kind: Middleware
 metadata:
   name: replace-desktops-prefix
 spec:
-  replacePathRegex:
-    regex: "^/desktop/[^/]+/?(.*)"
-    replacement: "/$1"
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: desktop-trailing-slash
-spec:
-  redirectRegex:
-    regex: "^(https?://[^/]*)/desktop/([^/]+)$"
-    replacement: "${1}/desktop/${2}/"
-    permanent: false
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: desktop-chain
-spec:
-  chain:
-    middlewares:
-      - name: desktop-trailing-slash
-      - name: replace-desktops-prefix
+  replacePath:
+    path: /
