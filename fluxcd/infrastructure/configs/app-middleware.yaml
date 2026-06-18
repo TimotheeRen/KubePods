@@ -3,5 +3,6 @@ kind: Middleware
 metadata:
   name: replace-desktops-prefix
 spec:
-  replacePath:
-    path: /
+  replacePathRegex:
+    regex: "^/desktop/[^/]+/?(.*)"
+    replacement: "/$1"
