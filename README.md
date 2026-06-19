@@ -1,9 +1,4 @@
----
-title: Overview
-description: KubePods architectural overview
----
-
-![alt](../../public/diagrams/overview.png)
+![alt](doc/public/diagrams/overview.png)
 
 # Architectural Overview
 

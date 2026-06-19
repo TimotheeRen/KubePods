@@ -11,7 +11,10 @@
     "pkg-config@latest",
     "gcc@latest",
     "protobuf_34",
-    "libiconv@latest"
+    "libiconv@latest",
+    "python@latest",
+    "python314Packages.pip@latest",
+    "graphviz@latest"
   ],
   "shell": {
     "init_hook": [
