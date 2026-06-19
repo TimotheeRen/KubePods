@@ -1,6 +1,10 @@
-![alt](doc/public/diagrams/overview.png)
+# KubePods
+
+KubePods is a Kubernetes based desktops hosting plateform. It allows users to easily provision linux desktops in containers throught a modern interface.
 
 # Architectural Overview
+
+![alt](doc/public/diagrams/overview.png)
 
 KubePods relies on a microservices architecture in which each service has a specific role.
 - The Traefik reverse proxy handles incoming HTTP requests and redirects them to the corresponding service. It also provides caching, performance optimizations, and SEO-related features.
