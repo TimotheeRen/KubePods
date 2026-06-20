@@ -42,8 +42,8 @@ export default function LoginDialog({ children }: LoginDialogProps) {
       toast.success(state.message)
       Cookie.set("token", state.token, {
         expires: 1,
-        secure: true,
-        sameSite: "strict",
+        secure: false,
+        sameSite: "lax",
       })
       navigate("/dashboard")
     }
