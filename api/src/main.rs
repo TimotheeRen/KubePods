@@ -93,8 +93,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cors = CorsLayer::new()
         .allow_origin([
             "http://localhost:5173".parse::<HeaderValue>().unwrap(), // DEV
-            "http://localhost:8081".parse::<HeaderValue>().unwrap(), // DEBUG PROD
-            "http://localhost:8080".parse::<HeaderValue>().unwrap(), // PROD
+            "http://localhost:8080".parse::<HeaderValue>().unwrap(), // DEBUG PROD
+            "http://kubepods.com:8080".parse::<HeaderValue>().unwrap(), // PROD
         ])
         .allow_methods(Any)
         .allow_headers(Any);
