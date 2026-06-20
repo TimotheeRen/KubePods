@@ -188,9 +188,10 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
         spec: Some(IngressSpec {
             ingress_class_name: Some("traefik".to_string()),
             rules: Some(vec![IngressRule {
+                host: Some(format!("{}.kubepods.com", desktop.spec.id.clone())),
                 http: Some(HTTPIngressRuleValue {
                     paths: vec![HTTPIngressPath {
-                        path: Some(format!("/desktop/{}", desktop.spec.id.clone())),
+                        path: Some("/".to_string()),
                         path_type: "Prefix".to_string(),
                         backend: IngressBackend {
                             service: Some(IngressServiceBackend {

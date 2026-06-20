@@ -20,8 +20,6 @@ export default function DesktopList() {
   const token = Cookie.get("token")
   if (!token) { return null }
   const username = jwtDecode(token).sub
-  const host = import.meta.env.VITE_API_HOST;
-  const link = host + "/desktop/" + username + "-"
 
   return (
     <Card className="w-full h-full">
@@ -66,13 +64,12 @@ export default function DesktopList() {
                   <TableCell>{d.distribution}</TableCell>
                   <TableCell>{d.desktop_environment}</TableCell>
                   <TableHead>
-                    <Link target="_blank" to={link + d.name} className="hover:underline">
-                      {link + d.name}
+                    <Link target="_blank" to={"http://" + username + "-" + d.name + ".kubepods.com:8080"} className="hover:underline">
+                      {"http://" + username + "-" + d.name + ".kubepods.com:8080"}
                     </Link>
                   </TableHead>
                   <TableCell>
-                    <DesktopSettingsMenu link={link + d.name} resourceName={d.name} />
-                  </TableCell>
+                    <DesktopSettingsMenu link={"http://" + username + "-" + d.name + ".kubepods.com:8080"} resourceName={d.name} /> </TableCell>
                 </TableRow>
               ))}
             </TableBody>
