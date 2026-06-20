@@ -155,7 +155,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
             selector: Some(labels),
             ports: Some(vec![ServicePort {
                 protocol: Some("TCP".to_string()),
-                port: 3000,
+                port: 8080,
                 target_port: Some(IntOrString::Int(3000)),
                 ..Default::default()
             }]),
@@ -197,7 +197,7 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
                             service: Some(IngressServiceBackend {
                                 name: desktop.spec.id.clone(),
                                 port: Some(ServiceBackendPort {
-                                    number: Some(3000),
+                                    number: Some(8080),
                                     ..Default::default()
                                 }),
                             }),
@@ -205,7 +205,6 @@ async fn reconcile(desktop: Arc<Desktop>, context: Arc<ContextData>) -> Result<A
                         },
                     }],
                 }),
-                ..Default::default()
             }]),
             ..Default::default()
         }),
