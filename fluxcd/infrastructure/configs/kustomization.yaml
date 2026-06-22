@@ -6,6 +6,7 @@ resources:
   - users-schema.yaml
   - desktops-schema.yaml
   - app-ingress.yaml
+  - cluster-issuer.yaml
 
 configMapGenerator:
   - name: users-schema-config

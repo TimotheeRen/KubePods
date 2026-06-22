@@ -14,7 +14,8 @@
     "libiconv@latest",
     "python@latest",
     "python314Packages.pip@latest",
-    "graphviz@latest"
+    "graphviz@latest",
+    "terraform@latest"
   ],
   "shell": {
     "init_hook": [
