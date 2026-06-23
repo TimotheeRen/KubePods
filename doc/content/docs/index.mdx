@@ -3,6 +3,7 @@ title: Overview
 description: KubePods architectural overview
 ---
 
+
 # Architectural Overview
 
 ![architectural overview](../../public/diagrams/overview.png)
@@ -14,3 +15,14 @@ KubePods relies on a microservices architecture in which each service has a spec
 - The Users service uses Tonic to handle gRPC requests. It manages user-related operations, including authentication.
 - The Desktops service also uses Tonic to handle gRPC requests and manages desktop-related operations, including provisioning.
 - The Kubernetes Operator is a custom operator that relies on the Rust Kube library to communicate with the cluster API and provision desktop infrastructure. It continuously watches Desktop custom resources and provisions their infrastructure through a reconciliation loop, preventing configuration drift.
+
+# Installation
+
+<Cards>
+<Card href="/docs/runbooks/installation/dev" title="Dev environment">
+  KubePods installation in a developement environment
+</Card>
+<Card href="/docs/runbooks/installation/staging" title="Staging environment">
+  KubePods installation in a staging environment
+</Card>
+</Cards>
