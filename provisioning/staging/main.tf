@@ -77,8 +77,12 @@ resource "libvirt_domain" "node" {
           bus = "virtio"
         }
       },
-      /*{
+      {
         device = "cdrom"
+        driver = {
+          name = "qemu"
+          type = "raw"
+        }
         source = {
           file = {
             file = libvirt_cloudinit_disk.init[each.value].path
@@ -88,7 +92,7 @@ resource "libvirt_domain" "node" {
           dev = "sda"
           bus = "sata"
         }
-      }*/
+      }
     ]
     interfaces = [{
       model  = { type = "virtio" }
