@@ -12,21 +12,40 @@ resource "libvirt_cloudinit_disk" "init" {
 
 resource "libvirt_volume" "disk" {
   for_each = toset(local.nodes)
-  name     = "${each.value}-disk"
+  name     = "${each.value}.qcow2"
   pool     = "default"
-  capacity = 21474836480
+  capacity = 10737418240
+  target = {
+    format = {
+      type = "qcow2"
+    }
+  }
   create = {
     content = {
-      url = libvirt_cloudinit_disk.init[each.key].path
+      url = "/var/lib/libvirt/images/ubuntu.qcow2"
     }
   }
 }
 
-resource "libvirt_domain" "master_node" {
+resource "libvirt_network" "network" {
+  name      = "k8s-net"
+  autostart = true
+
+  forward = { mode = "nat" }
+
+  ips = [{
+    address = "10.99.14.1"
+    netmask = "255.255.255.0"
+    dhcp    = { ranges = [{ start = "10.99.14.100", end = "10.99.14.200" }] }
+  }]
+}
+
+
+resource "libvirt_domain" "node" {
   for_each    = toset(local.nodes)
   name        = "${each.value}-vm"
   memory      = var.nodes_spec.memory
-  memory_unit = "Mib"
+  memory_unit = "MiB"
   vcpu        = var.nodes_spec.vcpu
   type        = "kvm"
 
@@ -36,31 +55,68 @@ resource "libvirt_domain" "master_node" {
     type_machine = "q35"
   }
 
+  features = {
+    acpi = true
+  }
+
   devices = {
     disks = [
       {
         source = {
-          file = {
-            file = "/var/lib/libvirt/images/ubuntu.img"
+          volume = {
+            volume = libvirt_volume.disk[each.value].name
+            pool   = libvirt_volume.disk[each.value].pool
           }
+        }
+        driver = {
+          name = "qemu"
+          type = "qcow2"
         }
         target = {
           dev = "vda"
           bus = "virtio"
         }
-      }
+      },
+      /*{
+        device = "cdrom"
+        source = {
+          file = {
+            file = libvirt_cloudinit_disk.init[each.value].path
+          }
+        }
+        target = {
+          dev = "sda"
+          bus = "sata"
+        }
+      }*/
     ]
-    interfaces = [
-      {
+    interfaces = [{
+      model  = { type = "virtio" }
+      source = { network = { network = libvirt_network.network.name } }
+    }]
+    serials = [{
+      type = "pty"
+      target = {
+        port = 0
+      }
+    }]
+    consoles = [{
+      type = "pty"
+      target = {
+        type = "serial"
+        port = 0
+      }
+    }]
+    graphics = [{
+      spice = {
+        auto_port = true
+        listen    = "127.0.0.1"
+      }
+      videos = [{
         model = {
           type = "virtio"
         }
-        source = {
-          network = {
-            network = "default"
-          }
-        }
-      }
-    ]
+      }]
+    }]
   }
 }
