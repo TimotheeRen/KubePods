@@ -11,13 +11,13 @@ description: Dev environment installation process
 
 ### With Make
 
-1. Clone the repository
+### Clone the repository [step]
 
 ```bash
 git clone https://github.com/TimotheeRen/KubePods.git
 ```
 
-2. Start the cluster
+### Start the cluster [step]
 
 ```bash
 make dev
@@ -27,13 +27,13 @@ It will automatically create a cluster, then install and configure the flux-oper
 
 ### Manually
 
-1. Clone the repository
+### Clone the repository [step]
 
 ```bash
 git clone https://github.com/TimotheeRen/KubePods.git
 ```
 
-2. Create the cluster with K3d
+### Create the cluster with K3d [step]
 
 ``` bash
 k3d cluster create --config k3d/dev-env.yaml \
@@ -41,7 +41,7 @@ k3d cluster create --config k3d/dev-env.yaml \
         --port "8443:30443@loadbalancer"
 ```
 
-3. Install the flux-operator chart
+### Install the flux-operator chart [step]
 
 ```bash
 helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
@@ -49,7 +49,7 @@ helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-opera
 	  --create-namespace
 ```
 
-4. Apply Flux's dev configuration file
+### Apply Flux's dev configuration file [step]
 
 ```bash
 kubectl apply -f flux-dev.yaml
@@ -57,13 +57,13 @@ kubectl apply -f flux-dev.yaml
 
 # Verification
 
-1. Check if the Kubernetes cluster is running:
+### Check if the Kubernetes cluster is running: [step]
 
 ```bash
 kubectl cluster-info
 ```
 
-2. If you have the Flux CLI installed, check for any reconciliation error:
+### If you have the Flux CLI installed, check for any reconciliation error: [step]
 
 ```bash
 flux get all

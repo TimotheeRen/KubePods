@@ -13,14 +13,14 @@ description: Staging environment installation process
 
 # Process
 
-1. Install a Debian based cloud image
+### Install a Debian based cloud image [step]
 
 ```bash
 cd /var/lib/libvirt/images
 sudo wget https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
 ```
 
-2. Create a backing file
+### Create a backing file [step]
 
 ```bash
 sudo qemu-img create -f qcow2 -F qcow2 \
@@ -28,32 +28,32 @@ sudo qemu-img create -f qcow2 -F qcow2 \
   /var/lib/libvirt/images/ubuntu.qcow2 20G
 ```
 
-3. Clone the repository
+### Clone the repository [step]
 
 ```bash
 git clone https://github.com/TimotheeRen/KubePods.git
 ```
 
-4. Get in the `provisioning/staging` folder
+### Get in the `provisioning/staging` folder [step]
 
 ```bash
 cd provisioning/staging
 ```
 
-5. Initialize Terraform
+### Initialize Terraform [step]
 
 ```bash
 terraform init
 ```
 
-6. Plan the migration
+### Plan the migration [step]
 
 ```bash
 terraform plan
 ```
 
 
-7. Apply the migration
+### Apply the migration [step]
 
 ```bash
 terraform apply
@@ -61,7 +61,7 @@ terraform apply
 
 # Verification
 
-1. You should have two running VM
+### You should have two running VM [step]
 
 ```bash
 virsh list --all
