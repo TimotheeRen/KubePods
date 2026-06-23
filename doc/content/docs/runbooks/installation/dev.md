@@ -3,11 +3,11 @@ title: Dev
 description: Dev environment installation process
 ---
 
-## Prerequisites
+# Prerequisites
 - A Kubernetes cluster running with k3d
 - The Kubectl and Helm CLI installed on the host
 
-## Process
+# Process
 
 ### With Make
 
