@@ -59,6 +59,19 @@ terraform plan
 terraform apply
 ```
 
+### Start the virtual machines [step]
+
+```bash
+virsh start master_node-vm
+virsh start worker_node-vm
+```
+
+### Wait then run the Ansible playbook [step]
+
+```bash
+ansible-playbook playbook.yml
+```
+
 # Verification
 
 ### You should have two running VM [step]

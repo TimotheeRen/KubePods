@@ -1,5 +1,5 @@
 - name: Test
-  hosts: master_node_01
+  hosts: "worker"
   become: true
   tasks:
     - ansible.builtin.copy:
