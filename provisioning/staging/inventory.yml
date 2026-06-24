@@ -1,0 +1,15 @@
+# plugin: cloud.terraform.terraform_provider
+all:
+  children:
+    master_nodes:
+      vars:
+        ansible_user: ubuntu
+      hosts:
+        master_node_01:
+          ansible_host: 192.168.122.10
+    worker_nodes:
+      vars:
+        ansible_user: ubuntu
+      hosts:
+        worker_node_01:
+          ansible_host: 192.168.122.11

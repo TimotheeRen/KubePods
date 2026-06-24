@@ -15,7 +15,8 @@
     "python@latest",
     "python314Packages.pip@latest",
     "graphviz@latest",
-    "terraform@latest"
+    "terraform@latest",
+    "ansible@latest"
   ],
   "shell": {
     "init_hook": [

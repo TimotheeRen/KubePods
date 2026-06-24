@@ -5,6 +5,10 @@ terraform {
       source  = "dmacvicar/libvirt"
       version = "~> 0.9.8"
     }
+    ansible = {
+      source  = "ansible/ansible"
+      version = "~> 1.4"
+    }
   }
 }
 

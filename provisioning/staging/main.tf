@@ -8,6 +8,9 @@ resource "libvirt_cloudinit_disk" "init" {
     instance-id    = each.value
     local-hostname = each.value
   })
+  network_config = templatefile("${path.module}/network-config.yaml", {
+    address = local.addresses[each.value]
+  })
 }
 
 resource "libvirt_volume" "disk" {
@@ -26,20 +29,6 @@ resource "libvirt_volume" "disk" {
     }
   }
 }
-
-resource "libvirt_network" "network" {
-  name      = "k8s-net"
-  autostart = true
-
-  forward = { mode = "nat" }
-
-  ips = [{
-    address = "10.99.14.1"
-    netmask = "255.255.255.0"
-    dhcp    = { ranges = [{ start = "10.99.14.100", end = "10.99.14.200" }] }
-  }]
-}
-
 
 resource "libvirt_domain" "node" {
   for_each    = toset(local.nodes)
@@ -96,7 +85,7 @@ resource "libvirt_domain" "node" {
     ]
     interfaces = [{
       model  = { type = "virtio" }
-      source = { network = { network = libvirt_network.network.name } }
+      source = { network = { network = "default" } }
     }]
     serials = [{
       type = "pty"
@@ -122,5 +111,19 @@ resource "libvirt_domain" "node" {
         }
       }]
     }]
+  }
+}
+
+resource "ansible_group" "nodes" {
+  name = "nodes"
+}
+
+resource "ansible_host" "vm" {
+  for_each = toset(local.nodes)
+  name     = "${each.value}-vm"
+  groups   = [ansible_group.nodes.name]
+  variables = {
+    ansible_host = local.addresses[each.value]
+    ansible_user = "ubuntu"
   }
 }
