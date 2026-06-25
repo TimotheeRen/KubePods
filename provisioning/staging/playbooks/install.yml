@@ -1,0 +1,57 @@
+- name: Test
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install CRI and dependencies
+      ansible.builtin.package:
+        name:
+          - containerd
+          - curl
+          - gpg
+          - apt-transport-https
+          - ca-certificates
+        state: present
+
+    - name: Make sure containerd is running
+      ansible.builtin.systemd_service:
+        name: containerd
+        enabled: true
+        state: started
+
+    - name: Get release key
+      ansible.builtin.get_url:
+        url: https://pkgs.k8s.io/core:/stable:/v1.36/deb/Release.key
+        dest: /tmp/kubernetes-release.key
+        owner: root
+        group: root
+        mode: "0600"
+        timeout: 15
+
+    - name: Install APT keyring
+      ansible.builtin.command:
+        cmd: "gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg /tmp/kubernetes-release.key"
+        creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+    - name: Add Kubernetes APT repository
+      ansible.builtin.copy:
+        content: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /"
+        dest: "/etc/apt/sources.list.d/kubernetes.list"
+
+    - name: Update APT local repository
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Kubernetes dependencies
+      ansible.builtin.package:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: Start Kubelet's service
+      ansible.builtin.systemd_service:
+        name: kubelet
+        enabled: true
+        state: started

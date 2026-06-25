@@ -1,8 +1,1 @@
-- name: Test
-  hosts: "worker"
-  become: true
-  tasks:
-    - ansible.builtin.copy:
-        content: "Provisioned."
-        dest: /tmp/ansible
-        mode: "0777"
+- ansible.builtin.import_playbook: playbooks/install.yml
