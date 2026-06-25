@@ -1,0 +1,54 @@
+- name: Create cluster
+  hosts: "master"
+  become: true
+
+  tasks:
+    - name: Add Kubeadm config file
+      ansible.builtin.copy:
+        src: ../kubeadm-config.yml
+        dest: kubeadm-config.yml
+        owner: root
+        group: root
+        mode: "0600"
+
+    - name: Check if a Cluster is already running
+      ansible.builtin.stat:
+        path: /etc/kubernetes/admin.conf
+      register: kubeadmin_conf
+
+    - name: Enable IP forwarding
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: true
+
+    - name: Init the cluster
+      ansible.builtin.command:
+        cmd: kubeadm init --config kubeadm-config.yml
+      when: not kubeadmin_conf.stat.exists
+
+    - name: Init Kubernetes home directory
+      ansible.builtin.file:
+        path: .kube
+        state: directory
+        owner: "{{ ansible_facts['env']['SUDO_USER'] }}"
+        group: "{{ ansible_facts['env']['SUDO_USER'] }}"
+        mode: "0777"
+
+    - name: Copy Kuberentes config file
+      ansible.builtin.copy:
+        src: /etc/kubernetes/admin.conf
+        dest: "/home/{{ ansible_facts['env']['SUDO_USER']  }}/.kube/config"
+        remote_src: true
+
+    - name: Install Kubernetes Python extension
+      ansible.builtin.package:
+        name: python3-kubernetes
+        state: present
+
+    - name: Install Flannel CNI
+      kubernetes.core.k8s:
+        src: https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+        state: present
+        kubeconfig: "/home/{{ ansible_facts['env']['SUDO_USER'] }}/.kube/config"
