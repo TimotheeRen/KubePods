@@ -1,2 +1,3 @@
 - ansible.builtin.import_playbook: playbooks/install.yml
 - ansible.builtin.import_playbook: playbooks/create-cluster.yml
+- ansible.builtin.import_playbook: playbooks/join-cluster.yml

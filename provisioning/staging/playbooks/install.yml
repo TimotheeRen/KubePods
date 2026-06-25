@@ -3,6 +3,19 @@
   become: true
 
   tasks:
+    - name: Load br_netfilter module
+      community.general.modprobe:
+        name: br_netfilter
+        state: present
+
+    - name: Make br_netfilter permanent
+      ansible.builtin.copy:
+        content: "br_netfilter"
+        dest: /etc/modules-load.d/k8s.conf
+        owner: root
+        group: root
+        mode: "0644"
+
     - name: Install CRI and dependencies
       ansible.builtin.package:
         name:

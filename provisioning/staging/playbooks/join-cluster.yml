@@ -1,0 +1,32 @@
+- name: Join cluster
+  hosts: "worker"
+  become: true
+
+  tasks:
+    - name: Configure hostname
+      ansible.builtin.hostname:
+        name: worker-01
+
+    - name: Check if the worker had already joined the cluster
+      ansible.builtin.stat:
+        path: /etc/kubernetes/kubelet.conf
+      register: kubelet_conf
+
+    - name: Reset kubeadm state if not already joined
+      ansible.builtin.command:
+        cmd: kubeadm reset --force
+      when: not kubelet_conf.stat.exists
+
+    - name: Enable IP forwarding
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: true
+
+    - name: Join the cluster
+      ansible.builtin.command:
+        cmd: "{{ kubeadm_join_command }}"
+      when:
+        - not kubelet_conf.stat.exists
+        - kubeadm_join_command is defined
