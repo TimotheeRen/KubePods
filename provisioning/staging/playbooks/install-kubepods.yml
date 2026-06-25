@@ -1,0 +1,40 @@
+- name: Create cluster
+  hosts: "master"
+  become: true
+
+  tasks:
+    - name: Check if directory KubePods exist
+      ansible.builtin.stat:
+        path: KubePods/
+      register: kubepods_directory
+
+    - name: Clone KubePods directory
+      ansible.builtin.git:
+        repo: https://github.com/TimotheeRen/KubePods
+        dest: KubePods
+      when: not kubepods_directory.stat.exists
+
+    - name: Check if Helm is installed
+      ansible.builtin.stat:
+        path: /usr/local/bin/helm
+      register: helm_bin
+
+    - name: Install Helm
+      ansible.builtin.shell: |
+        curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash
+      when: not helm_bin.stat.exists
+
+    - name: Install Flux Operator
+      ansible.builtin.command:
+        cmd: >
+          helm upgrade --install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+          --namespace flux-system
+          --create-namespace
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+    - name: Create KubePods cluster
+      ansible.builtin.command:
+        cmd: kubectl apply -f KubePods/flux-dev.yaml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf

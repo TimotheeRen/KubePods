@@ -1,3 +1,8 @@
 - ansible.builtin.import_playbook: playbooks/install.yml
+  tags: install
 - ansible.builtin.import_playbook: playbooks/create-cluster.yml
+  tags: create-cluster
 - ansible.builtin.import_playbook: playbooks/join-cluster.yml
+  tags: join-cluster
+- ansible.builtin.import_playbook: playbooks/install-kubepods.yml
+  tags: install-kubepods
