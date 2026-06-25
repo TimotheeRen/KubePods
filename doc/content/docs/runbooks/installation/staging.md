@@ -66,6 +66,12 @@ virsh start master_node-vm
 virsh start worker_node-vm
 ```
 
+### Add Ansible playbooks dependencies [step]
+
+```bash
+ansible-galaxy collection install kubernetes.core
+```
+
 ### Wait then run the Ansible playbook [step]
 
 ```bash
@@ -79,3 +85,6 @@ ansible-playbook playbook.yml
 ```bash
 virsh list --all
 ```
+
+
+
