@@ -6,4 +6,3 @@ resources:
   - atlas-operator.yaml
   - ingress-traefik.yaml
   - desktops-namespace.yaml
-  - cert-manager.yaml
