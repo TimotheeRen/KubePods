@@ -8,10 +8,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { ChartLine, LogOut, MonitorCloud, Settings, UserCog } from "lucide-react"
+
+import {
+  ChartLine,
+  LogOut,
+  MonitorCloud,
+  Settings,
+  UserCog,
+} from "lucide-react"
+
 import { FaDiscord, FaGithub } from "react-icons/fa"
+
 import CreateDesktopDialog from "./createDesktopDialog"
 import logo from "@/assets/logo.png"
+import LogoutMenu from "./logoutMenu"
 
 export default function AppSidebar() {
   return (
@@ -28,6 +38,7 @@ export default function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -36,6 +47,7 @@ export default function AppSidebar() {
                 <CreateDesktopDialog type="sidebar" />
               </SidebarMenuItem>
             </SidebarMenu>
+
             <SidebarMenu className="mt-2">
               <SidebarMenuItem>
                 <SidebarMenuButton>
@@ -43,28 +55,31 @@ export default function AppSidebar() {
                   <span>Dashboard</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <ChartLine />
                   <span>Analytics</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <UserCog />
                   <span>Members</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <Settings />
                   <span>Settings</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
             <SidebarMenu>
@@ -74,17 +89,16 @@ export default function AppSidebar() {
                   <span>Support</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <FaGithub />
                   <span>Source code</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
-                <SidebarMenuButton className="text-destructive">
-                  <LogOut />
-                  <span>Logout</span>
-                </SidebarMenuButton>
+                <LogoutMenu />
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
