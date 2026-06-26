@@ -75,16 +75,11 @@ impl AuthRepository for PostgresAuthRepository {
         password: String,
         hashed_password: &str,
     ) -> Result<String, AuthError> {
-        let hash = PasswordHash::new(hashed_password).map_err(|e| {
-            println!("PasswordHash error: {:?}", e);
-            AuthError::WrongPassword
-        })?;
+        let hash = PasswordHash::new(hashed_password).map_err(|_| AuthError::WrongPassword)?;
 
         Argon2::default()
             .verify_password(password.as_bytes(), &hash)
             .map_err(|_| AuthError::WrongPassword)?;
-
-        println!("Correct credentials !");
 
         let expiration = Utc::now() + Duration::from_mins(90);
 

@@ -54,7 +54,7 @@ export default function DesktopList() {
                 <TableHead>Name</TableHead>
                 <TableHead>Distribution</TableHead>
                 <TableHead>Desktop environment</TableHead>
-                <TableHead>Access</TableHead>
+                <TableHead>State</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -63,11 +63,9 @@ export default function DesktopList() {
                   <TableCell>{d.name}</TableCell>
                   <TableCell>{d.distribution}</TableCell>
                   <TableCell>{d.desktop_environment}</TableCell>
-                  <TableHead>
-                    <Link target="_blank" to={"http://" + username + "-" + d.name + ".kubepods.com:8080"} className="hover:underline">
-                      {"http://" + username + "-" + d.name + ".kubepods.com:8080"}
-                    </Link>
-                  </TableHead>
+                  <TableCell>
+                    <span>Running</span>
+                  </TableCell>
                   <TableCell>
                     <DesktopSettingsMenu link={"http://" + username + "-" + d.name + ".kubepods.com:8080"} resourceName={d.name} /> </TableCell>
                 </TableRow>

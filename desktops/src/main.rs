@@ -1,3 +1,4 @@
+mod daemon;
 mod provisioning;
 use crate::provisioning::{
     handler::{ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer},
@@ -27,6 +28,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .acquire_timeout(std::time::Duration::from_secs(30))
         .connect(&pg_host)
         .await?;
+
+    tokio::spawn(daemon::increment(pool.clone()));
 
     let client = Client::try_default().await?;
 
