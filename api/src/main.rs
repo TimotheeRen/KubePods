@@ -56,11 +56,16 @@ where
     type Rejection = AuthError;
 
     async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
+        let jwt_secret = match std::env::var("JWT_SECRET") {
+            Ok(val) => val,
+            Err(_) => "jwt_default_secret".to_string(),
+        };
+
         let TypedHeader(Authorization(bearer)) =
             TypedHeader::<Authorization<Bearer>>::from_request_parts(parts, state)
                 .await
                 .map_err(|_| AuthError::MissingToken)?;
-        let key = &DecodingKey::from_secret("secret".as_ref()); // TODO: add secret var
+        let key = &DecodingKey::from_secret(jwt_secret.as_ref());
         let validation = &Validation::new(jsonwebtoken::Algorithm::HS256);
         let token = decode::<Claims>(bearer.token(), key, validation)
             .map_err(|_| AuthError::InvalidToken)?;

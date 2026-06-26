@@ -77,6 +77,11 @@ impl AuthRepository for PostgresAuthRepository {
         password: String,
         hashed_password: &str,
     ) -> Result<String, AuthError> {
+        let jwt_secret = match std::env::var("JWT_SECRET") {
+            Ok(val) => val,
+            Err(_) => "jwt_default_secret".to_string(),
+        };
+
         let hash = PasswordHash::new(hashed_password).map_err(|_| AuthError::WrongPassword)?;
 
         Argon2::default()
@@ -94,7 +99,7 @@ impl AuthRepository for PostgresAuthRepository {
         let token = encode(
             &Header::default(),
             &claims,
-            &EncodingKey::from_secret("secret".as_ref()), // TODO: add secret var
+            &EncodingKey::from_secret(jwt_secret.as_ref()),
         )
         .map_err(|_| AuthError::InternalServerError)?;
 
