@@ -2,7 +2,7 @@ import { MonitorPlay, ScreenShareOff } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "./ui/empty";
 import CreateDesktopDialog from "./createDesktopDialog";
-import { Link, useLoaderData } from "react-router";
+import { useLoaderData } from "react-router";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import Cookie from "js-cookie";
 import { jwtDecode } from "jwt-decode";
