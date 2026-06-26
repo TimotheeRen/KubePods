@@ -50,11 +50,9 @@ impl<K: KubernetesProvisiningRepository, P: PostgresProvioningRepository>
         name: String,
         username: String,
     ) -> Result<(), ProvisioningError> {
-        println!("A");
         self.kubernetes_repo
             .delete_desktop(name.clone(), username.clone())
             .await?;
-        println!("B");
         self.postgres_repo.remove_desktop(name, username).await?;
         Ok(())
     }

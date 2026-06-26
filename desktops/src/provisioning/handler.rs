@@ -27,7 +27,6 @@ impl ProvisioningService for ProvisioningImpl {
         &self,
         request: tonic::Request<CreateDesktopRequest>,
     ) -> Result<tonic::Response<CreateDesktopResponse>, Status> {
-        println!("Received a desktop creation request!");
         let req = request.into_inner();
         self.service
             .create_desktop(

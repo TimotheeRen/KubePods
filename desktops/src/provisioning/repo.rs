@@ -145,7 +145,6 @@ impl PostgresProvioningRepository for PostgresRepository {
         username: String,
     ) -> Result<(), ProvisioningError> {
         let id = format!("{}-{}", username, name);
-        println!("{}", id.clone());
         match query("DELETE FROM desktops WHERE id = $1")
             .bind(&id)
             .execute(&self.pool)
