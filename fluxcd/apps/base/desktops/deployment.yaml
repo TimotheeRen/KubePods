@@ -16,7 +16,7 @@ spec:
       serviceAccount: desktops
       containers:
         - name: desktops
-          image: timotheeren/kubepods-desktops:sha-9956ee71776e6f52d8e055661740aaa05d546fc6
+          image: timotheeren/kubepods-desktops:sha-a0677a2c4a8af4518c367fd3f6485862e93d0fe0
           ports:
             - containerPort: 50052
           env:
