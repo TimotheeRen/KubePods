@@ -9,6 +9,9 @@ table "users" {
   column "password" {
     type = text
   }
+  column "utilization" {
+    type = integer
+  }
   primary_key {
     columns = [
       column.username
