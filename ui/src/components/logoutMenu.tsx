@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
-import { Trash2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { SidebarMenuButton } from "@/components/ui/sidebar"
 import Cookie from "js-cookie";
 import { useNavigate } from "react-router-dom"

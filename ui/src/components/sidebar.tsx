@@ -11,7 +11,6 @@ import {
 
 import {
   ChartLine,
-  LogOut,
   MonitorCloud,
   Settings,
   UserCog,
