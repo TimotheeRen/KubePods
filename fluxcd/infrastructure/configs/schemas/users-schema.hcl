@@ -11,6 +11,7 @@ table "users" {
   }
   column "utilization" {
     type = integer
+    default = 0
   }
   primary_key {
     columns = [
