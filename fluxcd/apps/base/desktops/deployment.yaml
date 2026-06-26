@@ -25,3 +25,5 @@ spec:
                 secretKeyRef:
                   name: desktops-postgres-cluster-app
                   key: uri
+            - name: USERS_HOST
+              value: "http://users:50051"
