@@ -18,3 +18,8 @@ pub struct UserClaims {
     pub role: String,
     pub exp: i64,
 }
+
+pub struct UserTicks {
+    pub username: String,
+    pub ticks: i32,
+}

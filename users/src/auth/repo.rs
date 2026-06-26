@@ -7,6 +7,7 @@ use sqlx::{Pool, Postgres, Row, query};
 
 use crate::auth::{
     error::AuthError,
+    handler::user::UsersTicks,
     model::{LoginUser, User, UserClaims},
 };
 
@@ -19,6 +20,7 @@ pub trait AuthRepository {
         password: String,
         hashed_password: &str,
     ) -> Result<String, AuthError>;
+    async fn increment_ticks(&self, users_ticks: Vec<UsersTicks>) -> Result<(), AuthError>;
 }
 
 pub struct PostgresAuthRepository {
@@ -97,5 +99,18 @@ impl AuthRepository for PostgresAuthRepository {
         .map_err(|_| AuthError::InternalServerError)?;
 
         Ok(token)
+    }
+
+    async fn increment_ticks(&self, users_ticks: Vec<UsersTicks>) -> Result<(), AuthError> {
+        for tick in users_ticks {
+            let _ = query("UPDATE users SET utilization = utilization + $1 WHERE username = $2")
+                .bind(tick.tick as i32)
+                .bind(&tick.username)
+                .execute(&self.pool)
+                .await
+                .map_err(|_| AuthError::InternalServerError)?;
+        }
+
+        Ok(())
     }
 }

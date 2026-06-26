@@ -53,6 +53,8 @@ impl AuthService for AuthImpl {
     ) -> std::result::Result<tonic::Response<user::IncrementChronometerResponse>, tonic::Status>
     {
         let req = request.into_inner();
+        println!("{:?}", req);
+        self.service.increment_chronometer(req.users_ticks).await;
 
         Ok(Response::new(user::IncrementChronometerResponse {}))
     }

@@ -1,5 +1,6 @@
 use crate::auth::{
     error::AuthError,
+    handler::user::UsersTicks,
     model::{LoginUser, User},
     repo::AuthRepository,
 };
@@ -41,5 +42,12 @@ impl<R: AuthRepository> AuthServiceLayer<R> {
         self.repo
             .generate_token(user.username, user.password, &hash)
             .await
+    }
+
+    pub async fn increment_chronometer(
+        &self,
+        users_ticks: Vec<UsersTicks>,
+    ) -> Result<(), AuthError> {
+        self.repo.increment_ticks(users_ticks).await
     }
 }
