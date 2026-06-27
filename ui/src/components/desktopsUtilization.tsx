@@ -1,4 +1,4 @@
-import { Binoculars, Timer } from "lucide-react";
+import { Timer } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { ChartContainer, type ChartConfig } from "./ui/chart";
 import { PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, Label } from "recharts";
