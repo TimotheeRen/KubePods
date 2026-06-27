@@ -13,6 +13,10 @@ table "users" {
     type = integer
     default = 0
   }
+  column "desktops_utilization" {
+    type = jsonb
+    null = true
+  }
   primary_key {
     columns = [
       column.username
