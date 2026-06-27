@@ -15,7 +15,9 @@ type Desktop = {
 };
 
 export default function DesktopList() {
-  const desktops = useLoaderData().response
+  const { desktops, utilization, timeRemaining } = useLoaderData() as { desktops: any, utilization: any, timeRemaining: any };
+  console.log(utilization)
+  console.log(timeRemaining)
   const isPresent = desktops.length === 0
   const token = Cookie.get("token")
   if (!token) { return null }

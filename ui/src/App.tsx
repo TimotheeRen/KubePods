@@ -11,6 +11,8 @@ import DashboardLayout from "./components/dashboardLayout.tsx"
 import { createDesktop } from "./actions/createDesktop.tsx";
 import NotFound from "./components/ui/not-found.tsx";
 import { GetDesktops } from "./loaders/getDesktops.tsx";
+import { GetUtilization } from "./loaders/getUtilization.tsx";
+import { GetTimeRemaining } from "./loaders/getTimeRemaining.tsx";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +38,14 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Dashboard />,
-        loader: GetDesktops,
+        loader: async () => {
+          const [desktops, utilization, timeRemaining] = await Promise.all([
+            GetDesktops(),
+            GetUtilization(),
+            GetTimeRemaining()
+          ])
+          return { desktops, utilization, timeRemaining }
+        },
       },
     ],
   },

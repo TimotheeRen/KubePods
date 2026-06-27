@@ -1,6 +1,6 @@
 import Cookie from "js-cookie";
 
-export async function GetDesktops() {
+export async function GetUtilization() {
   const host = import.meta.env.VITE_API_HOST;
   const token = Cookie.get("token")
 
@@ -10,5 +10,7 @@ export async function GetDesktops() {
       Authorization: `Bearer ${token}`,
     },
   })
-  return await response.json()
+  return ({
+    response: await response.json()
+  })
 } 
