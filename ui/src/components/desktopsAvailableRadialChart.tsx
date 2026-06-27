@@ -1,4 +1,4 @@
-import { Binoculars, ChartLine } from "lucide-react";
+import { Binoculars } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 export default function desktopsavailableradialchart() {
