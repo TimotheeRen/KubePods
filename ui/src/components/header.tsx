@@ -9,8 +9,8 @@ interface HeaderProps {
 export default function Header({ title }: HeaderProps) {
   return (
     <header className="py-1 flex items-center border-b justify-between">
-      <div className="flex items-center">
-        <SidebarTrigger className="" />
+      <div className="flex items-center px-1">
+        <SidebarTrigger />
         <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4 my-auto" />
         <h1>{title}</h1>
       </div>

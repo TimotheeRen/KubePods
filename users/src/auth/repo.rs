@@ -92,7 +92,7 @@ impl AuthRepository for PostgresAuthRepository {
 
         let claims = UserClaims {
             sub: username,
-            role: "user".to_string(),
+            role: "starter".to_string(),
             exp: expiration.timestamp(),
         };
 
