@@ -1,14 +1,14 @@
-import { ChartLine } from "lucide-react";
+import { Binoculars, ChartLine } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
-export default function DesktopsUsageLineChart() {
+export default function desktopsavailableradialchart() {
   return (
     <Card className="w-full h-full">
       <CardHeader>
-        <CardTitle>Desktops usage</CardTitle>
-        <CardDescription>Explore your desktops usage</CardDescription>
+        <CardTitle>Desktops created</CardTitle>
+        <CardDescription>Explore your available desktops</CardDescription>
         <CardAction>
-          <ChartLine />
+          <Binoculars />
         </CardAction>
       </CardHeader>
       <CardContent>

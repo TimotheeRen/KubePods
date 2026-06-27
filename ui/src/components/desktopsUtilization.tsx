@@ -1,14 +1,14 @@
-import { ChartPie } from "lucide-react";
+import { Timer } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
-export default function DesktopsUsagePieChart() {
+export default function DesktopsUtilization() {
   return (
     <Card className="w-full h-full">
       <CardHeader>
-        <CardTitle>Most used desktops</CardTitle>
-        <CardDescription>Explore your most used desktops</CardDescription>
+        <CardTitle>Time spent</CardTitle>
+        <CardDescription>Explore your remaining time</CardDescription>
         <CardAction>
-          <ChartPie />
+          <Timer />
         </CardAction>
       </CardHeader>
       <CardContent>

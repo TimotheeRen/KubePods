@@ -1,7 +1,7 @@
 import Header from "@/components/header"
 import DesktopsList from "@/components/desktopsList"
-import DesktopsUsageLineChart from "@/components/desktopsUsageLineChart"
-import DesktopsUsagePieChart from "@/components/desktopsUsagePieChart"
+import Desktopsavailableradialchart from "@/components/desktopsAvailableRadialChart"
+import DesktopsUtilization from "@/components/desktopsUtilization"
 
 export default function Dashboard() {
   return (
@@ -10,8 +10,8 @@ export default function Dashboard() {
       <div className="p-5 flex flex-col gap-3 justify-between h-full w-full">
         <DesktopsList />
         <div className="flex justify-between gap-3 flex-1">
-          <DesktopsUsageLineChart />
-          <DesktopsUsagePieChart />
+          <Desktopsavailableradialchart />
+          <DesktopsUtilization />
         </div>
       </div>
     </div>
