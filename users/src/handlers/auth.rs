@@ -1,13 +1,13 @@
 use tonic::{Response, Status};
-use user::auth_service_server::AuthService;
+use user_auth::auth_service_server::AuthService;
 
 use crate::{
     domains::error::AuthError, repositories::auth::PostgresAuthRepository,
     services::auth::AuthServiceLayer,
 };
 
-pub mod user {
-    tonic::include_proto!("user");
+pub mod user_auth {
+    tonic::include_proto!("auth");
 }
 
 pub struct AuthImpl {
@@ -18,8 +18,8 @@ pub struct AuthImpl {
 impl AuthService for AuthImpl {
     async fn register(
         &self,
-        request: tonic::Request<user::RegisterRequest>,
-    ) -> std::result::Result<tonic::Response<user::RegisterResponse>, tonic::Status> {
+        request: tonic::Request<user_auth::RegisterRequest>,
+    ) -> std::result::Result<tonic::Response<user_auth::RegisterResponse>, tonic::Status> {
         let req = request.into_inner();
 
         let token = self
@@ -31,13 +31,13 @@ impl AuthService for AuthImpl {
                 _ => Status::internal("Internal server error"),
             })?;
 
-        Ok(Response::new(user::RegisterResponse { token }))
+        Ok(Response::new(user_auth::RegisterResponse { token }))
     }
 
     async fn login(
         &self,
-        request: tonic::Request<user::LoginRequest>,
-    ) -> std::result::Result<tonic::Response<user::LoginResponse>, tonic::Status> {
+        request: tonic::Request<user_auth::LoginRequest>,
+    ) -> std::result::Result<tonic::Response<user_auth::LoginResponse>, tonic::Status> {
         let req = request.into_inner();
         let token = self
             .service
@@ -47,30 +47,17 @@ impl AuthService for AuthImpl {
                 AuthError::WrongPassword => Status::unauthenticated("Wrong credentials"),
                 _ => Status::internal("Internal server error"),
             })?;
-        Ok(Response::new(user::LoginResponse { token }))
+        Ok(Response::new(user_auth::LoginResponse { token }))
     }
 
     async fn increment_chronometer(
         &self,
-        request: tonic::Request<user::IncrementChronometerRequest>,
-    ) -> std::result::Result<tonic::Response<user::IncrementChronometerResponse>, tonic::Status>
+        request: tonic::Request<user_auth::IncrementChronometerRequest>,
+    ) -> std::result::Result<tonic::Response<user_auth::IncrementChronometerResponse>, tonic::Status>
     {
         let req = request.into_inner();
         self.service.increment_chronometer(req.users_ticks).await;
 
-        Ok(Response::new(user::IncrementChronometerResponse {}))
-    }
-
-    async fn remaining_time(
-        &self,
-        request: tonic::Request<user::RemainingTimeRequest>,
-    ) -> std::result::Result<tonic::Response<user::RemainingTimeResponse>, tonic::Status> {
-        let req = request.into_inner();
-        // self.service.increment_chronometer(req.username).await;
-
-        Ok(Response::new(user::RemainingTimeResponse {
-            utilization: 6,
-            remaining: 100,
-        }))
+        Ok(Response::new(user_auth::IncrementChronometerResponse {}))
     }
 }

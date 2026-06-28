@@ -1,8 +1,8 @@
 use crate::users::schemas::RemainingTime;
-use crate::users::user::LoginRequest;
+use crate::users::user_auth::LoginRequest;
 use crate::users::{
     schemas::{self},
-    user::RegisterRequest,
+    user_auth::RegisterRequest,
 };
 use crate::{AppState, Claims};
 use axum::Json;

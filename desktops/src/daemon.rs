@@ -5,12 +5,12 @@ use tokio::time::sleep;
 use tokio_stream::StreamExt;
 use tonic::transport::Channel;
 
-use crate::daemon::user::{
+use crate::daemon::user_auth::{
     IncrementChronometerRequest, UsersTicks, auth_service_client::AuthServiceClient,
 };
 
-pub mod user {
-    tonic::include_proto!("user");
+pub mod user_auth {
+    tonic::include_proto!("auth");
 }
 
 pub async fn increment(

@@ -3,7 +3,7 @@ use crate::{
         auth::{LoginUser, User},
         error::AuthError,
     },
-    handlers::auth::user::UsersTicks,
+    handlers::auth::user_auth::UsersTicks,
     repositories::auth::AuthRepository,
 };
 

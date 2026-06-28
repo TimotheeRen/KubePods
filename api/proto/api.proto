@@ -2,3 +2,4 @@ syntax = "proto3";
 
 import "desktops/provisioning.proto";
 import "user/auth.proto";
+import "user/info.proto";

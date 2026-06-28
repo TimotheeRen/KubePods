@@ -3,7 +3,7 @@ mod users;
 
 use crate::{
     desktops::user::provisioning_service_client::ProvisioningServiceClient,
-    users::user::auth_service_client::AuthServiceClient,
+    users::user_auth::auth_service_client::AuthServiceClient,
 };
 use axum::{
     Router,

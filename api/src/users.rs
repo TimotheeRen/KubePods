@@ -2,6 +2,10 @@ mod handlers;
 pub mod routes;
 mod schemas;
 
-pub mod user {
-    tonic::include_proto!("user");
+pub mod user_auth {
+    tonic::include_proto!("auth");
+}
+
+pub mod user_info {
+    tonic::include_proto!("info");
 }

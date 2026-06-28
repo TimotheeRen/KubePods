@@ -10,7 +10,7 @@ use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
 
 use crate::{
-    handlers::auth::{AuthImpl, user::auth_service_server::AuthServiceServer},
+    handlers::auth::{AuthImpl, user_auth::auth_service_server::AuthServiceServer},
     repositories::auth::PostgresAuthRepository,
     services::auth::AuthServiceLayer,
 };
@@ -36,10 +36,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let repo = PostgresAuthRepository::new(pool);
     let service = AuthServiceLayer::new(repo);
-
-    let addr = "0.0.0.0:50051".parse()?;
     let register_service = AuthImpl { service };
 
+    let addr = "0.0.0.0:50051".parse()?;
     Server::builder()
         .add_service(AuthServiceServer::new(register_service))
         .serve(addr)

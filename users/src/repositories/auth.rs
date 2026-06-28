@@ -10,7 +10,7 @@ use crate::{
         auth::{LoginUser, User, UserClaims},
         error::AuthError,
     },
-    handlers::auth::user::UsersTicks,
+    handlers::auth::user_auth::UsersTicks,
 };
 
 pub trait AuthRepository {
