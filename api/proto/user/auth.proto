@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package user_auth;
+package user;
 
-service UserAuthService {
+service AuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
   rpc IncrementChronometer(IncrementChronometerRequest) returns (IncrementChronometerResponse);
