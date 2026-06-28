@@ -6,9 +6,11 @@ use jsonwebtoken::{EncodingKey, Header, encode};
 use sqlx::{Pool, Postgres, Row, query};
 
 use crate::{
-    error::AuthError,
-    handler::user::UsersTicks,
-    model::{LoginUser, User, UserClaims},
+    domains::{
+        auth::{LoginUser, User, UserClaims},
+        error::AuthError,
+    },
+    handlers::auth::user::UsersTicks,
 };
 
 pub trait AuthRepository {

@@ -1,8 +1,7 @@
-mod error;
-mod handler;
-mod model;
-mod repo;
-mod service;
+mod domains;
+mod handlers;
+mod repositories;
+mod services;
 
 use std::env::var;
 
@@ -11,9 +10,9 @@ use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
 
 use crate::{
-    handler::{AuthImpl, user::auth_service_server::AuthServiceServer},
-    repo::PostgresAuthRepository,
-    service::AuthServiceLayer,
+    handlers::auth::{AuthImpl, user::auth_service_server::AuthServiceServer},
+    repositories::auth::PostgresAuthRepository,
+    services::auth::AuthServiceLayer,
 };
 
 #[tokio::main]

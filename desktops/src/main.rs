@@ -1,9 +1,8 @@
 mod daemon;
-mod error;
-mod handler;
-mod model;
-mod repo;
-mod service;
+mod domains;
+mod handlers;
+mod repositories;
+mod services;
 
 use dotenvy::{dotenv, var};
 use kube::Client;
@@ -11,9 +10,11 @@ use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
 
 use crate::{
-    handler::{ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer},
-    repo::{KubernetesRepository, PostgresRepository},
-    service::ProvisioningServiceLayer,
+    handlers::provisioning::{
+        ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer,
+    },
+    repositories::{kubernetes::KubernetesRepository, postgres::PostgresRepository},
+    services::provisioning::ProvisioningServiceLayer,
 };
 
 #[tokio::main]

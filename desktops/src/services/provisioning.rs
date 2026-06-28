@@ -1,7 +1,8 @@
 use crate::{
-    error::ProvisioningError,
-    model::Desktop,
-    repo::{KubernetesProvisiningRepository, PostgresProvioningRepository},
+    domains::{error::ProvisioningError, provisioning::Desktop},
+    repositories::{
+        kubernetes::KubernetesProvisiningRepository, postgres::PostgresProvioningRepository,
+    },
 };
 
 pub struct ProvisioningServiceLayer<

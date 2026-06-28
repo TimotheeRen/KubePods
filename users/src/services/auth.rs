@@ -1,8 +1,10 @@
 use crate::{
-    error::AuthError,
-    handler::user::UsersTicks,
-    model::{LoginUser, User},
-    repo::AuthRepository,
+    domains::{
+        auth::{LoginUser, User},
+        error::AuthError,
+    },
+    handlers::auth::user::UsersTicks,
+    repositories::auth::AuthRepository,
 };
 
 pub struct AuthServiceLayer<R: AuthRepository> {
