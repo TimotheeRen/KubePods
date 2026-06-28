@@ -4,9 +4,6 @@ import { ChartContainer, type ChartConfig } from "./ui/chart";
 import { PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, Label } from "recharts";
 import { useLoaderData } from "react-router";
 
-const chartData = [
-  { label: "14 Hours", count: 1, fill: "var(--color-primary)" },
-]
 const chartConfig = {
   desktops: {
     label: "Hours",
