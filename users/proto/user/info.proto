@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package user_info;
+
+service UserInfoService {
+  rpc RemainingTime(RemainingTimeRequest) returns (RemainingTimeResponse);
+}
+
+message RemainingTimeRequest {
+  string username = 1;
+}
+
+message RemainingTimeResponse {
+  uint32 utilization = 1;
+  uint32 remaining = 2;
+}

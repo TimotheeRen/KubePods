@@ -1,4 +1,4 @@
-use crate::auth::{
+use crate::{
     error::AuthError,
     handler::user::UsersTicks,
     model::{LoginUser, User},

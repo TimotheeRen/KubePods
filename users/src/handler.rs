@@ -1,7 +1,7 @@
 use tonic::{Response, Status};
 use user::auth_service_server::AuthService;
 
-use crate::auth::{error::AuthError, repo::PostgresAuthRepository, service::AuthServiceLayer};
+use crate::{error::AuthError, repo::PostgresAuthRepository, service::AuthServiceLayer};
 
 pub mod user {
     tonic::include_proto!("user");
@@ -57,5 +57,18 @@ impl AuthService for AuthImpl {
         self.service.increment_chronometer(req.users_ticks).await;
 
         Ok(Response::new(user::IncrementChronometerResponse {}))
+    }
+
+    async fn remaining_time(
+        &self,
+        request: tonic::Request<user::RemainingTimeRequest>,
+    ) -> std::result::Result<tonic::Response<user::RemainingTimeResponse>, tonic::Status> {
+        let req = request.into_inner();
+        // self.service.increment_chronometer(req.username).await;
+
+        Ok(Response::new(user::RemainingTimeResponse {
+            utilization: 6,
+            remaining: 100,
+        }))
     }
 }

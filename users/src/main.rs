@@ -1,11 +1,16 @@
-mod auth;
+mod error;
+mod handler;
+mod model;
+mod repo;
+mod service;
+
 use std::env::var;
 
 use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
 
-use crate::auth::{
+use crate::{
     handler::{AuthImpl, user::auth_service_server::AuthServiceServer},
     repo::PostgresAuthRepository,
     service::AuthServiceLayer,
