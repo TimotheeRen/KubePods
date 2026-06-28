@@ -2,7 +2,7 @@ import { Timer } from "lucide-react";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { ChartContainer, type ChartConfig } from "./ui/chart";
 import { PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart, Label } from "recharts";
-
+import { useLoaderData } from "react-router";
 
 const chartData = [
   { label: "14 Hours", count: 1, fill: "var(--color-primary)" },
@@ -13,8 +13,17 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+interface timeRemainingInterface {
+  utilization: number,
+  remaining: number,
+}
 
 export default function DesktopsUtilization() {
+  const { timeRemaining } = useLoaderData() as { timeRemaining: timeRemainingInterface };
+  const chartData = [
+    { label: String(timeRemaining.utilization) + " Hours", count: 1, fill: "var(--color-primary)" },
+  ]
+  let angle = timeRemaining.utilization / timeRemaining.remaining * 360
   return (
     <Card className="w-full h-full">
       <CardHeader>
@@ -31,7 +40,7 @@ export default function DesktopsUtilization() {
         >
           <RadialBarChart
             data={chartData}
-            endAngle={270}
+            endAngle={angle}
             innerRadius={65}
             outerRadius={95}
           >

@@ -1,3 +1,4 @@
+use crate::users::schemas::RemainingTime;
 use crate::users::user::LoginRequest;
 use crate::users::{
     schemas::{self},
@@ -43,6 +44,16 @@ pub async fn login_handler(
             _ => StatusCode::INTERNAL_SERVER_ERROR,
         })?;
     Ok(res.into_inner().token)
+}
+
+pub async fn get_remaining_time(
+    user: Claims,
+    State(mut state): State<AppState>,
+) -> Result<Json<RemainingTime>, StatusCode> {
+    Ok(Json(RemainingTime {
+        utilization: 8,
+        remaining: 100,
+    }))
 }
 
 pub async fn ping(_: Claims) -> String {

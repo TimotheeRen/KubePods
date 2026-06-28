@@ -3,7 +3,7 @@ use axum::{Json, extract::State, http::StatusCode};
 use crate::{
     AppState, Claims,
     desktops::{
-        schemas::{self, DesktopItem},
+        schemas::{self, DesktopItem, GetRemainingDesktops},
         user::{CreateDesktopRequest, DeleteDesktopRequest, GetDesktopsRequest},
     },
 };
@@ -70,4 +70,14 @@ pub async fn delete_desktop(
         .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     Ok("".to_string())
+}
+
+pub async fn get_remaining_desktops(
+    user: Claims,
+    State(mut state): State<AppState>,
+) -> Result<Json<GetRemainingDesktops>, StatusCode> {
+    Ok(Json(GetRemainingDesktops {
+        created: 1,
+        remaining: 3,
+    }))
 }

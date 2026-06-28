@@ -18,3 +18,9 @@ pub struct DesktopItem {
 pub struct DeleteDesktop {
     pub name: String,
 }
+
+#[derive(Serialize)]
+pub struct GetRemainingDesktops {
+    pub created: u8,
+    pub remaining: u8,
+}

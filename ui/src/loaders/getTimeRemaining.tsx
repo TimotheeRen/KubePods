@@ -4,13 +4,11 @@ export async function GetTimeRemaining() {
   const host = import.meta.env.VITE_API_HOST;
   const token = Cookie.get("token")
 
-  const response = await fetch(host + "/desktops/get_desktops", {
+  const response = await fetch(host + "/users/get_remaining_time", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
-  return ({
-    response: await response.json()
-  })
+  return await response.json()
 } 

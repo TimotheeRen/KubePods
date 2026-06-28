@@ -10,4 +10,8 @@ pub fn provisioning() -> Router<AppState> {
         .route("/create_desktop", post(handlers::create_desktop))
         .route("/get_desktops", get(handlers::get_desktops))
         .route("/delete_desktop", delete(handlers::delete_desktop))
+        .route(
+            "/get_remaining_desktops",
+            get(handlers::get_remaining_desktops),
+        )
 }
