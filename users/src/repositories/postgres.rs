@@ -122,6 +122,17 @@ impl PostgresRepositoryInterface for PostgresRepository {
     }
 
     async fn get_remaining_time(&self, username: String) -> Result<u32, InfoError> {
-        Ok(5)
+        let res = query("SELECT utilization FROM users WHERE username = $1")
+            .bind(&username)
+            .fetch_optional(&self.pool)
+            .await;
+        match res {
+            Ok(Some(row)) => {
+                let utilization = row.get::<i32, _>("utilization") / 60;
+                Ok(utilization as u32)
+            }
+            Ok(None) => Err(InfoError::InternalServerError),
+            Err(_) => Err(InfoError::InternalServerError),
+        }
     }
 }
