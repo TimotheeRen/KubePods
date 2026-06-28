@@ -1,7 +1,8 @@
 use axum::{Json, extract::State, http::StatusCode};
 
 use crate::{
-    AppState, Claims,
+    AppState,
+    claims::Claims,
     desktops::{
         schemas::{self, DesktopItem, GetRemainingDesktops},
         user::{CreateDesktopRequest, DeleteDesktopRequest, GetDesktopsRequest},

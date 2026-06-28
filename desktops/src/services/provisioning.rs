@@ -1,19 +1,20 @@
 use crate::{
-    domains::{error::ProvisioningError, provisioning::Desktop},
+    domains::provisioning::Desktop,
+    errors::provisioning::ProvisioningError,
     repositories::{
-        kubernetes::KubernetesProvisiningRepository, postgres::PostgresProvioningRepository,
+        kubernetes::KubernetesRepositoryInterface, postgres::PostgresRepositoryInterface,
     },
 };
 
 pub struct ProvisioningServiceLayer<
-    K: KubernetesProvisiningRepository,
-    P: PostgresProvioningRepository,
+    K: KubernetesRepositoryInterface,
+    P: PostgresRepositoryInterface,
 > {
     kubernetes_repo: K,
     postgres_repo: P,
 }
 
-impl<K: KubernetesProvisiningRepository, P: PostgresProvioningRepository>
+impl<K: KubernetesRepositoryInterface, P: PostgresRepositoryInterface>
     ProvisioningServiceLayer<K, P>
 {
     pub fn new(kubernetes_repo: K, postgres_repo: P) -> Self {

@@ -1,8 +1,8 @@
 use sqlx::{Pool, Postgres, query, query_as};
 
-use crate::domains::{error::ProvisioningError, provisioning::Desktop};
+use crate::{domains::provisioning::Desktop, errors::provisioning::ProvisioningError};
 
-pub trait PostgresProvioningRepository {
+pub trait PostgresRepositoryInterface {
     async fn add_desktop(
         &self,
         desktop: &Desktop,
@@ -23,7 +23,7 @@ impl PostgresRepository {
     }
 }
 
-impl PostgresProvioningRepository for PostgresRepository {
+impl PostgresRepositoryInterface for PostgresRepository {
     async fn add_desktop(
         &self,
         desktop: &Desktop,

@@ -4,9 +4,9 @@ use kube::{
     api::{DeleteParams, ObjectMeta, PostParams},
 };
 
-use crate::domains::{error::ProvisioningError, provisioning::Desktop};
+use crate::{domains::provisioning::Desktop, errors::provisioning::ProvisioningError};
 
-pub trait KubernetesProvisiningRepository {
+pub trait KubernetesRepositoryInterface {
     async fn create_desktop(
         &self,
         desktop: &Desktop,
@@ -27,7 +27,7 @@ impl KubernetesRepository {
     }
 }
 
-impl KubernetesProvisiningRepository for KubernetesRepository {
+impl KubernetesRepositoryInterface for KubernetesRepository {
     async fn create_desktop(
         &self,
         desktop: &Desktop,

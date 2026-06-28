@@ -1,7 +1,7 @@
 use tonic::{Response, Status};
 
 use crate::{
-    domains::error::ProvisioningError,
+    errors::provisioning::ProvisioningError,
     handlers::provisioning::user::{
         CreateDesktopRequest, CreateDesktopResponse, DeleteDesktopRequest, DeleteDesktopResponse,
         GetDesktopsRequest, GetDesktopsResponse, provisioning_service_server::ProvisioningService,
@@ -14,12 +14,12 @@ pub mod user {
     tonic::include_proto!("provisioning");
 }
 
-pub struct ProvisioningImpl {
+pub struct ProvisioningHandler {
     pub service: ProvisioningServiceLayer<KubernetesRepository, PostgresRepository>,
 }
 
 #[tonic::async_trait]
-impl ProvisioningService for ProvisioningImpl {
+impl ProvisioningService for ProvisioningHandler {
     async fn create_desktop(
         &self,
         request: tonic::Request<CreateDesktopRequest>,

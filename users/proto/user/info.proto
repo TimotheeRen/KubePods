@@ -12,5 +12,4 @@ message RemainingTimeRequest {
 
 message RemainingTimeResponse {
   uint32 utilization = 1;
-  uint32 remaining = 2;
 }

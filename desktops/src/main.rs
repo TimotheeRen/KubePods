@@ -1,5 +1,6 @@
 mod daemon;
 mod domains;
+mod errors;
 mod handlers;
 mod repositories;
 mod services;
@@ -11,7 +12,7 @@ use tonic::transport::Server;
 
 use crate::{
     handlers::provisioning::{
-        ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer,
+        ProvisioningHandler, user::provisioning_service_server::ProvisioningServiceServer,
     },
     repositories::{kubernetes::KubernetesRepository, postgres::PostgresRepository},
     services::provisioning::ProvisioningServiceLayer,
@@ -44,7 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let kubernetes_repo = KubernetesRepository::new(client);
     let postgres_repo = PostgresRepository::new(pool);
     let service = ProvisioningServiceLayer::new(kubernetes_repo, postgres_repo);
-    let provisioning_service = ProvisioningImpl { service };
+    let provisioning_service = ProvisioningHandler { service };
 
     Server::builder()
         .add_service(ProvisioningServiceServer::new(provisioning_service))

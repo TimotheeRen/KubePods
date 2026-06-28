@@ -6,14 +6,12 @@ use jsonwebtoken::{EncodingKey, Header, encode};
 use sqlx::{Pool, Postgres, Row, query};
 
 use crate::{
-    domains::{
-        auth::{LoginUser, User, UserClaims},
-        error::AuthError,
-    },
+    domains::auth::{LoginUser, User, UserClaims},
+    errors::{auth::AuthError, info::InfoError},
     handlers::auth::user_auth::UsersTicks,
 };
 
-pub trait AuthRepository {
+pub trait PostgresRepositoryInterface {
     async fn create_user(&self, user: &User) -> Result<(), AuthError>;
     async fn check_password(&self, user: LoginUser) -> Result<String, AuthError>;
     async fn generate_token(
@@ -23,19 +21,21 @@ pub trait AuthRepository {
         hashed_password: &str,
     ) -> Result<String, AuthError>;
     async fn increment_ticks(&self, users_ticks: Vec<UsersTicks>) -> Result<(), AuthError>;
+    async fn get_remaining_time(&self, username: String) -> Result<u32, InfoError>;
 }
 
-pub struct PostgresAuthRepository {
+#[derive(Clone)]
+pub struct PostgresRepository {
     pub pool: Pool<Postgres>,
 }
 
-impl PostgresAuthRepository {
+impl PostgresRepository {
     pub fn new(pool: Pool<Postgres>) -> Self {
         Self { pool }
     }
 }
 
-impl AuthRepository for PostgresAuthRepository {
+impl PostgresRepositoryInterface for PostgresRepository {
     async fn create_user(&self, user: &User) -> Result<(), AuthError> {
         let password = Argon2::default()
             .hash_password(user.password.as_bytes())
@@ -119,5 +119,9 @@ impl AuthRepository for PostgresAuthRepository {
         }
 
         Ok(())
+    }
+
+    async fn get_remaining_time(&self, username: String) -> Result<u32, InfoError> {
+        Ok(5)
     }
 }

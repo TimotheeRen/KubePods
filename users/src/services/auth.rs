@@ -1,17 +1,15 @@
 use crate::{
-    domains::{
-        auth::{LoginUser, User},
-        error::AuthError,
-    },
+    domains::auth::{LoginUser, User},
+    errors::auth::AuthError,
     handlers::auth::user_auth::UsersTicks,
-    repositories::auth::AuthRepository,
+    repositories::postgres::PostgresRepositoryInterface,
 };
 
-pub struct AuthServiceLayer<R: AuthRepository> {
+pub struct AuthServiceLayer<R: PostgresRepositoryInterface> {
     repo: R,
 }
 
-impl<R: AuthRepository> AuthServiceLayer<R> {
+impl<R: PostgresRepositoryInterface> AuthServiceLayer<R> {
     pub fn new(repo: R) -> Self {
         Self { repo }
     }

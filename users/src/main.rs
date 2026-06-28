@@ -1,4 +1,5 @@
 mod domains;
+mod errors;
 mod handlers;
 mod repositories;
 mod services;
@@ -10,9 +11,12 @@ use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
 
 use crate::{
-    handlers::auth::{AuthImpl, user_auth::auth_service_server::AuthServiceServer},
-    repositories::auth::PostgresAuthRepository,
-    services::auth::AuthServiceLayer,
+    handlers::{
+        auth::{AuthImpl, user_auth::auth_service_server::AuthServiceServer},
+        info::{InfoImpl, user_info::info_service_server::InfoServiceServer},
+    },
+    repositories::postgres::PostgresRepository,
+    services::{auth::AuthServiceLayer, info::InfoServiceLayer},
 };
 
 #[tokio::main]
@@ -34,13 +38,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .connect(&pg_host)
         .await?;
 
-    let repo = PostgresAuthRepository::new(pool);
-    let service = AuthServiceLayer::new(repo);
-    let register_service = AuthImpl { service };
+    let repo = PostgresRepository::new(pool);
+    let auth_service = AuthServiceLayer::new(repo.clone());
+    let auth_service_handler = AuthImpl {
+        service: auth_service,
+    };
+
+    let info_service = InfoServiceLayer::new(repo);
+    let info_service_handler = InfoImpl {
+        service: info_service,
+    };
 
     let addr = "0.0.0.0:50051".parse()?;
     Server::builder()
-        .add_service(AuthServiceServer::new(register_service))
+        .add_service(AuthServiceServer::new(auth_service_handler))
+        .add_service(InfoServiceServer::new(info_service_handler))
         .serve(addr)
         .await?;
 

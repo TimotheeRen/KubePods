@@ -2,7 +2,7 @@ use tonic::{Response, Status};
 use user_auth::auth_service_server::AuthService;
 
 use crate::{
-    domains::error::AuthError, repositories::auth::PostgresAuthRepository,
+    errors::auth::AuthError, repositories::postgres::PostgresRepository,
     services::auth::AuthServiceLayer,
 };
 
@@ -11,7 +11,7 @@ pub mod user_auth {
 }
 
 pub struct AuthImpl {
-    pub service: AuthServiceLayer<PostgresAuthRepository>,
+    pub service: AuthServiceLayer<PostgresRepository>,
 }
 
 #[tonic::async_trait]
