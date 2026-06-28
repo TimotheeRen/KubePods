@@ -64,8 +64,15 @@ pub async fn get_remaining_time(
             StatusCode::INTERNAL_SERVER_ERROR
         })?;
     let inner_data = res.into_inner();
+    let remaining = match user.role.as_str() {
+        "starter" => 100,
+        "standard" => 200,
+        "premium" => 300,
+        _ => 100,
+    };
+
     Ok(Json(RemainingTime {
         utilization: inner_data.utilization as u8,
-        remaining: 100, // TODO: Customize it with the claim
+        remaining,
     }))
 }

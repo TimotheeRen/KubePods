@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package metrics;
+
+service MetricsService {
+  rpc GetRemainingDesktops(GetRemainingDesktopsRequest) returns (GetRemainingDesktopsResponse);
+}
+
+message GetRemainingDesktopsRequest {
+  string username = 1;
+}
+
+message GetRemainingDesktopsResponse {
+  uint32 created = 1;
+}

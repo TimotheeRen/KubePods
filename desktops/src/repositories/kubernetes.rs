@@ -17,6 +17,7 @@ pub trait KubernetesRepositoryInterface {
     -> Result<(), ProvisioningError>;
 }
 
+#[derive(Clone)]
 pub struct KubernetesRepository {
     pub client: Client,
 }

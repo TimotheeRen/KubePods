@@ -2,7 +2,7 @@ use tonic::{Response, Status};
 
 use crate::{
     errors::provisioning::ProvisioningError,
-    handlers::provisioning::user::{
+    handlers::provisioning::desktops_provisioning::{
         CreateDesktopRequest, CreateDesktopResponse, DeleteDesktopRequest, DeleteDesktopResponse,
         GetDesktopsRequest, GetDesktopsResponse, provisioning_service_server::ProvisioningService,
     },
@@ -10,7 +10,7 @@ use crate::{
     services::provisioning::ProvisioningServiceLayer,
 };
 
-pub mod user {
+pub mod desktops_provisioning {
     tonic::include_proto!("provisioning");
 }
 
@@ -57,7 +57,7 @@ impl ProvisioningService for ProvisioningHandler {
             })?;
         let desktops = res
             .into_iter()
-            .map(|d| user::Desktop {
+            .map(|d| desktops_provisioning::Desktop {
                 name: d.name,
                 distribution: d.distribution,
                 desktop_environment: d.desktop_environment,

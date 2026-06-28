@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "desktops/metrics.proto";
 import "desktops/provisioning.proto";
 import "user/auth.proto";
 import "user/info.proto";

@@ -1,6 +1,9 @@
-use sqlx::{Pool, Postgres, query, query_as};
+use sqlx::{Pool, Postgres, Row, query, query_as};
 
-use crate::{domains::provisioning::Desktop, errors::provisioning::ProvisioningError};
+use crate::{
+    domains::provisioning::Desktop,
+    errors::{metrics::MetricsError, provisioning::ProvisioningError},
+};
 
 pub trait PostgresRepositoryInterface {
     async fn add_desktop(
@@ -11,8 +14,10 @@ pub trait PostgresRepositoryInterface {
     async fn get_desktops(&self, username: String) -> Result<Vec<Desktop>, ProvisioningError>;
     async fn remove_desktop(&self, name: String, username: String)
     -> Result<(), ProvisioningError>;
+    async fn get_remaining_desktops(&self, username: String) -> Result<u32, MetricsError>;
 }
 
+#[derive(Clone)]
 pub struct PostgresRepository {
     pub pool: Pool<Postgres>,
 }
@@ -79,5 +84,16 @@ impl PostgresRepositoryInterface for PostgresRepository {
             Ok(_) => Ok(()),
             Err(_) => Err(ProvisioningError::InternalServerError),
         }
+    }
+
+    async fn get_remaining_desktops(&self, username: String) -> Result<u32, MetricsError> {
+        let row = query("SELECT COUNT(*) FROM desktops WHERE username = $1")
+            .bind(&username)
+            .fetch_one(&self.pool)
+            .await
+            .map_err(|_| MetricsError::InternalServerError)?;
+
+        let count: i64 = row.get(0);
+        Ok(count as u32)
     }
 }

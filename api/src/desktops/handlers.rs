@@ -4,8 +4,9 @@ use crate::{
     AppState,
     claims::Claims,
     desktops::{
+        desktops_metrics::GetRemainingDesktopsRequest,
+        desktops_provisioning::{CreateDesktopRequest, DeleteDesktopRequest, GetDesktopsRequest},
         schemas::{self, DesktopItem, GetRemainingDesktops},
-        user::{CreateDesktopRequest, DeleteDesktopRequest, GetDesktopsRequest},
     },
 };
 
@@ -77,8 +78,24 @@ pub async fn get_remaining_desktops(
     user: Claims,
     State(mut state): State<AppState>,
 ) -> Result<Json<GetRemainingDesktops>, StatusCode> {
+    let res = state
+        .desktops_metrics_client
+        .get_remaining_desktops(GetRemainingDesktopsRequest { username: user.sub })
+        .await
+        .map_err(|e| {
+            println!("{e}");
+            StatusCode::INTERNAL_SERVER_ERROR
+        })?;
+    let inner_data = res.into_inner();
+    let remaining = match user.role.as_str() {
+        "starter" => 3,
+        "standard" => 5,
+        "premium" => 7,
+        _ => 3,
+    };
+
     Ok(Json(GetRemainingDesktops {
-        created: 1,
-        remaining: 3,
+        created: inner_data.created as u8,
+        remaining,
     }))
 }

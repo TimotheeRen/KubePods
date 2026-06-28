@@ -11,11 +11,15 @@ use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
 
 use crate::{
-    handlers::provisioning::{
-        ProvisioningHandler, user::provisioning_service_server::ProvisioningServiceServer,
+    handlers::{
+        metrics::{MetricsHandler, desktops_metrics::metrics_service_server::MetricsServiceServer},
+        provisioning::{
+            ProvisioningHandler,
+            desktops_provisioning::provisioning_service_server::ProvisioningServiceServer,
+        },
     },
     repositories::{kubernetes::KubernetesRepository, postgres::PostgresRepository},
-    services::provisioning::ProvisioningServiceLayer,
+    services::{metrics::MetricsServiceLayer, provisioning::ProvisioningServiceLayer},
 };
 
 #[tokio::main]
@@ -41,14 +45,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let client = Client::try_default().await?;
 
-    let addr = "0.0.0.0:50052".parse()?;
     let kubernetes_repo = KubernetesRepository::new(client);
     let postgres_repo = PostgresRepository::new(pool);
-    let service = ProvisioningServiceLayer::new(kubernetes_repo, postgres_repo);
-    let provisioning_service = ProvisioningHandler { service };
 
+    let provisioning_service =
+        ProvisioningServiceLayer::new(kubernetes_repo.clone(), postgres_repo.clone());
+    let provisioning_service_handler = ProvisioningHandler {
+        service: provisioning_service,
+    };
+
+    let metrics_service = MetricsServiceLayer::new(kubernetes_repo, postgres_repo);
+    let metrics_service_handler = MetricsHandler {
+        service: metrics_service,
+    };
+
+    let addr = "0.0.0.0:50052".parse()?;
     Server::builder()
-        .add_service(ProvisioningServiceServer::new(provisioning_service))
+        .add_service(ProvisioningServiceServer::new(provisioning_service_handler))
+        .add_service(MetricsServiceServer::new(metrics_service_handler))
         .serve(addr)
         .await?;
 

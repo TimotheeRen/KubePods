@@ -3,7 +3,10 @@ mod desktops;
 mod users;
 
 use crate::{
-    desktops::user::provisioning_service_client::ProvisioningServiceClient,
+    desktops::{
+        desktops_metrics::metrics_service_client::MetricsServiceClient,
+        desktops_provisioning::provisioning_service_client::ProvisioningServiceClient,
+    },
     users::{
         user_auth::auth_service_client::AuthServiceClient,
         user_info::info_service_client::InfoServiceClient,
@@ -15,8 +18,9 @@ use tower_http::cors::{Any, CorsLayer};
 
 #[derive(Clone)]
 struct AppState {
-    pub user_auth_client: AuthServiceClient<Channel>,
     pub provisioning_auth_client: ProvisioningServiceClient<Channel>,
+    pub desktops_metrics_client: MetricsServiceClient<Channel>,
+    pub user_auth_client: AuthServiceClient<Channel>,
     pub user_info_client: InfoServiceClient<Channel>,
 }
 
@@ -36,10 +40,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let desktops_channel = Channel::from_shared(desktops_host)?.connect().await?;
     let user_auth_client = AuthServiceClient::new(users_channel.clone());
     let user_info_client = InfoServiceClient::new(users_channel);
-    let provisioning_auth_client = ProvisioningServiceClient::new(desktops_channel);
+    let provisioning_auth_client = ProvisioningServiceClient::new(desktops_channel.clone());
+    let desktops_metrics_client = MetricsServiceClient::new(desktops_channel);
 
     let state = AppState {
         user_auth_client,
+        desktops_metrics_client,
         provisioning_auth_client,
         user_info_client,
     };

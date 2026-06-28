@@ -16,5 +16,5 @@ pub struct LoginUser {
 #[derive(Serialize)]
 pub struct RemainingTime {
     pub utilization: u8,
-    pub remaining: u8,
+    pub remaining: u16,
 }
