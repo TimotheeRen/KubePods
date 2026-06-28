@@ -6,6 +6,7 @@ service UserAuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
   rpc IncrementChronometer(IncrementChronometerRequest) returns (IncrementChronometerResponse);
+  rpc RemainingTime(RemainingTimeRequest) returns (RemainingTimeResponse);
 }
 
 message RegisterRequest {
@@ -36,3 +37,12 @@ message IncrementChronometerRequest {
 }
 
 message IncrementChronometerResponse {}
+
+message RemainingTimeRequest {
+  string username = 1;
+}
+
+message RemainingTimeResponse {
+  uint32 utilization = 1;
+  uint32 remaining = 2;
+}

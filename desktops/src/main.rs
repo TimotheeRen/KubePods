@@ -1,14 +1,20 @@
 mod daemon;
-mod provisioning;
-use crate::provisioning::{
-    handler::{ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer},
-    repo::{KubernetesRepository, PostgresRepository},
-    service::ProvisioningServiceLayer,
-};
+mod error;
+mod handler;
+mod model;
+mod repo;
+mod service;
+
 use dotenvy::{dotenv, var};
 use kube::Client;
 use sqlx::postgres::PgPoolOptions;
 use tonic::transport::Server;
+
+use crate::{
+    handler::{ProvisioningImpl, user::provisioning_service_server::ProvisioningServiceServer},
+    repo::{KubernetesRepository, PostgresRepository},
+    service::ProvisioningServiceLayer,
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

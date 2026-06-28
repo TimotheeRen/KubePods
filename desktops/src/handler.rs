@@ -1,15 +1,12 @@
 use tonic::{Response, Status};
 
-use crate::provisioning::error::ProvisioningError;
-use crate::provisioning::handler::user::{
-    DeleteDesktopRequest, DeleteDesktopResponse, GetDesktopsRequest, GetDesktopsResponse,
-};
-use crate::provisioning::repo::{KubernetesRepository, PostgresRepository};
-use crate::provisioning::{
+use crate::{
+    error::ProvisioningError,
     handler::user::{
-        CreateDesktopRequest, CreateDesktopResponse,
-        provisioning_service_server::ProvisioningService,
+        CreateDesktopRequest, CreateDesktopResponse, DeleteDesktopRequest, DeleteDesktopResponse,
+        GetDesktopsRequest, GetDesktopsResponse, provisioning_service_server::ProvisioningService,
     },
+    repo::{KubernetesRepository, PostgresRepository},
     service::ProvisioningServiceLayer,
 };
 

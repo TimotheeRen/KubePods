@@ -1,4 +1,4 @@
-use crate::provisioning::{
+use crate::{
     error::ProvisioningError,
     model::Desktop,
     repo::{KubernetesProvisiningRepository, PostgresProvioningRepository},

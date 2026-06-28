@@ -5,7 +5,7 @@ use kube::{
 };
 use sqlx::{Pool, Postgres, query, query_as};
 
-use crate::provisioning::{error::ProvisioningError, model::Desktop};
+use crate::{error::ProvisioningError, model::Desktop};
 
 pub trait KubernetesProvisiningRepository {
     async fn create_desktop(
