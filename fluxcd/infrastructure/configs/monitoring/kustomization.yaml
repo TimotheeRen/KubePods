@@ -2,3 +2,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - api-service-monitor.yaml
+
+configMapGenerator:
+  - name: red-dashboard
+    files:
+      - dashboards/red.json
+
+generatorOptions:
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: "Application"
