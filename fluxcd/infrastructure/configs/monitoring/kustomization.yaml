@@ -5,6 +5,7 @@ resources:
 
 configMapGenerator:
   - name: red-dashboard
+    namespace: monitoring
     files:
       - dashboards/red.json
 
