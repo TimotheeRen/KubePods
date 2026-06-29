@@ -3,6 +3,8 @@ kind: ServiceMonitor
 metadata:
   name: api
   namespace: monitoring
+  labels:
+    release: monitoring
 spec:
   namespaceSelector:
     matchNames:
