@@ -1,5 +1,6 @@
 mod claims;
 mod desktops;
+mod middlewares;
 mod users;
 
 use crate::{
@@ -7,12 +8,14 @@ use crate::{
         desktops_metrics::metrics_service_client::MetricsServiceClient,
         desktops_provisioning::provisioning_service_client::ProvisioningServiceClient,
     },
+    middlewares::metrics,
     users::{
         user_auth::auth_service_client::AuthServiceClient,
         user_info::info_service_client::InfoServiceClient,
     },
 };
-use axum::{Router, http::HeaderValue};
+use axum::{Router, http::HeaderValue, middleware::from_fn};
+use metrics_exporter_prometheus::{Matcher, PrometheusBuilder};
 use tonic::transport::Channel;
 use tower_http::cors::{Any, CorsLayer};
 
@@ -59,9 +62,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .allow_methods(Any)
         .allow_headers(Any);
 
+    let http_buckets = [
+        0.001, 0.005, 0.015, 0.05, 0.1, 0.2, 0.5, 1.0, 2.5, 5.0, 10.0,
+    ];
+    PrometheusBuilder::new()
+        .with_http_listener(([0, 0, 0, 0], 9000))
+        .set_buckets_for_metric(
+            Matcher::Suffix("duration_seconds".to_string()),
+            &http_buckets,
+        )?
+        .install()?;
+
     let app = Router::new()
         .nest("/users", users::routes::auth())
         .nest("/desktops", desktops::routes::provisioning())
+        .layer(from_fn(metrics::middleware))
         .layer(cors)
         .with_state(state);
 
