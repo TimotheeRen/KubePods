@@ -40,15 +40,15 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -109,14 +109,14 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
-          "expr": "http_requests_total{path=\"/$service/ping\"}",
+          "editorMode": "code",
+          "expr": "sum by(path) (rate(http_requests_total{path=~\"/$service/.*\"}[5m]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "New panel",
+      "title": "Requests per seconds (5 min)",
       "type": "timeseries"
     }
   ],
@@ -160,6 +160,6 @@
   "timezone": "browser",
   "title": "RED",
   "uid": "adgtffk",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }
