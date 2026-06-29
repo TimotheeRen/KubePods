@@ -13,7 +13,7 @@ pub async fn middleware(request: Request, next: Next) -> Response {
     let response = next.run(request).await;
     let duration = start.elapsed().as_secs_f64();
     let status = response.status().as_u16();
-    counter!("http_request_duration_total", "path" => path.clone(), "status" => status.to_string())
+    counter!("http_requests_total", "path" => path.clone(), "status" => status.to_string())
         .increment(1);
     describe_counter!(
         "http_request_duration_total",
