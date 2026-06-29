@@ -18,6 +18,9 @@ spec:
           image: timotheeren/kubepods-api:sha-ad5cae5025923c6cd38cbd380070407fe30f949c
           ports:
             - containerPort: 3001
+              name: http
+            - containerPort: 9000
+              name: metrics
           env:
             - name: USERS_HOST
               value: "http://users:50051"
