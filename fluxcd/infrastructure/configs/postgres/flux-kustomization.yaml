@@ -20,6 +20,14 @@ spec:
       kind: Cluster
       name: desktops-postgres-cluster
       namespace: default
+    - apiVersion: v1
+      kind: Pod
+      name: users-postgres-cluster-1
+      namespace: default
+    - apiVersion: v1
+      kind: Pod
+      name: desktops-postgres-cluster-1
+      namespace: default
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
