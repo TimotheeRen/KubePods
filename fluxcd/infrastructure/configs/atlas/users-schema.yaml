@@ -3,6 +3,8 @@ kind: AtlasSchema
 metadata:
   name: users-schema
   namespace: default
+  annotations:
+    kustomize.toolkit.fluxcd.io/depends-on: postgresql.cnpg.io/Cluster/default/users-postgres-cluster
 spec:
   urlFrom:
     secretKeyRef:

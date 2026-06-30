@@ -4,7 +4,7 @@ metadata:
   name: desktops-postgres-cluster
   namespace: default
   annotations:
-    kustomize.toolkit.fluxcd.io/depends-on: default/atlas-operator
+    kustomize.toolkit.fluxcd.io/depends-on: helm.toolkit.fluxcd.io/HelmRelease/default/atlas-operator
 spec:
   instances: 1
   storage:
