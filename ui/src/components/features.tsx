@@ -82,7 +82,7 @@ const Features = () => {
           className="col-span-1 rounded-xl bg-background p-6 md:col-span-2 lg:col-span-1"
         >
           <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden">
-            {/* Media 1 Mobile */}
+            <HeroAnimatedList />
           </motion.div>
 
           <span className="font-medium text-xl tracking-[-0.01em]">
@@ -135,7 +135,7 @@ const Features = () => {
           className="col-span-1 rounded-xl bg-background p-6 md:col-span-2 lg:col-span-1"
         >
           <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden">
-            {/* Media 2 Mobile */}
+            <HeroOrbitingCircles />
           </motion.div>
 
           <span className="font-medium text-xl tracking-[-0.01em]">
