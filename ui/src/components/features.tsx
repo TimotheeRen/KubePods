@@ -20,7 +20,7 @@ const Features = () => {
     }
   } as const
   return (
-    <div className="mx-auto w-full max-w-(--breakpoint-lg) px-6 py-20">
+    <div className="mx-auto w-full max-w-(--breakpoint-lg) px-6 py-10">
       <motion.h2
         initial={{
           opacity: 0,
@@ -37,6 +37,7 @@ const Features = () => {
           }
         }}
         className="font-medium text-3xl leading-10 tracking-[-0.04em] sm:text-4xl md:text-[40px] md:leading-13"
+        id="features"
       >
         Stop configuring, start working: <br />
         <motion.span
@@ -60,7 +61,7 @@ const Features = () => {
           Spin up instantly customized environment
         </motion.span>
       </motion.h2>
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-3">
+      <div className="mt-14 grid gap-6 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-3">
         {/* Card 1 */}
         <motion.div
           initial={{
