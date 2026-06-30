@@ -8,6 +8,8 @@ import Pricing from "@/components/pricing";
 import RegisterDialog from "@/components/registerDialog";
 import SubTitle from "@/components/subTitle";
 import { LightRays } from "@/components/ui/light-rays";
+import CTA from "@/components/cta";
+import Footer from "@/components/footer";
 
 export default function Root() {
   return (
@@ -27,6 +29,8 @@ export default function Root() {
       <Features />
       <FeaturesCards />
       <Pricing />
+      <CTA />
+      <Footer />
     </div>
   )
 }
