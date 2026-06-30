@@ -1,0 +1,37 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: postgres-cluster
+  namespace: flux-system
+spec:
+  interval: 10m
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./fluxcd/infrastructure/configs/postgres/databases
+  timeout: 10m
+  healthChecks:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: users-postgres-cluster
+      namespace: default
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: desktops-postgres-cluster
+      namespace: default
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: postgres-schemas
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: postgres-cluster
+  interval: 10m
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./fluxcd/infrastructure/configs/postgres/atlas

@@ -5,8 +5,6 @@ namespace: default
 resources:
   - users-schema.yaml
   - desktops-schema.yaml
-  - desktops-cluster.yaml
-  - users-cluster.yaml
 
 configMapGenerator:
   - name: users-schema-config
