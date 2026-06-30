@@ -3,8 +3,6 @@ kind: AtlasSchema
 metadata:
   name: desktops-schema
   namespace: default
-  annotations:
-    kustomize.toolkit.fluxcd.io/depends-on: postgresql.cnpg.io/Cluster/default/desktops-postgres-cluster
 spec:
   urlFrom:
     secretKeyRef:

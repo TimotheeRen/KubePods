@@ -3,8 +3,6 @@ kind: Cluster
 metadata:
   name: users-postgres-cluster
   namespace: default
-  annotations:
-    kustomize.toolkit.fluxcd.io/depends-on: helm.toolkit.fluxcd.io/HelmRelease/default/atlas-operator
 spec:
   instances: 1
   storage:
