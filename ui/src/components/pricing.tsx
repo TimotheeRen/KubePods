@@ -14,6 +14,7 @@ const plans = [
       "For occasionnal users",
     features: [
       { title: "100h desktops usage per month." },
+      { title: "Maximum 3 desktops at a time" },
       { title: "No persistance." },
     ],
   },
@@ -25,17 +26,19 @@ const plans = [
       "For regular users, who uses more their desktops regularly.",
     features: [
       { title: "200h desktops usage per month" },
+      { title: "Maximum 5 desktops at a time" },
       { title: "No persistance." },
     ],
     isPopular: true,
   },
   {
     name: "Premium",
-    price: 7.99,
+    price: 6.99,
     description:
       "For advanced users, who uses more their desktops very often.",
     features: [
       { title: "300h desktops usage per month" },
+      { title: "Maximum 7 desktops at a time" },
       { title: "No persistance." },
     ],
   },

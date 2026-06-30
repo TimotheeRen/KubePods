@@ -1,5 +1,7 @@
 import { AppWindow, Earth, SquareDashedMousePointer, Timer } from "lucide-react";
 import { motion } from "motion/react";
+import { HeroAnimatedList } from "./heroAnimatedList";
+import { HeroOrbitingCircles } from "./heroOrbitingCircles";
 
 const Features = () => {
   const viewVariant = {
@@ -62,7 +64,6 @@ const Features = () => {
         </motion.span>
       </motion.h2>
       <div className="mt-14 grid gap-6 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-3">
-        {/* Card 1 */}
         <motion.div
           initial={{
             opacity: 0,
@@ -78,7 +79,7 @@ const Features = () => {
               ease: "easeInOut"
             }
           }}
-          className="col-span-1 rounded-xl bg-muted p-6 md:col-span-2 lg:col-span-1"
+          className="col-span-1 rounded-xl bg-background p-6 md:col-span-2 lg:col-span-1"
         >
           <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden">
             {/* Media 1 Mobile */}
@@ -108,12 +109,12 @@ const Features = () => {
           </ul>
 
         </motion.div>
-        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-muted md:col-span-3 md:block lg:col-span-2">
-          {/* Media 1 Desktop */}
+        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-background md:col-span-3 md:block lg:col-span-2">
+          <HeroAnimatedList />
         </motion.div>
 
-        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-muted md:col-span-3 md:block lg:col-span-2">
-          {/* Media 2 Desktop */}
+        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-background md:col-span-3 md:block lg:col-span-2">
+          <HeroOrbitingCircles />
         </motion.div>
 
         <motion.div
@@ -131,7 +132,7 @@ const Features = () => {
               ease: "easeInOut"
             }
           }}
-          className="col-span-1 rounded-xl bg-muted p-6 md:col-span-2 lg:col-span-1"
+          className="col-span-1 rounded-xl bg-background p-6 md:col-span-2 lg:col-span-1"
         >
           <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden">
             {/* Media 2 Mobile */}
