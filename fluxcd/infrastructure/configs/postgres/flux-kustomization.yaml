@@ -11,6 +11,7 @@ spec:
     name: flux-system
   path: ./fluxcd/infrastructure/configs/postgres/databases
   timeout: 10m
+  wait: true
   healthChecks:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
@@ -35,3 +36,4 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./fluxcd/infrastructure/configs/postgres/atlas
+  wait: true
