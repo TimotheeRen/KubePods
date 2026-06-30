@@ -1,7 +1,6 @@
 import Navbar from "@/components/navbar";
 import PreviewFrame from "@/components/previewFrame";
 import RegisterDialog from "@/components/registerDialog";
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { LightRays } from "@/components/ui/light-rays";
 import { ShimmerButton } from "@/components/ui/shimmer-button"
 
