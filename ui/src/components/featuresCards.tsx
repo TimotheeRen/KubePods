@@ -75,7 +75,7 @@ export default function FeaturesCards() {
   } as const
 
   return (
-    <div className="mx-auto w-full max-w-(--breakpoint-lg) px-6 py-20">
+    <div className="mx-auto w-full max-w-(--breakpoint-lg) px-6 pt-20">
       <motion.h2
         initial={{
           opacity: 0,

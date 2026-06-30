@@ -4,6 +4,7 @@ import FeaturesCards from "@/components/featuresCards";
 import HeroButton from "@/components/heroButton";
 import Navbar from "@/components/navbar";
 import PreviewFrame from "@/components/previewFrame";
+import Pricing from "@/components/pricing";
 import RegisterDialog from "@/components/registerDialog";
 import SubTitle from "@/components/subTitle";
 import { LightRays } from "@/components/ui/light-rays";
@@ -25,6 +26,7 @@ export default function Root() {
       <PreviewFrame />
       <Features />
       <FeaturesCards />
+      <Pricing />
     </div>
   )
 }
