@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-  - postgres-cluster.yaml
   - cluster-role.yaml
   - cluster-role-binding.yaml
   - service-account.yaml
