@@ -1,4 +1,3 @@
-import { Wheat } from "lucide-react";
 import logo from "@/assets/logo.png"
 
 const Footer = () => {
