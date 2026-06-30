@@ -1,4 +1,5 @@
 import BigTitle from "@/components/bigTitle";
+import Features from "@/components/features";
 import HeroButton from "@/components/heroButton";
 import Navbar from "@/components/navbar";
 import PreviewFrame from "@/components/previewFrame";
@@ -21,6 +22,7 @@ export default function Root() {
         </div>
       </div>
       <PreviewFrame />
+      <Features />
     </div>
   )
 }

@@ -18,7 +18,7 @@ export default function SubTitle() {
           ease: "easeInOut"
         }
       }}
-      className="text-muted-foreground mb-4"
+      className="text-muted-foreground/80 mb-4"
     >
       A secure cloud native desktops hosting plateform.
     </motion.h1 >
