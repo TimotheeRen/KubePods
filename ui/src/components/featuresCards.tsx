@@ -91,6 +91,7 @@ export default function FeaturesCards() {
             ease: "easeInOut"
           }
         }}
+        viewport={{ once: true }}
         className="font-medium text-3xl leading-10 tracking-[-0.04em] sm:text-4xl md:text-[40px] md:leading-13"
         id="why-kubepods"
       >
@@ -111,6 +112,7 @@ export default function FeaturesCards() {
               ease: "easeInOut"
             }
           }}
+          viewport={{ once: true }}
           className="text-muted-foreground/80"
         >
           KubePods deliver clouds desktops at low prices
@@ -123,10 +125,11 @@ export default function FeaturesCards() {
             variants={containerVariant}
             initial="hidden"
             whileInView="visible"
+            viewport={{ once: true }}
             className="mx-auto -mt-4 grid w-full gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3"
           >
             {features.map((feature) => (
-              <motion.div variants={cardVariant}>
+              <motion.div variants={cardVariant} viewport={{ once: true }}>
                 <MagicCard
                   className="flex flex-col overflow-hidden rounded-xl pb-5 shadow-none pt-3"
                   key={feature.title}

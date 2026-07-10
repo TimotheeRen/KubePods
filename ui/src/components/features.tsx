@@ -38,6 +38,7 @@ const Features = () => {
             ease: "easeInOut"
           }
         }}
+        viewport={{ once: true }}
         className="font-medium text-3xl leading-10 tracking-[-0.04em] sm:text-4xl md:text-[40px] md:leading-13"
         id="features"
       >
@@ -58,6 +59,7 @@ const Features = () => {
               ease: "easeInOut"
             }
           }}
+          viewport={{ once: true }}
           className="text-muted-foreground/80"
         >
           Spin up instantly customized environment
@@ -79,9 +81,10 @@ const Features = () => {
               ease: "easeInOut"
             }
           }}
+          viewport={{ once: true }}
           className="col-span-1 rounded-xl bg-background p-6 md:col-span-2 lg:col-span-1"
         >
-          <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden">
+          <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden" viewport={{ once: true }}>
             <HeroAnimatedList />
           </motion.div>
 
@@ -109,11 +112,11 @@ const Features = () => {
           </ul>
 
         </motion.div>
-        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-background md:col-span-3 md:block lg:col-span-2">
+        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-background md:col-span-3 md:block lg:col-span-2" viewport={{ once: true }}>
           <HeroAnimatedList />
         </motion.div>
 
-        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-background md:col-span-3 md:block lg:col-span-2">
+        <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="col-span-1 hidden rounded-xl bg-background md:col-span-3 md:block lg:col-span-2" viewport={{ once: true }}>
           <HeroOrbitingCircles />
         </motion.div>
 
@@ -132,9 +135,10 @@ const Features = () => {
               ease: "easeInOut"
             }
           }}
+          viewport={{ once: true }}
           className="col-span-1 rounded-xl bg-background p-6 md:col-span-2 lg:col-span-1"
         >
-          <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden">
+          <motion.div variants={viewVariant} initial="initial" whileInView="visible" className="mb-6 aspect-video w-full rounded-xl bg-background md:hidden" viewport={{ once: true }}>
             <HeroOrbitingCircles />
           </motion.div>
 

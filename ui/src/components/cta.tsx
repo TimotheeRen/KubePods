@@ -20,6 +20,7 @@ export default function CTA() {
           ease: "easeInOut"
         }
       }}
+      viewport={{ once: true }}
       className="px-0 py-16 sm:px-6"
     >
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center justify-center rounded-3xl bg-foreground py-16 text-background dark:bg-foreground/7 dark:text-foreground">

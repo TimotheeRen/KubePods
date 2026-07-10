@@ -62,6 +62,7 @@ const Pricing = () => {
             ease: "easeInOut"
           }
         }}
+        viewport={{ once: true }}
         className="font-medium text-3xl leading-10 tracking-[-0.04em] sm:text-4xl md:text-[40px] md:leading-13"
       >
         Choose a Plan<br />
@@ -81,6 +82,7 @@ const Pricing = () => {
               ease: "easeInOut"
             }
           }}
+          viewport={{ once: true }}
           className="text-muted-foreground/80"
         >
           Choose the plan that bests fits your needs
@@ -102,6 +104,7 @@ const Pricing = () => {
             ease: "easeInOut"
           }
         }}
+        viewport={{ once: true }}
         className="mx-auto mt-12 grid max-w-(--breakpoint-lg) grid-cols-1 items-center gap-8 sm:mt-16 lg:grid-cols-3 lg:gap-0"
       >
         {plans.map((plan) => (
