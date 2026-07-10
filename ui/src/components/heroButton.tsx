@@ -1,9 +1,10 @@
 import { motion } from "motion/react";
 import { ShimmerButton } from "./ui/shimmer-button";
 
-export default function HeroButton() {
+export default function HeroButton({ ...props }) {
   return (
     <motion.div
+      {...props}
       initial={{
         opacity: 0,
         filter: "blur(8px)",
@@ -20,7 +21,7 @@ export default function HeroButton() {
         }
       }}
     >
-      <ShimmerButton background="rgba(99, 102, 241, 1)" className="h-10 w-20 px-15" >Try it now</ShimmerButton>
+      <ShimmerButton background="rgba(99, 102, 241, 1)" className="h-10 w-20 px-15">Try it now</ShimmerButton>
     </motion.div>
   )
 }
