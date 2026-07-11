@@ -13,6 +13,7 @@ import NotFound from "./components/ui/not-found.tsx";
 import { GetDesktops } from "./loaders/getDesktops.tsx";
 import { GetUtilization } from "./loaders/getUtilization.tsx";
 import { GetTimeRemaining } from "./loaders/getTimeRemaining.tsx";
+import Settings from "./routes/settings.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
           return { desktops, utilization, timeRemaining }
         },
       },
+      {
+        path: 'settings',
+        element: <Settings />
+      }
     ],
   },
   {

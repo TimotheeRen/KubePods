@@ -11,9 +11,9 @@ import {
 
 import {
   ChartLine,
+  Logs,
   MonitorCloud,
   Settings,
-  UserCog,
 } from "lucide-react"
 
 import { FaDiscord, FaGithub } from "react-icons/fa"
@@ -21,6 +21,7 @@ import { FaDiscord, FaGithub } from "react-icons/fa"
 import CreateDesktopDialog from "./createDesktopDialog"
 import logo from "@/assets/logo.png"
 import LogoutMenu from "./logoutMenu"
+import { Link } from "react-router"
 
 export default function AppSidebar() {
   return (
@@ -50,8 +51,10 @@ export default function AppSidebar() {
             <SidebarMenu className="mt-2">
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <MonitorCloud />
-                  <span>Dashboard</span>
+                  <Link to="" className="flex gap-2 w-full h-full">
+                    <MonitorCloud />
+                    <span>Dashboard</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -64,15 +67,17 @@ export default function AppSidebar() {
 
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <UserCog />
-                  <span>Members</span>
+                  <Logs />
+                  <span>Logs</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Settings />
-                  <span>Settings</span>
+                <SidebarMenuButton asChild>
+                  <Link to="settings" className="flex gap-2 w-full h-full">
+                    <Settings />
+                    <span>Settings</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -91,8 +96,10 @@ export default function AppSidebar() {
 
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <FaGithub />
-                  <span>Source code</span>
+                  <a href="https://github.com/TimotheeRen/KubePods" className="flex gap-2 w-full h-full" target="_blank">
+                    <FaGithub />
+                    <span>Source code</span>
+                  </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -103,6 +110,6 @@ export default function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-    </Sidebar>
+    </Sidebar >
   )
 }
