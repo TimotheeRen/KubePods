@@ -1,7 +1,6 @@
 use crate::{
     domains::auth::{LoginUser, User},
     errors::auth::AuthError,
-    handlers::auth::user_auth::UsersTicks,
     repositories::postgres::PostgresRepositoryInterface,
 };
 
@@ -42,12 +41,5 @@ impl<R: PostgresRepositoryInterface> AuthServiceLayer<R> {
         self.repo
             .generate_token(user.username, user.password, &hash)
             .await
-    }
-
-    pub async fn increment_chronometer(
-        &self,
-        users_ticks: Vec<UsersTicks>,
-    ) -> Result<(), AuthError> {
-        self.repo.increment_ticks(users_ticks).await
     }
 }

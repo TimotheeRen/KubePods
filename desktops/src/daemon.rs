@@ -5,12 +5,13 @@ use tokio::time::sleep;
 use tokio_stream::StreamExt;
 use tonic::transport::Channel;
 
-use crate::daemon::user_auth::{
-    IncrementChronometerRequest, UsersTicks, auth_service_client::AuthServiceClient,
+use crate::daemon::user_external::{
+    IncrementChronometerRequest, UsersTicks,
+    user_external_service_client::UserExternalServiceClient,
 };
 
-pub mod user_auth {
-    tonic::include_proto!("auth");
+pub mod user_external {
+    tonic::include_proto!("user_external");
 }
 
 pub async fn increment(
@@ -21,7 +22,7 @@ pub async fn increment(
         Err(_) => "http://0.0.0.0:50051".to_string(),
     };
     let users_channel = Channel::from_shared(users_host)?.connect().await?;
-    let mut user_auth_client = AuthServiceClient::new(users_channel);
+    let mut user_auth_client = UserExternalServiceClient::new(users_channel);
 
     loop {
         sleep(Duration::from_mins(1)).await;

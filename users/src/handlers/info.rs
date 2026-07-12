@@ -1,14 +1,17 @@
 use tonic::{Response, Status};
 use user_info::info_service_server::InfoService;
 
-use crate::{repositories::postgres::PostgresRepository, services::info::InfoServiceLayer};
+use crate::{
+    repositories::{external::ExternalRepository, postgres::PostgresRepository},
+    services::info::InfoServiceLayer,
+};
 
 pub mod user_info {
     tonic::include_proto!("info");
 }
 
 pub struct InfoImpl {
-    pub service: InfoServiceLayer<PostgresRepository>,
+    pub service: InfoServiceLayer<PostgresRepository, ExternalRepository>,
 }
 
 #[tonic::async_trait]

@@ -6,7 +6,7 @@ use crate::{
         metrics_service_server::MetricsService,
     },
     repositories::{kubernetes::KubernetesRepository, postgres::PostgresRepository},
-    services::{self, metrics::MetricsServiceLayer},
+    services::metrics::MetricsServiceLayer,
 };
 
 pub mod desktops_metrics {

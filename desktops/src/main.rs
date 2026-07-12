@@ -12,6 +12,10 @@ use tonic::transport::Server;
 
 use crate::{
     handlers::{
+        external::{
+            ExternalHandler,
+            desktops_external::desktops_external_service_server::DesktopsExternalServiceServer,
+        },
         metrics::{MetricsHandler, desktops_metrics::metrics_service_server::MetricsServiceServer},
         provisioning::{
             ProvisioningHandler,
@@ -19,7 +23,10 @@ use crate::{
         },
     },
     repositories::{kubernetes::KubernetesRepository, postgres::PostgresRepository},
-    services::{metrics::MetricsServiceLayer, provisioning::ProvisioningServiceLayer},
+    services::{
+        external::ExternalServiceLayer, metrics::MetricsServiceLayer,
+        provisioning::ProvisioningServiceLayer,
+    },
 };
 
 #[tokio::main]
@@ -54,15 +61,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         service: provisioning_service,
     };
 
-    let metrics_service = MetricsServiceLayer::new(kubernetes_repo, postgres_repo);
+    let metrics_service = MetricsServiceLayer::new(kubernetes_repo.clone(), postgres_repo.clone());
     let metrics_service_handler = MetricsHandler {
         service: metrics_service,
+    };
+
+    let external_service = ExternalServiceLayer::new(kubernetes_repo, postgres_repo);
+    let external_service_handler = ExternalHandler {
+        service: external_service,
     };
 
     let addr = "0.0.0.0:50052".parse()?;
     Server::builder()
         .add_service(ProvisioningServiceServer::new(provisioning_service_handler))
         .add_service(MetricsServiceServer::new(metrics_service_handler))
+        .add_service(DesktopsExternalServiceServer::new(external_service_handler))
         .serve(addr)
         .await?;
 

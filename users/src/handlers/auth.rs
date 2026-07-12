@@ -49,18 +49,4 @@ impl AuthService for AuthImpl {
             })?;
         Ok(Response::new(user_auth::LoginResponse { token }))
     }
-
-    async fn increment_chronometer(
-        &self,
-        request: tonic::Request<user_auth::IncrementChronometerRequest>,
-    ) -> std::result::Result<tonic::Response<user_auth::IncrementChronometerResponse>, tonic::Status>
-    {
-        let req = request.into_inner();
-        self.service
-            .increment_chronometer(req.users_ticks)
-            .await
-            .map_err(|_| Status::internal("Internal server error"))?;
-
-        Ok(Response::new(user_auth::IncrementChronometerResponse {}))
-    }
 }

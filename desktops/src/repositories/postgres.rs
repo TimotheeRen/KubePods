@@ -2,7 +2,7 @@ use sqlx::{Pool, Postgres, Row, query, query_as};
 
 use crate::{
     domains::provisioning::Desktop,
-    errors::{metrics::MetricsError, provisioning::ProvisioningError},
+    errors::{external::ExternalError, metrics::MetricsError, provisioning::ProvisioningError},
 };
 
 pub trait PostgresRepositoryInterface {
@@ -15,6 +15,11 @@ pub trait PostgresRepositoryInterface {
     async fn remove_desktop(&self, name: String, username: String)
     -> Result<(), ProvisioningError>;
     async fn get_remaining_desktops(&self, username: String) -> Result<u32, MetricsError>;
+    async fn change_desktops_user(
+        &self,
+        username: String,
+        old_username: String,
+    ) -> Result<(), ExternalError>;
 }
 
 #[derive(Clone)]
@@ -95,5 +100,23 @@ impl PostgresRepositoryInterface for PostgresRepository {
 
         let count: i64 = row.get(0);
         Ok(count as u32)
+    }
+
+    async fn change_desktops_user(
+        &self,
+        username: String,
+        old_username: String,
+    ) -> Result<(), ExternalError> {
+        match query(
+            "UPDATE desktops SET id = CONCAT($1, '-', name), username = $1 WHERE username = $2",
+        )
+        .bind(&username)
+        .bind(&old_username)
+        .execute(&self.pool)
+        .await
+        {
+            Ok(_) => Ok(()),
+            Err(_) => Err(ExternalError::InternalServerError),
+        }
     }
 }

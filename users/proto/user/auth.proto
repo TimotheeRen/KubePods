@@ -5,7 +5,6 @@ package auth;
 service AuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
-  rpc IncrementChronometer(IncrementChronometerRequest) returns (IncrementChronometerResponse);
 }
 
 message RegisterRequest {
@@ -25,14 +24,3 @@ message LoginRequest {
 message LoginResponse {
   string token = 1;
 }
-
-message UsersTicks {
-  string username = 1;
-  uint32 tick = 2;
-}
-
-message IncrementChronometerRequest {
-  repeated UsersTicks users_ticks = 1;
-}
-
-message IncrementChronometerResponse {}

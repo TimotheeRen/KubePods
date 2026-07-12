@@ -11,7 +11,7 @@ use crate::{
         info::UserAccount,
     },
     errors::{auth::AuthError, info::InfoError},
-    handlers::auth::user_auth::UsersTicks,
+    handlers::external::user_external::UsersTicks,
 };
 
 pub trait PostgresRepositoryInterface {

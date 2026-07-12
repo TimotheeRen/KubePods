@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package desktops_external;
+
+service DesktopsExternalService {
+  rpc ChangeDesktopsUser(ChangeDesktopsUserRequest) returns (ChangeDesktopsUserResponse);
+}
+
+message ChangeDesktopsUserRequest {
+  string username = 1;
+  string old_username = 2;
+}
+
+message ChangeDesktopsUserResponse {}

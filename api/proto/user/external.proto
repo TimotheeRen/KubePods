@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package user_external;
+
+service UserExternalService {
+  rpc IncrementChronometer(IncrementChronometerRequest) returns (IncrementChronometerResponse);
+}
+
+message UsersTicks {
+  string username = 1;
+  uint32 tick = 2;
+}
+
+message IncrementChronometerRequest {
+  repeated UsersTicks users_ticks = 1;
+}
+
+message IncrementChronometerResponse {}

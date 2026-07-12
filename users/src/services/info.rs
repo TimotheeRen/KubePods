@@ -1,23 +1,28 @@
 use crate::{
-    domains::info::UserAccount, errors::info::InfoError,
-    repositories::postgres::PostgresRepositoryInterface,
+    domains::info::UserAccount,
+    errors::info::InfoError,
+    repositories::{external::ExternalRepositoryInterface, postgres::PostgresRepositoryInterface},
 };
 
-pub struct InfoServiceLayer<R: PostgresRepositoryInterface> {
-    repo: R,
+pub struct InfoServiceLayer<P: PostgresRepositoryInterface, E: ExternalRepositoryInterface> {
+    postgres_repo: P,
+    external_repo: E,
 }
 
-impl<R: PostgresRepositoryInterface> InfoServiceLayer<R> {
-    pub fn new(repo: R) -> Self {
-        Self { repo }
+impl<P: PostgresRepositoryInterface, E: ExternalRepositoryInterface> InfoServiceLayer<P, E> {
+    pub fn new(postgres_repo: P, external_repo: E) -> Self {
+        Self {
+            postgres_repo,
+            external_repo,
+        }
     }
 
     pub async fn get_remaining_time(&self, username: String) -> Result<u32, InfoError> {
-        self.repo.get_remaining_time(username).await
+        self.postgres_repo.get_remaining_time(username).await
     }
 
     pub async fn get_account(&self, username: String) -> Result<UserAccount, InfoError> {
-        self.repo.get_account(username).await
+        self.postgres_repo.get_account(username).await
     }
 
     pub async fn save_settings(
@@ -26,8 +31,12 @@ impl<R: PostgresRepositoryInterface> InfoServiceLayer<R> {
         username: String,
         old_username: String,
     ) -> Result<(), InfoError> {
-        self.repo
-            .update_settings(email, username, old_username)
-            .await
+        self.postgres_repo
+            .update_settings(email, username.clone(), old_username.clone())
+            .await;
+        self.external_repo
+            .update_settings(username, old_username)
+            .await;
+        Ok(())
     }
 }

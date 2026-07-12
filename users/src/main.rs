@@ -4,20 +4,29 @@ mod handlers;
 mod repositories;
 mod services;
 
-use std::env::var;
+use std::{env::var, time::Duration};
 
 use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
-use tonic::transport::Server;
+use tonic::transport::{Channel, Server};
 
 use crate::{
+    desktops_metrics::metrics_service_client::MetricsServiceClient,
     handlers::{
         auth::{AuthImpl, user_auth::auth_service_server::AuthServiceServer},
+        external::{ExternalImpl, user_external::external_service_server::ExternalServiceServer},
         info::{InfoImpl, user_info::info_service_server::InfoServiceServer},
     },
-    repositories::postgres::PostgresRepository,
-    services::{auth::AuthServiceLayer, info::InfoServiceLayer},
+    repositories::{
+        external::{ExternalRepository, ExternalRepositoryInterface},
+        postgres::PostgresRepository,
+    },
+    services::{auth::AuthServiceLayer, external::ExternalServiceLayer, info::InfoServiceLayer},
 };
+
+pub mod desktops_metrics {
+    tonic::include_proto!("metrics");
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -44,15 +53,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         service: auth_service,
     };
 
-    let info_service = InfoServiceLayer::new(repo);
+    let external_repo = ExternalRepository::new().await?;
+    let info_service = InfoServiceLayer::new(repo.clone(), external_repo);
     let info_service_handler = InfoImpl {
         service: info_service,
+    };
+
+    let external_service = ExternalServiceLayer::new(repo);
+    let external_service_handler = ExternalImpl {
+        service: external_service,
     };
 
     let addr = "0.0.0.0:50051".parse()?;
     Server::builder()
         .add_service(AuthServiceServer::new(auth_service_handler))
         .add_service(InfoServiceServer::new(info_service_handler))
+        .add_service(ExternalServiceServer::new(external_service_handler))
         .serve(addr)
         .await?;
 
