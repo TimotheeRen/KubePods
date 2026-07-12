@@ -15,6 +15,7 @@ import { GetUtilization } from "./loaders/getUtilization.tsx";
 import { GetTimeRemaining } from "./loaders/getTimeRemaining.tsx";
 import Settings from "./routes/settings.tsx";
 import { GetUserAccount } from "./loaders/getUserAccount.tsx";
+import { saveSettings } from "./actions/saveSettings.tsx";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: 'createDesktop',
         action: createDesktop
+      },
+      {
+        path: 'saveSettings',
+        action: saveSettings
       },
     ]
   },

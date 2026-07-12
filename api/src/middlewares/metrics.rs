@@ -1,10 +1,6 @@
 use std::time::Instant;
 
-use axum::{
-    extract::Request,
-    middleware::Next,
-    response::{self, Response},
-};
+use axum::{extract::Request, middleware::Next, response::Response};
 use metrics::{counter, describe_counter, describe_histogram, histogram};
 
 pub async fn middleware(request: Request, next: Next) -> Response {

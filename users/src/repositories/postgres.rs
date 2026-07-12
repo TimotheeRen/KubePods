@@ -26,6 +26,12 @@ pub trait PostgresRepositoryInterface {
     async fn increment_ticks(&self, users_ticks: Vec<UsersTicks>) -> Result<(), AuthError>;
     async fn get_remaining_time(&self, username: String) -> Result<u32, InfoError>;
     async fn get_account(&self, username: String) -> Result<UserAccount, InfoError>;
+    async fn update_settings(
+        &self,
+        email: String,
+        username: String,
+        username: String,
+    ) -> Result<(), InfoError>;
 }
 
 #[derive(Clone)]
@@ -154,5 +160,21 @@ impl PostgresRepositoryInterface for PostgresRepository {
             Ok(None) => Err(InfoError::InternalServerError),
             Err(_) => Err(InfoError::InternalServerError),
         }
+    }
+
+    async fn update_settings(
+        &self,
+        email: String,
+        username: String,
+        old_username: String,
+    ) -> Result<(), InfoError> {
+        query("UPDATE users SET username = $1, email = $2 WHERE username = $3")
+            .bind(&username)
+            .bind(&email)
+            .bind(&old_username)
+            .execute(&self.pool)
+            .await
+            .map_err(|_| InfoError::InternalServerError)?;
+        Ok(())
     }
 }

@@ -46,4 +46,17 @@ impl InfoService for InfoImpl {
             username: account.username,
         }))
     }
+
+    async fn save_settings(
+        &self,
+        request: tonic::Request<user_info::SaveSettingsRequest>,
+    ) -> std::result::Result<tonic::Response<user_info::SaveSettingsResponse>, tonic::Status> {
+        let req = request.into_inner();
+        self.service
+            .save_settings(req.email, req.username, req.old_username)
+            .await
+            .map_err(|_| Status::internal("Internal server error"))?;
+
+        Ok(Response::new(user_info::SaveSettingsResponse {}))
+    }
 }

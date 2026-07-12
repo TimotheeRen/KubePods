@@ -24,3 +24,9 @@ pub struct GetUserAccount {
     pub email: String,
     pub username: String,
 }
+
+#[derive(Deserialize)]
+pub struct SavedSettings {
+    pub email: String,
+    pub username: String,
+}

@@ -10,7 +10,6 @@ const Desktop = z.object({
 
 export async function createDesktop({ request }: ActionFunctionArgs) {
   const host = import.meta.env.VITE_API_HOST;
-  console.log(host)
   const formData = await request.formData()
   const result = Desktop.safeParse(Object.fromEntries(formData.entries()))
   const token = Cookie.get("token")

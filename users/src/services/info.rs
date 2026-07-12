@@ -19,4 +19,15 @@ impl<R: PostgresRepositoryInterface> InfoServiceLayer<R> {
     pub async fn get_account(&self, username: String) -> Result<UserAccount, InfoError> {
         self.repo.get_account(username).await
     }
+
+    pub async fn save_settings(
+        &self,
+        email: String,
+        username: String,
+        old_username: String,
+    ) -> Result<(), InfoError> {
+        self.repo
+            .update_settings(email, username, old_username)
+            .await
+    }
 }

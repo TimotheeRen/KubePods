@@ -1,6 +1,6 @@
 use crate::users::schemas::{GetUserAccount, RemainingTime};
 use crate::users::user_auth::LoginRequest;
-use crate::users::user_info::{GetUserAccountRequest, RemainingTimeRequest};
+use crate::users::user_info::{GetUserAccountRequest, RemainingTimeRequest, SaveSettingsRequest};
 use crate::users::{
     schemas::{self},
     user_auth::RegisterRequest,
@@ -91,4 +91,21 @@ pub async fn get_user_account(
         email: data.email,
         username: data.username,
     }))
+}
+
+pub async fn save_settings(
+    user: Claims,
+    State(mut state): State<AppState>,
+    Json(settings): Json<schemas::SavedSettings>,
+) -> Result<(), StatusCode> {
+    state
+        .user_info_client
+        .save_settings(SaveSettingsRequest {
+            email: settings.email,
+            username: settings.username,
+            old_username: user.sub,
+        })
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    Ok(())
 }

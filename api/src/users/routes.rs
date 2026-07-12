@@ -12,4 +12,5 @@ pub fn auth() -> Router<AppState> {
         .route("/ping", get(handlers::ping))
         .route("/get_remaining_time", get(handlers::get_remaining_time))
         .route("/get_user_account", get(handlers::get_user_account))
+        .route("/save_settings", post(handlers::save_settings))
 }
