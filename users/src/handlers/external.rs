@@ -1,10 +1,11 @@
+use crate::{
+    handlers::external::user_external::user_external_service_server::UserExternalService,
+    repositories::postgres::PostgresRepository, services::external::ExternalServiceLayer,
+};
 use tonic::{Response, Status};
-use user_external::external_service_server::ExternalService;
-
-use crate::{repositories::postgres::PostgresRepository, services::external::ExternalServiceLayer};
 
 pub mod user_external {
-    tonic::include_proto!("external");
+    tonic::include_proto!("user_external");
 }
 
 pub struct ExternalImpl {
@@ -12,7 +13,7 @@ pub struct ExternalImpl {
 }
 
 #[tonic::async_trait]
-impl ExternalService for ExternalImpl {
+impl UserExternalService for ExternalImpl {
     async fn increment_chronometer(
         &self,
         request: tonic::Request<user_external::IncrementChronometerRequest>,

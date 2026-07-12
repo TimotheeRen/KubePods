@@ -14,7 +14,9 @@ use crate::{
     desktops_metrics::metrics_service_client::MetricsServiceClient,
     handlers::{
         auth::{AuthImpl, user_auth::auth_service_server::AuthServiceServer},
-        external::{ExternalImpl, user_external::external_service_server::ExternalServiceServer},
+        external::{
+            ExternalImpl, user_external::user_external_service_server::UserExternalServiceServer,
+        },
         info::{InfoImpl, user_info::info_service_server::InfoServiceServer},
     },
     repositories::{
@@ -68,7 +70,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Server::builder()
         .add_service(AuthServiceServer::new(auth_service_handler))
         .add_service(InfoServiceServer::new(info_service_handler))
-        .add_service(ExternalServiceServer::new(external_service_handler))
+        .add_service(UserExternalServiceServer::new(external_service_handler))
         .serve(addr)
         .await?;
 
