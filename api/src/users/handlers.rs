@@ -1,6 +1,6 @@
-use crate::users::schemas::RemainingTime;
+use crate::users::schemas::{GetUserAccount, RemainingTime};
 use crate::users::user_auth::LoginRequest;
-use crate::users::user_info::RemainingTimeRequest;
+use crate::users::user_info::{GetUserAccountRequest, RemainingTimeRequest};
 use crate::users::{
     schemas::{self},
     user_auth::RegisterRequest,
@@ -74,5 +74,21 @@ pub async fn get_remaining_time(
     Ok(Json(RemainingTime {
         utilization: inner_data.utilization as u8,
         remaining,
+    }))
+}
+
+pub async fn get_user_account(
+    user: Claims,
+    State(mut state): State<AppState>,
+) -> Result<Json<GetUserAccount>, StatusCode> {
+    let res = state
+        .user_info_client
+        .get_user_account(GetUserAccountRequest { username: user.sub })
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let data = res.into_inner();
+    Ok(Json(GetUserAccount {
+        email: data.email,
+        username: data.username,
     }))
 }

@@ -18,3 +18,9 @@ pub struct RemainingTime {
     pub utilization: u8,
     pub remaining: u16,
 }
+
+#[derive(Serialize)]
+pub struct GetUserAccount {
+    pub email: String,
+    pub username: String,
+}

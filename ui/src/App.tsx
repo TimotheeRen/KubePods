@@ -14,6 +14,7 @@ import { GetDesktops } from "./loaders/getDesktops.tsx";
 import { GetUtilization } from "./loaders/getUtilization.tsx";
 import { GetTimeRemaining } from "./loaders/getTimeRemaining.tsx";
 import Settings from "./routes/settings.tsx";
+import { GetUserAccount } from "./loaders/getUserAccount.tsx";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        element: <Settings />
+        element: <Settings />,
+        loader: GetUserAccount
       }
     ],
   },

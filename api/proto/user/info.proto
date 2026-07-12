@@ -4,6 +4,7 @@ package info;
 
 service InfoService {
   rpc RemainingTime(RemainingTimeRequest) returns (RemainingTimeResponse);
+  rpc GetUserAccount(GetUserAccountRequest) returns (GetUserAccountResponse);
 }
 
 message RemainingTimeRequest {
@@ -12,4 +13,13 @@ message RemainingTimeRequest {
 
 message RemainingTimeResponse {
   uint32 utilization = 1;
+}
+
+message GetUserAccountRequest {
+  string username = 1;
+}
+
+message GetUserAccountResponse {
+  string email = 1;
+  string username = 2;
 }

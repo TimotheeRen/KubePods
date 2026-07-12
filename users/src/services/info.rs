@@ -1,6 +1,5 @@
 use crate::{
-    errors::{auth::AuthError, info::InfoError},
-    handlers::auth::user_auth::UsersTicks,
+    domains::info::UserAccount, errors::info::InfoError,
     repositories::postgres::PostgresRepositoryInterface,
 };
 
@@ -15,5 +14,9 @@ impl<R: PostgresRepositoryInterface> InfoServiceLayer<R> {
 
     pub async fn get_remaining_time(&self, username: String) -> Result<u32, InfoError> {
         self.repo.get_remaining_time(username).await
+    }
+
+    pub async fn get_account(&self, username: String) -> Result<UserAccount, InfoError> {
+        self.repo.get_account(username).await
     }
 }

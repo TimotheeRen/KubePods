@@ -28,4 +28,22 @@ impl InfoService for InfoImpl {
             utilization: usage,
         }))
     }
+
+    async fn get_user_account(
+        &self,
+        request: tonic::Request<user_info::GetUserAccountRequest>,
+    ) -> std::result::Result<tonic::Response<user_info::GetUserAccountResponse>, tonic::Status>
+    {
+        let req = request.into_inner();
+        let account = self
+            .service
+            .get_account(req.username)
+            .await
+            .map_err(|_| Status::internal("Internal server error"))?;
+
+        Ok(Response::new(user_info::GetUserAccountResponse {
+            email: account.email,
+            username: account.username,
+        }))
+    }
 }

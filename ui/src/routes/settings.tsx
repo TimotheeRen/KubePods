@@ -4,8 +4,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Mail, User } from "lucide-react";
+import { useLoaderData } from "react-router";
+
+interface User {
+  email: string,
+  username: string
+}
 
 export default function Settings() {
+  const { email, username } = useLoaderData() as User;
+
   return (
     <div className="flex-1 flex flex-col">
       <Header title="Settings" />
@@ -17,7 +25,7 @@ export default function Settings() {
             <Field>
               <FieldLabel>Email address</FieldLabel>
               <InputGroup>
-                <InputGroupInput defaultValue="xxxx@example.com" />
+                <InputGroupInput defaultValue={email} />
                 <InputGroupAddon align="inline-end">
                   <Mail />
                 </InputGroupAddon>
@@ -26,7 +34,7 @@ export default function Settings() {
             <Field className="mt-5">
               <FieldLabel>Username</FieldLabel>
               <InputGroup>
-                <InputGroupInput defaultValue="example" />
+                <InputGroupInput defaultValue={username} />
                 <InputGroupAddon align="inline-end">
                   <User />
                 </InputGroupAddon>

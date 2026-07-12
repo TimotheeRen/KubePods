@@ -6,7 +6,10 @@ use jsonwebtoken::{EncodingKey, Header, encode};
 use sqlx::{Pool, Postgres, Row, query};
 
 use crate::{
-    domains::auth::{LoginUser, User, UserClaims},
+    domains::{
+        auth::{LoginUser, User, UserClaims},
+        info::UserAccount,
+    },
     errors::{auth::AuthError, info::InfoError},
     handlers::auth::user_auth::UsersTicks,
 };
@@ -22,6 +25,7 @@ pub trait PostgresRepositoryInterface {
     ) -> Result<String, AuthError>;
     async fn increment_ticks(&self, users_ticks: Vec<UsersTicks>) -> Result<(), AuthError>;
     async fn get_remaining_time(&self, username: String) -> Result<u32, InfoError>;
+    async fn get_account(&self, username: String) -> Result<UserAccount, InfoError>;
 }
 
 #[derive(Clone)]
@@ -131,6 +135,22 @@ impl PostgresRepositoryInterface for PostgresRepository {
                 let utilization = row.get::<i32, _>("utilization") / 60;
                 Ok(utilization as u32)
             }
+            Ok(None) => Err(InfoError::InternalServerError),
+            Err(_) => Err(InfoError::InternalServerError),
+        }
+    }
+
+    async fn get_account(&self, username: String) -> Result<UserAccount, InfoError> {
+        let res = query("SELECT email FROM users WHERE username = $1")
+            .bind(&username)
+            .fetch_optional(&self.pool)
+            .await;
+
+        match res {
+            Ok(Some(row)) => Ok(UserAccount {
+                email: row.get("email"),
+                username,
+            }),
             Ok(None) => Err(InfoError::InternalServerError),
             Err(_) => Err(InfoError::InternalServerError),
         }
