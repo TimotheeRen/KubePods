@@ -19,6 +19,7 @@ spec:
           image: timotheeren/kubepods-desktops:sha-a6c5850b8200607ef163cd3cb3ecf4c58d4fb0af
           ports:
             - containerPort: 50052
+              name: grpc
           env:
             - name: DB_HOST
               valueFrom:
@@ -27,3 +28,10 @@ spec:
                   key: uri
             - name: USERS_HOST
               value: "http://users:50051"
+          livenessProbe:
+            tcpSocket:
+              port: grpc
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
