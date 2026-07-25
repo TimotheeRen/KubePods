@@ -16,7 +16,7 @@ spec:
       serviceAccount: desktops
       containers:
         - name: desktops
-          image: timotheeren/kubepods-desktops:sha-a6c5850b8200607ef163cd3cb3ecf4c58d4fb0af
+          image: timotheeren/kubepods-desktops:sha-6a01f3122e03db5b085d128be8885ccb5520e4d1
           ports:
             - containerPort: 50052
               name: grpc
