@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: timotheeren/kubepods-users:sha-c0adf84a66bc0b32fcc4ed21c668f9d6719765c9
+          image: timotheeren/kubepods-users:sha-6a01f3122e03db5b085d128be8885ccb5520e4d1
           ports:
             - containerPort: 50051
               name: grpc
