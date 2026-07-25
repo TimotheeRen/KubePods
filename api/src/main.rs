@@ -1,5 +1,6 @@
 mod claims;
 mod desktops;
+mod health;
 mod middlewares;
 mod users;
 
@@ -76,6 +77,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = Router::new()
         .nest("/users", users::routes::auth())
         .nest("/desktops", desktops::routes::provisioning())
+        .nest("/health", health::probes())
         .layer(from_fn(metrics::middleware))
         .layer(cors)
         .with_state(state);

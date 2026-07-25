@@ -31,3 +31,10 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: secret
+          livenessProbe:
+            httpGet:
+              path: /health/live
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
