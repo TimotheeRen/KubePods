@@ -34,6 +34,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health/live
+              port: http
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 2
