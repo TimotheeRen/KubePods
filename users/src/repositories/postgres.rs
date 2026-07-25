@@ -95,7 +95,6 @@ impl PostgresRepositoryInterface for PostgresRepository {
         };
 
         let hash = PasswordHash::new(hashed_password).map_err(|_| AuthError::WrongPassword)?;
-
         Argon2::default()
             .verify_password(password.as_bytes(), &hash)
             .map_err(|_| AuthError::WrongPassword)?;
@@ -176,5 +175,49 @@ impl PostgresRepositoryInterface for PostgresRepository {
             .await
             .map_err(|_| InfoError::InternalServerError)?;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use jsonwebtoken::{DecodingKey, Validation, decode};
+
+    use super::*;
+
+    fn setup_repo() -> PostgresRepository {
+        let pool = Pool::<Postgres>::connect_lazy("postgres://localhost/dummy").unwrap();
+        PostgresRepository::new(pool)
+    }
+
+    #[tokio::test]
+    async fn test_generate_token() {
+        let repo = setup_repo();
+
+        let username = "testuser".to_string();
+        let password = "testpass".to_string();
+        let hashed_password = Argon2::default()
+            .hash_password(password.as_bytes())
+            .unwrap()
+            .to_string();
+
+        let token = repo
+            .generate_token(username.clone(), password, &hashed_password)
+            .await
+            .unwrap();
+
+        let jwt_secret = match std::env::var("JWT_SECRET") {
+            Ok(val) => val,
+            Err(_) => "jwt_default_secret".to_string(),
+        };
+
+        let token_data = decode::<UserClaims>(
+            &token,
+            &DecodingKey::from_secret(jwt_secret.as_ref()),
+            &Validation::default(),
+        )
+        .expect("The JWT Token is not readable");
+
+        assert_eq!(token_data.claims.sub, username);
+        assert_eq!(token_data.claims.role, "starter");
     }
 }
