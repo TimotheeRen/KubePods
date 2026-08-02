@@ -12,7 +12,8 @@
     "ghcr.io/devcontainers/features/node:2": {},
     "ghcr.io/rio/features/k3d:1": {},
     "ghcr.io/jsburckhardt/devcontainer-features/flux:1": {},
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/rio/features/k9s:1": {}
   },
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
