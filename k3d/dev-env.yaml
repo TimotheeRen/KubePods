@@ -5,6 +5,10 @@ metadata:
 image: rancher/k3s:v1.31.4-k3s1
 servers: 1
 agents: 1
+kubeAPI:
+  host: "host.docker.internal"
+  hostIP: "0.0.0.0"
+  hostPort: "6445"
 options:
   k3s:
     extraArgs:
@@ -12,3 +16,6 @@ options:
         nodeFilters: [server:*]
       - arg: --disable=servicelb
         nodeFilters: [server:*]
+      - arg: --tls-san=host.docker.internal
+        nodeFilters:
+          - server:*
