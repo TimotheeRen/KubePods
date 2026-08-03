@@ -23,9 +23,16 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: '83.7.0'
+      version: "83.7.0"
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
         namespace: monitoring
       interval: 10m
+  values:
+    grafana:
+      additionalDataSources:
+        - name: Loki
+          type: loki
+          access: proxy
+          url: http://grafana-loki.monitoring.svc.cluster.local:3100
