@@ -4,20 +4,21 @@ discovery.kubernetes "pod" {
 
 discovery.relabel "api_pod" {
   targets = discovery.kubernetes.pod.targets
+
   rule {
     source_labels = ["__meta_kubernetes_pod_label_app"]
-    regex = "api-.*"
-    action = "keep"
+    regex         = "api-.*"
+    action        = "keep"
   }
 }
 
 loki.source.podlog "podlog" {
-  target = discovery.relabel.api_pod.output
+  targets    = discovery.relabel.api_pod.output // <- "targets" avec un 's' !
   forward_to = [loki.write.grafana_loki.receiver]
 }
 
 loki.write "grafana_loki" {
   endpoint {
-      url = "http://grafana-loki.monitoring.svc.cluster.local:3100/api/v1/push"
-    }
+    url = "http://grafana-loki.monitoring.svc.cluster.local:3100/api/v1/push"
+  }
 }
