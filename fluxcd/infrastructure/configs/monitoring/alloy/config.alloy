@@ -12,8 +12,8 @@ discovery.relabel "api_pod" {
   }
 }
 
-loki.source.podlog "podlog" {
-  targets    = discovery.relabel.api_pod.output // <- "targets" avec un 's' !
+loki.source.kubernetes "podlog" {
+  targets    = discovery.relabel.api_pod.output
   forward_to = [loki.write.grafana_loki.receiver]
 }
 
