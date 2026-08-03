@@ -22,3 +22,7 @@ spec:
         kind: HelmRepository
         name: grafana-loki
         namespace: monitoring
+  values:
+    loki:
+      storage:
+        type: filesystem
