@@ -8,8 +8,13 @@ configMapGenerator:
     namespace: monitoring
     files:
       - dashboards/red.json
+  - name: alloy-config
+    namespace: monitoring
+    files:
+      - config.alloy=alloy/config.river
 
 generatorOptions:
+  disableNameSuffixHash: true
   labels:
     grafana_dashboard: "1"
   annotations:
