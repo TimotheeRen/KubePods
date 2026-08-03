@@ -22,3 +22,8 @@ spec:
         kind: HelmRepository
         name: grafana-alloy
         namespace: monitoring
+  alloy:
+    configMap:
+      create: false
+      name: alloy-config
+      key: config.alloy
