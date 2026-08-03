@@ -8,3 +8,4 @@ resources:
   - desktops-namespace.yaml
   - secret-generator.yaml
   - grafana-loki.yaml
+  - grafana-alloy.yaml
