@@ -24,6 +24,10 @@ spec:
         namespace: monitoring
   values:
     loki:
+      limits_config:
+        volume_enabled: true
+      chunksCache:
+        enabled: false
       storage:
         type: filesystem
       schemaConfig:
