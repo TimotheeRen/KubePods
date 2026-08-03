@@ -26,14 +26,14 @@ spec:
     loki:
       storage:
         type: filesystem
-      backend:
-        replicas: 0
-      read:
-        replicas: 0
-      write:
-        replicas: 0
-      singleBinary:
-        replicas: 1
-        persistence:
-          enabled: true
-          size: 5Gi
+    backend:
+      replicas: 0
+    read:
+      replicas: 0
+    write:
+      replicas: 0
+    singleBinary:
+      replicas: 1
+      persistence:
+        enabled: true
+        size: 5Gi
