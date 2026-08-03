@@ -9,6 +9,7 @@ use crate::{AppState, claims::Claims};
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
+use tracing::info;
 
 pub async fn register_handler(
     State(mut state): State<AppState>,

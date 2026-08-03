@@ -18,7 +18,12 @@ use crate::{
 use axum::{Router, http::HeaderValue, middleware::from_fn};
 use metrics_exporter_prometheus::{Matcher, PrometheusBuilder};
 use tonic::transport::Channel;
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::{
+    cors::{Any, CorsLayer},
+    trace::TraceLayer,
+};
+use tracing::error;
+use tracing_subscriber::{EnvFilter, fmt::layer, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Clone)]
 struct AppState {
@@ -56,9 +61,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let cors = CorsLayer::new()
         .allow_origin([
-            "http://localhost:5173".parse::<HeaderValue>().unwrap(), // DEV
-            "http://localhost:8080".parse::<HeaderValue>().unwrap(), // DEBUG PROD
-            "http://kubepods.com:8080".parse::<HeaderValue>().unwrap(), // PROD
+            "http://localhost:5173".parse::<HeaderValue>().unwrap(),
+            "http://172.17.0.2:5173".parse::<HeaderValue>().unwrap(),
+            "http://172.17.0.3:5173".parse::<HeaderValue>().unwrap(),
+            "http://localhost:8080".parse::<HeaderValue>().unwrap(),
+            "http://kubepods.com:8080".parse::<HeaderValue>().unwrap(),
         ])
         .allow_methods(Any)
         .allow_headers(Any);
@@ -74,11 +81,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )?
         .install()?;
 
+    tracing_subscriber::registry()
+        .with(
+            EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| EnvFilter::new("info,tower_http=debug")),
+        )
+        .with(layer().json())
+        .init();
+
     let app = Router::new()
         .nest("/users", users::routes::auth())
         .nest("/desktops", desktops::routes::provisioning())
         .nest("/health", health::probes())
         .layer(from_fn(metrics::middleware))
+        .layer(TraceLayer::new_for_http())
         .layer(cors)
         .with_state(state);
 
