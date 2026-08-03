@@ -23,6 +23,7 @@ spec:
         name: grafana-loki
         namespace: monitoring
   values:
+    deploymentMode: SingleBinary
     loki:
       storage:
         type: filesystem
