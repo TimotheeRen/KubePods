@@ -24,6 +24,8 @@ spec:
         namespace: monitoring
   values:
     loki:
+      commonConfig:
+        replication_factor: 1
       limits_config:
         volume_enabled: true
       chunksCache:
@@ -39,14 +41,35 @@ spec:
             index:
               prefix: index_
               period: 24h
+    deploymentMode: Monolithic
+    singleBinary:
+      replicas: 1
+      persistence:
+        enabled: true
+        size: 5Gi
     backend:
       replicas: 0
     read:
       replicas: 0
     write:
       replicas: 0
-    singleBinary:
-      replicas: 1
-      persistence:
-        enabled: true
-        size: 5Gi
+    ingester:
+      replicas: 0
+    querier:
+      replicas: 0
+    queryFrontend:
+      replicas: 0
+    queryScheduler:
+      replicas: 0
+    distributor:
+      replicas: 0
+    compactor:
+      replicas: 0
+    indexGateway:
+      replicas: 0
+    bloomPlanner:
+      replicas: 0
+    bloomBuilder:
+      replicas: 0
+    bloomGateway:
+      replicas: 0
