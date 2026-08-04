@@ -7,7 +7,7 @@ discovery.relabel "api_pod" {
 
   rule {
     source_labels = ["__meta_kubernetes_pod_label_app"]
-    regex         = "api-.*"
+    regex         = "api"
     action        = "keep"
   }
 }
