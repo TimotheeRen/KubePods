@@ -45,6 +45,6 @@ loki.source.kubernetes "podlog" {
 
 loki.write "grafana_loki" {
   endpoint {
-    url = "http://grafana-loki.monitoring.svc.cluster.local:3100/api/v1/push"
+    url = "http://grafana-loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push"
   }
 }
